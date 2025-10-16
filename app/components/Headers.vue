@@ -15,7 +15,7 @@ const hideHeader = computed(() => {
       
       <ToggleTheme />
 
-      <NuxtLink to="/app/home" class="flex justify-center">
+      <NuxtLink to="/app" class="flex justify-center">
         <img src="/abronia.svg" alt="logo" class="w-30" />
       </NuxtLink>
       
