@@ -5,7 +5,7 @@ const router = useRouter()
 
 const handleLogout = () => {
   logout()
-  router.push('/app')
+  router.push('/')
 };
 
 onMounted(() => {
