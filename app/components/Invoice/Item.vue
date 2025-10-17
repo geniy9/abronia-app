@@ -11,7 +11,7 @@ const props = defineProps({
 const invoiceYear = new Date(props.item?.shipmentDate).getFullYear()
 
 function goInvoice() {
-  router.push(`/app/invoices/${invoiceYear}/${props.item?.documentId}`)
+  router.push(`/invoices/${invoiceYear}/${props.item?.documentId}`)
 }
 </script>
 <template>

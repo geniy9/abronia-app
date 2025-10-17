@@ -10,7 +10,7 @@ const cartStore = useCartStore()
 
 // onMounted(() => {
 //   if (cartStore.items.length === 0) {
-//     router.replace('/app');
+//     router.replace('/home');
 //   }
 // });
 </script>

@@ -10,7 +10,7 @@ const isOpen = ref(false)
 async function checkOut() {
   isOpen.value = false
   await nextTick()
-  router.push('/app/checkout')
+  router.push('/checkout')
 }
 </script>
 <template>

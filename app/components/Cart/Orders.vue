@@ -34,7 +34,7 @@ const fetchOrders = async () => {
 
 onMounted(() => {
   if (!user.value) {
-    router.push('/app/auth/login')
+    router.push('/auth/login')
   } else {
     fetchOrders()
   }

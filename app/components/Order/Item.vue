@@ -7,7 +7,7 @@ const props = defineProps({
   }
 })
 function goOrder() {
-  router.push(`/app/orders/${props.item?.documentId}`)
+  router.push(`/orders/${props.item?.documentId}`)
 }
 </script>
 <template>

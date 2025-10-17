@@ -24,7 +24,7 @@ const handleLogin = async () => {
       identifier: state.identifier,
       password: state.password,
     });
-    router.push('/app');
+    router.push('/home');
   } catch (e) {
     error.value = 'Неправильный адрес электронной почты или пароль';
     console.error(e);

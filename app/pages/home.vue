@@ -8,7 +8,7 @@ const { menuMain } = useMenu()
 <template>
   <div class="page_layout">
 
-    <NuxtLink v-if="user" to="/app/auth/profile" 
+    <NuxtLink v-if="user" to="/auth/profile" 
       class="flex items-center gap-2 border border-primary rounded-xl w-full p-2">
       <div class="bg-gray-300 w-9 h-9 rounded-lg">
         <UIcon name="hugeicons:user-circle-02" class="bg-gray-500 w-9 h-9" />

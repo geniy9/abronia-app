@@ -20,7 +20,7 @@ const props = defineProps({
       </div>
     </div>
     <NuxtLink v-else v-for="(item, i) in items" :key="i" 
-      :to="`/app/stock/${item.documentId}`" 
+      :to="`/stock/${item.documentId}`" 
       class="bg-gray-200 dark:bg-gray-900 rounded-lg p-2">
       <div class="flex items-center justify-between w-full">
         <h3 class="font-bold text-gray-900 dark:text-white px-2">

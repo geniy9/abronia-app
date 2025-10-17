@@ -9,7 +9,7 @@ const hideFooter = computed(() => {
 })
 
 function backStep() {
-  if (route.path === '/app') {
+  if (route.path === '/home') {
     return 
   } else {
     router.go(-1)
@@ -25,7 +25,7 @@ function backStep() {
         @click="backStep" 
         class="text-3xl cursor-pointer" />
 
-      <NuxtLink to="/app" class="flex items-center justify-center">
+      <NuxtLink to="/home" class="flex items-center justify-center">
         <UIcon name="hugeicons:dashboard-square-01" class="text-3xl" />
       </NuxtLink>
 

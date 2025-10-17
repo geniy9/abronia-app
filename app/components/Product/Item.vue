@@ -17,7 +17,7 @@ function goProduct() {
   if (isSamples.value) {
     return
   } else {
-    router.push(`/app/stock/${props.item?.category?.documentId}/${props.item?.documentId}`)
+    router.push(`/stock/${props.item?.category?.documentId}/${props.item?.documentId}`)
   }
 }
 </script>

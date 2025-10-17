@@ -21,6 +21,7 @@ export default defineNuxtConfig({
   },
 
   app: {
+    baseURL: '/app/',
     head: {
       charset: 'utf-16',
       viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0',

@@ -63,7 +63,7 @@ const handleForgotPassword = async () => {
 
     <template #footer>
       <div class="text-center">
-        <NuxtLink to="/app/auth/login" class="text-sm text-primary font-medium">
+        <NuxtLink to="/auth/login" class="text-sm text-primary font-medium">
           Вернуться ко входу
         </NuxtLink>
       </div>

@@ -10,7 +10,7 @@ const handleLogout = () => {
 
 onMounted(() => {
   if (!user.value) {
-    router.push('/app/auth/login')
+    router.push('/auth/login')
   }
 })
 </script>

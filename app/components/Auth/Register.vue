@@ -27,7 +27,7 @@ const handleRegister = async () => {
       email: state.email,
       password: state.password,
     });
-    router.push('/app/auth/profile');
+    router.push('/auth/profile');
   } catch (e) {
     error.value = e.error?.message || 'Во время регистрации произошла ошибка';
     console.error(e);

@@ -2,23 +2,23 @@ export default () => {
   return {
     menuMain: [{
       name: 'Склад',
-      to: '/app/stock',
+      to: '/stock',
       img: '/img/stock.png'
     },{
       name: 'Инвойсы',
-      to: '/app/invoices',
+      to: '/invoices',
       img: '/img/invoice.png'
     },{
       name: 'Заказы',
-      to: '/app/orders',
+      to: '/orders',
       img: '/img/order.png'
     },{
       name: 'Клиенты',
-      to: '/app/customers',
+      to: '/customers',
       img: '/img/customer.png'
     },{
       name: 'Заметки',
-      to: '/app/comments',
+      to: '/comments',
       img: null
     }]
   }

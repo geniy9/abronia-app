@@ -3,10 +3,10 @@ const user = useStrapiUser()
 </script>
 <template>
   <div class="flex items-center leading-0">
-    <NuxtLink v-if="user" to="/app/auth/profile">
+    <NuxtLink v-if="user" to="/auth/profile">
       <UIcon name="hugeicons:user-circle-02" class="text-primary w-6 h-6" />
     </NuxtLink>
-    <NuxtLink v-else to="/app/auth/login">
+    <NuxtLink v-else to="/auth/login">
       <UIcon name="hugeicons:user-circle-02" class="text-primary w-6 h-6" />
     </NuxtLink>
   </div>
