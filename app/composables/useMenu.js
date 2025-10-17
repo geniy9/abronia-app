@@ -1,4 +1,5 @@
 export default () => {
+  const runtimeConfig = useRuntimeConfig()
   const baseURL = runtimeConfig.app.baseURL
   return {
     menuMain: [{
