@@ -1,11 +1,9 @@
 export default () => {
   const config = useRuntimeConfig()
   const imageUrl = config.public.STRAPI_URL
-  const originUrl = config.public.ORIGIN
   const toast = useToast()
   return {
     imageUrl,
-    originUrl,
     unitMeasurement: (data) => {
       switch (data) {
         case 'liter': return ' Литры'

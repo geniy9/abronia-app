@@ -1,21 +1,22 @@
 export default () => {
+  const baseURL = runtimeConfig.app.baseURL
   return {
     menuMain: [{
       name: 'Склад',
       to: '/stock',
-      img: '/img/stock.png'
+      img: `${baseURL}/img/stock.png`
     },{
       name: 'Инвойсы',
       to: '/invoices',
-      img: '/img/invoice.png'
+      img: `${baseURL}/img/invoice.png`
     },{
       name: 'Заказы',
       to: '/orders',
-      img: '/img/order.png'
+      img: `${baseURL}/img/order.png`
     },{
       name: 'Клиенты',
       to: '/customers',
-      img: '/img/customer.png'
+      img: `${baseURL}/img/customer.png`
     },{
       name: 'Заметки',
       to: '/comments',
