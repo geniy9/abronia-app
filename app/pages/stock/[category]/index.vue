@@ -23,7 +23,7 @@ watch(() => data.currentPage, (value) => {
 })
 </script>
 <template>
-  <div class="page_layout">
+  <div class="body_layout">
     <div class="flex flex-col gap-4 bg-white dark:bg-gray-700 p-2 rounded-xl w-full">
       <div v-if="apiStore.getterCategory" class="bg-primary rounded-lg p-3">
         <h2 class="text-center text-lg font-bold text-white">

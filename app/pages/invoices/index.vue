@@ -22,7 +22,7 @@ const yearsForSelect = computed(() => {
 })
 </script>
 <template>
-  <div class="page_layout">
+  <div class="body_layout">
     <div class="relative flex flex-col gap-4 bg-white dark:bg-gray-700 p-2 rounded-xl w-full mt-9 pt-9">
       <img src="/img/invoice.png" alt="Инвойсы" class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-15 h-15 p-1 rounded-full bg-gray-200 dark:bg-gray-500" />
       <h2 class="text-center text-lg font-bold text-black dark:text-white">

@@ -6,7 +6,7 @@ const user = useStrapiUser()
 const { menuMain } = useMenu()
 </script>
 <template>
-  <div class="page_layout">
+  <div class="body_layout">
 
     <NuxtLink v-if="user" to="/auth/profile" 
       class="flex items-center gap-2 border border-primary rounded-xl w-full p-2">

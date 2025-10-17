@@ -19,7 +19,7 @@ const invoices = computed(() => apiStore.invoices)
 // })
 </script>
 <template>
-  <div class="page_layout">
+  <div class="body_layout">
     <div class="relative flex flex-col gap-4 bg-white dark:bg-gray-700 p-2 rounded-xl w-full">
       <div class="bg-primary text-white text-center rounded-lg p-2">
         <p class="text-xs">Инвойсы</p>

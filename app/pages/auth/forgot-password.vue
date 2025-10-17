@@ -1,5 +1,5 @@
 <template>
-  <div class="section">
+  <div class="body_layout">
     <AuthForgotPassword />
   </div>
 </template>

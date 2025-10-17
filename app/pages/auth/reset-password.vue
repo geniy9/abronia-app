@@ -2,7 +2,7 @@
 const route = useRoute()
 </script>
 <template>
-  <div class="section mx-auto">
+  <div class="body_layout">
     <div v-if="!route.query.code" class="text-center">
       <UAlert
         icon="hugeicons:alert-01"

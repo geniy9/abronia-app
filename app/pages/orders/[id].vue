@@ -39,7 +39,7 @@ onMounted(async () => { await getOrder() })
 onUnmounted(() => { order.value = null })
 </script>
 <template>
-  <div class="page_layout">
+  <div class="body_layout">
     <div class="flex flex-col gap-4 bg-white dark:bg-gray-700 p-2 rounded-xl w-full">
 
       <div v-if="data.loading" class="grid grid-cols-1 gap-4">

@@ -15,7 +15,7 @@ const cartStore = useCartStore()
 // });
 </script>
 <template>
-  <div class="page_layout">
+  <div class="body_layout">
     <div v-if="cartStore.items.length > 0" class="max-w-md mx-auto">
       <ClientOnly>
         <CartCheckout />

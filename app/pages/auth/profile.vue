@@ -5,7 +5,7 @@ definePageMeta({
 const user = useStrapiUser()
 </script>
 <template>
-  <div class="page_layout">
+  <div class="body_layout">
     <div v-if="user" class="w-full">
       <AuthSendEmailConfirmationBanner v-if="!user.confirmed" />
       
