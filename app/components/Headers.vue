@@ -13,7 +13,8 @@ const hideHeader = computed(() => {
     :class="[hideHeader ? 'rounded-b-none -translate-y-full' : 'rounded-b-2xl translate-y-0']">
     <div class="section grid grid-cols-3 items-center gap-4">
       
-      <ToggleTheme />
+      <!-- <ToggleTheme /> -->
+      <div></div>
 
       <NuxtLink to="/home" class="flex justify-center">
         <img src="/abronia.svg" alt="logo" class="w-30" />

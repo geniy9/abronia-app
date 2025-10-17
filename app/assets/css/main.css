@@ -82,7 +82,7 @@
 
 @layer base {
   .body_layout {
-    @apply flex flex-col justify-center items-center gap-4 w-full xs:max-w-sm sm:max-w-md mx-auto;
+    @apply flex flex-col justify-center items-center gap-4 w-full xs:max-w-sm sm:max-w-md mx-2 xs:mx-auto;
   }
   .section {
     @apply relative w-full xs:max-w-2xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto px-4 xs:px-6 lg:px-0;
