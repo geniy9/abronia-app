@@ -15,6 +15,40 @@ function backStep() {
     router.go(-1)
   }
 }
+
+const items = ref([
+  [
+    {
+      label: 'Добавить клиента',
+      icon: 'hugeicons:user-add-01',
+      to: '/customers#new'
+    }
+  ],
+  [
+    {
+      label: 'Новый товар',
+      icon: 'hugeicons:shopping-basket-add-03',
+      to: '/stock#new'
+    },
+    {
+      label: 'Создать заказ',
+      icon: 'hugeicons:store-add-01',
+      to: '/orders#new'
+    },
+    {
+      label: 'Создать инвойс',
+      icon: 'hugeicons:add-invoice',
+      to: '/invoices#new'
+    },
+  ],
+  [
+    {
+      label: 'Добавить заметку',
+      icon: 'hugeicons:comment-add-01',
+      to: '/comments#new'
+    }
+  ]
+])
 </script>
 <template>
   <footer class="fixed bottom-0 w-full bg-primary rounded-t-2xl p-2 transition-all duration-300" 
@@ -30,7 +64,10 @@ function backStep() {
       </NuxtLink>
 
       <div class="flex justify-end">
-        <UIcon name="hugeicons:add-01" class="text-3xl" />
+        <UDropdownMenu :items="items">
+          <UIcon name="hugeicons:add-01" class="text-3xl" />
+        </UDropdownMenu>
+        
         <!-- <ul class="flex flex-col items-center xs:items-start">
           <li v-for="(m, i) in menuMain" :key="i">
             <NuxtLink :to="m.to" class="block text-xs font-medium select-none space-y-1 rounded-md py-3 leading-none no-underline outline-none uppercase">
