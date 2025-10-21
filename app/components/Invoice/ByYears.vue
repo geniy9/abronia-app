@@ -27,7 +27,7 @@ const props = defineProps({
           {{ item }} год
         </h3>
         <div class="flex items-center justify-center bg-white dark:bg-gray-950 rounded-lg w-10 h-10">
-          <UIcon name="hugeicons:arrow-right-double" class="w-6 h-6 text-primary" />
+          <UIcon name="hugeicons:arrow-right-02" class="w-6 h-6 text-primary" />
         </div>
       </div>
     </NuxtLink>

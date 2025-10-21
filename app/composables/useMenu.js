@@ -22,6 +22,31 @@ export default () => {
       name: 'Заметки',
       to: '/comments',
       img: null
-    }]
+    }],
+    menuAdding: [
+      [{
+        label: 'Новый Товар',
+        icon: 'hugeicons:package-add',
+        to: '/stock#add'
+      },{
+        label: 'Создать Заказ',
+        icon: 'hugeicons:shopping-basket-add-03',
+        to: '/orders#add'
+      },{
+        label: 'Создать Инвойс',
+        icon: 'hugeicons:add-invoice',
+        to: '/invoices#add'
+      }],
+      [{
+        label: 'Добавить Клиента',
+        icon: 'hugeicons:user-add-02',
+        to: '/customers#add'
+      }],
+      [{
+        label: 'Добавить Заметку',
+        icon: 'hugeicons:message-add-01',
+        to: '/comments#add'
+      }]
+    ]
   }
 }

@@ -1,29 +1,32 @@
 <script setup>
 import { useApiStore } from '~/store/api'
 const apiStore = useApiStore()
+const route = useRoute()
 
 definePageMeta({
   middleware: 'auth'
 })
-
 onMounted(async () => { await apiStore.getCustomers() })
 
-const customers = computed(() => apiStore.customers)
+const isAdd = computed(() => route.hash === '#add')
 </script>
 <template>
   <div class="body_layout">
-    <div class="relative flex flex-col gap-4 bg-white dark:bg-gray-700 p-2 rounded-xl w-full mt-9 pt-9">
-      <img src="/img/customer.png" alt="Заказы" class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-15 h-15 p-1 rounded-full bg-gray-200 dark:bg-gray-500" />
-      <h2 class="text-center text-lg font-bold text-black dark:text-white">
-        База клиентов
-      </h2>
-      <SearchBar placeholder="Поиск по клиентам" api="customers" />
+    <div class="body_content">
+      <NuxtLink to="/customers" class="body_head">
+        <img src="/img/customer.png" alt="Склад" />
+      </NuxtLink>
+      <h2 class="main_title">База клиентов</h2>
 
-      <UButton color="primary" block trailing icon="hugeicons:plus-sign-circle">
-        Добавить нового клиента
-      </UButton>
+      <CustomerAdd v-if="isAdd" />
+      <div v-else class="flex flex-col gap-4">
+        <SearchBar placeholder="Поиск по клиентам" api="customers" />
+        <UButton to="/customers#add" color="primary" block icon="hugeicons:user-add-02">
+          Добавить нового клиента
+        </UButton>
+        <CustomerList :items="apiStore.customers" :loading="apiStore.loadingCustomers" />
+      </div>
 
-      <CustomerList :items="customers" :loading="apiStore.loadingCustomers" />
     </div>
   </div>
 </template>

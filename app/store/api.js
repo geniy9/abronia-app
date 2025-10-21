@@ -8,26 +8,29 @@ export const useApiStore = defineStore('api', {
     searchValue: '',
 
     categories: [],
+    samples: [],
     products: [],
     invoices: [],
     orders: [],
     customers: [],
     comments: [],
 
-    loadingCategories: false,
+    loadingSamples: false,
     loadingProducts: false,
     loadingInvoices: false,
     loadingOrders: false,
     loadingCustomers: false,
     loadingComments: false,
 
+    totalSamples: 0,
     totalProducts: 0,
     totalInvoices: 0,
     totalOrders: 0,
     totalCustomers: 0,
     totalComments: 0,
 
-    hasProduct: null,
+    hasSamples: null,
+    hasProducts: null,
     hasInvoices: null,
     hasOrders: null,
     hasCustomers: null,
@@ -180,6 +183,35 @@ export const useApiStore = defineStore('api', {
       }
     },
 
+    async getSamples() {
+      this.loadingSamples = true
+      const { find } = useStrapi()
+      try {
+        const res = await find('samples', {
+          pagination: {
+            page: this.currentPage,
+            pageSize: this.pageSize
+          }
+        });
+        if (res?.data) {
+          this.samples = res.data
+          this.totalSamples = res.meta?.pagination?.total || 0;
+          this.hasSamples = res.meta?.pagination?.total || 0
+        } else {
+          this.samples = [];
+          this.totalSamples = 0;
+          this.hasSamples = null
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        this.samples = [];
+        this.totalSamples = 0;
+        this.hasSamples = null
+      } finally {
+        this.loadingSamples = false;
+      }
+    },
+
     async fetchProducts() {
       this.loadingProducts = true
       const { find } = useStrapi()
@@ -219,17 +251,17 @@ export const useApiStore = defineStore('api', {
         if (res?.data) {
           this.products = res.data
           this.totalProducts = res.meta?.pagination?.total || 0
-          this.hasProduct = res.meta?.pagination?.total || 0
+          this.hasProducts = res.meta?.pagination?.total || 0
         } else {
           this.products = []
           this.totalProducts = 0
-          this.hasProduct = null
+          this.hasProducts = null
         }
       } catch (error) {
         console.error("Error fetching products:", error)
         this.products = []
         this.totalProducts = 0
-        this.hasProduct = null
+        this.hasProducts = null
       } finally {
         this.loadingProducts = false
       }
@@ -257,17 +289,17 @@ export const useApiStore = defineStore('api', {
         if (res?.data) {
           this.products = res.data
           this.totalProducts = res.meta?.pagination?.total || 0;
-          this.hasProduct = res.meta?.pagination?.total || 0
+          this.hasProducts = res.meta?.pagination?.total || 0
         } else {
           this.products = [];
           this.totalProducts = 0;
-          this.hasProduct = null
+          this.hasProducts = null
         }
       } catch (error) {
         console.error("Error fetching products:", error);
         this.products = [];
         this.totalProducts = 0;
-        this.hasProduct = null
+        this.hasProducts = null
       } finally {
         this.loadingProducts = false;
       }
@@ -280,15 +312,15 @@ export const useApiStore = defineStore('api', {
       this.fetchProducts()
     },
 
-    async paginate(value, categorySlug = null) {
-      this.products.length = 0
-      this.currentPage = value
-      if (categorySlug) {
-        await this.getProductsByCategory(categorySlug)
-      } else {
-        await this.fetchProducts()
-      }
-    },
+    // async paginate(value, id = null) {
+    //   this.products.length = 0
+    //   this.currentPage = value
+    //   if (id) {
+    //     await this.getProductsByCategory(id)
+    //   } else {
+    //     await this.fetchProducts()
+    //   }
+    // },
 
   },
 

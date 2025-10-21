@@ -50,21 +50,12 @@ const props = defineProps({
           {{ item.quantityInStock + unitMeasurement(item.unit) }}
         </span>
       </div>
-      <!-- <div class="flex justify-between gap-2">
-        <span class="text-gray-900 dark:text-white">ID</span>
-        <span class="text-gray-900 dark:text-white text-sm font-medium">
-          {{ item.id }}
-        </span>
-      </div> -->
       <div v-if="item.comment" class="flex flex-col justify-between gap-1">
-        <UFormField label="Комментарий">
-          <UTextarea v-model="item.comment.message" disabled 
-            placeholder="Оставить комментарий..." 
-            class="w-full" />
-        </UFormField>
+        <span class="text-gray-900 dark:text-white">
+          Комментарий
+        </span>
+        <span v-html="item.comment.message" class="text-sm p-2 rounded-md bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-400"></span>
       </div>
-      
-
     </div>
 
   </div>

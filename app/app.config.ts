@@ -21,13 +21,13 @@ export default defineAppConfig({
     input: {
       slots: {
         base: [
-          'placeholder:text-gray-400',
+          'placeholder:text-gray-400 dark:placeholder:text-gray-400',
         ],
         leadingIcon: 'shrink-0 text-gray-400',
       },
       variants: {
         variant: {
-          custom: 'text-highlighted bg-white/20 hover:bg-white/30 focus:bg-white/30 disabled:bg-elevated/50',
+          custom: 'text-highlighted bg-black/10 dark:bg-white/20 hover:bg-white/30 focus:bg-white/30 disabled:bg-elevated/50',
         },
       }
     },

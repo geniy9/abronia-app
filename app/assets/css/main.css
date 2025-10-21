@@ -84,10 +84,19 @@
   .body_layout {
     @apply flex flex-col justify-center items-center gap-4 max-w-sm sm:max-w-md mx-auto;
   }
-  .section {
-    @apply relative w-full xs:max-w-2xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto px-4 xs:px-6 lg:px-0;
+  .body_content {
+    @apply relative flex flex-col gap-2 bg-white dark:bg-gray-700 p-2 rounded-xl w-full mt-9 pt-9;
   }
   .main_title {
-    @apply text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold uppercase;
+    @apply text-center text-lg font-bold text-black dark:text-white;
+  }
+  .body_head {
+    @apply absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 p-2 rounded-full bg-white dark:bg-gray-700;
+  }
+  .body_head img {
+    @apply w-16 h-16;
+  }
+  .section {
+    @apply relative w-full xs:max-w-2xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto px-4 xs:px-6 lg:px-0;
   }
 }

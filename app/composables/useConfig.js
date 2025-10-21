@@ -4,6 +4,13 @@ export default () => {
   const toast = useToast()
   return {
     imageUrl,
+    productUnits: [{
+      name: 'Литры',
+      value: 'liter',
+    },{
+      name: 'Кг',
+      value: 'kg',
+    }],
     unitMeasurement: (data) => {
       switch (data) {
         case 'liter': return ' Литры'

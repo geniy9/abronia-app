@@ -31,7 +31,7 @@ watch(() => data.currentPage, (value) => {
         </h2>
       </div>
       <ProductList :items="apiStore.products" :loading="apiStore.loadingProducts" />
-      <div v-if="(apiStore.hasProduct === 0)" class="text-center text-gray-500 py-4">
+      <div v-if="(apiStore.hasProducts === 0)" class="text-center text-gray-500 py-4">
         Продукция в данной категории пока отсутствует
       </div>
 

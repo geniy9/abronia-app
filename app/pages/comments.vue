@@ -18,6 +18,9 @@ const comments = computed(() => apiStore.comments)
           Заметки
         </h2>
       </div>
+      <UButton to="/comments#add" color="primary" block icon="hugeicons:message-add-01">
+        Добавить заметку
+      </UButton>
       <CommentList :items="comments" :loading="apiStore.loadingComments" />
     </div>
   </div>

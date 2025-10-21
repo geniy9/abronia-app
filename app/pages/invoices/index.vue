@@ -23,14 +23,14 @@ const yearsForSelect = computed(() => {
 </script>
 <template>
   <div class="body_layout">
-    <div class="relative flex flex-col gap-4 bg-white dark:bg-gray-700 p-2 rounded-xl w-full mt-9 pt-9">
-      <img src="/img/invoice.png" alt="Инвойсы" class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-15 h-15 p-1 rounded-full bg-gray-200 dark:bg-gray-500" />
-      <h2 class="text-center text-lg font-bold text-black dark:text-white">
-        Инвойсы
-      </h2>
+    <div class="body_content">
+      <NuxtLink to="/invoices" class="body_head">
+        <img src="/img/invoice.png" alt="Склад" />
+      </NuxtLink>
+      <h2 class="main_title">Инвойсы</h2>
       <SearchBar placeholder="Поиск по инвойсам" api="invoices" />
 
-      <UButton color="primary" block trailing icon="hugeicons:plus-sign-circle">
+      <UButton color="primary" block icon="hugeicons:add-invoice">
         Создать новый инвойс
       </UButton>
 

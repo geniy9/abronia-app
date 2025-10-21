@@ -5,6 +5,10 @@ const props = defineProps({
   placeholder: {
     type: String,
     default: 'Поиск'
+  },
+  api: {
+    type: String,
+    default: ''
   }
 })
 

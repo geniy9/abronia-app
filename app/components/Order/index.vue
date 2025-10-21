@@ -58,7 +58,7 @@ const columns = [{
         <template #quantity-cell="{ row }">
           <div class="flex items-center justify-end gap-1">
             <p>{{ row.original.quantity }}</p>
-            <p>{{ unitMeasurement(row.original.product.unit) }}</p>
+            <p>{{ unitMeasurement(row.original.product?.unit) }}</p>
           </div>
         </template>
       </UTable>
