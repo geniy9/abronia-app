@@ -1,6 +1,7 @@
 <script setup>
 import { useApiStore } from '~/store/api'
 const apiStore = useApiStore()
+const route = useRoute()
 
 definePageMeta({
   middleware: 'auth'
@@ -20,6 +21,8 @@ const yearsForSelect = computed(() => {
   }
   return years
 })
+
+const isAdd = computed(() => route.hash === '#add')
 </script>
 <template>
   <div class="body_layout">
@@ -28,13 +31,16 @@ const yearsForSelect = computed(() => {
         <img src="/img/invoice.png" alt="Склад" />
       </NuxtLink>
       <h2 class="main_title">Инвойсы</h2>
-      <SearchBar placeholder="Поиск по инвойсам" api="invoices" />
 
-      <UButton color="primary" block icon="hugeicons:add-invoice">
-        Создать новый инвойс
-      </UButton>
+      <InvoiceAdd v-if="isAdd" />
+      <div v-else class="flex flex-col gap-4">
+        <SearchBar placeholder="Поиск по инвойсам" api="invoices" />
+        <UButton to="/invoices#add" color="primary" block icon="hugeicons:add-invoice">
+          Создать новый инвойс
+        </UButton>
+        <InvoiceByYears :items="yearsForSelect" :loading="apiStore.loadingInvoices" />
+      </div>
 
-      <InvoiceByYears :items="yearsForSelect" :loading="apiStore.loadingInvoices" />
     </div>
   </div>
 </template>

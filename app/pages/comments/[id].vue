@@ -1,26 +1,28 @@
 <script setup>
 const route = useRoute()
 
-const product = ref(null)
-const hasProduct = ref(null)
+const comment = ref(null)
 const data = reactive({
   id: route.params.id || null,
   loading: false,
 })
 
-async function getProduct() {
+async function getCommet() {
   try {
     data.loading = true
     const { findOne } = useStrapi()
-    const res = await findOne('products', data.id, {
+    const res = await findOne('comments', data.id, {
       populate: { 
-        category: true,
-        comment: true
+        order: true, 
+        invoice: true, 
+        customer: true, 
+        product: {
+          populate: { category: true }
+        }
       }
     })
-    if (res) {
-      product.value = res.data
-      hasProduct.value = res.meta?.pagination?.total || 0;
+    if (res?.data) {
+      comment.value = res.data
     }
   } catch (error) {
     console.log(error)
@@ -28,8 +30,8 @@ async function getProduct() {
     data.loading = false
   }
 }
-onMounted(async () => { await getProduct() })
-onUnmounted(() => { product.value = null })
+onMounted(async () => { await getCommet() })
+onUnmounted(() => { comment.value = null })
 </script>
 <template>
   <div class="body_layout">
@@ -38,12 +40,12 @@ onUnmounted(() => { product.value = null })
       <div v-if="data.loading" class="grid grid-cols-1 gap-4">
         <USkeleton class="w-full h-15" />
         <div class="w-full flex flex-col gap-4">
-          <div class="grid grid-cols-2 gap-4">
-            <USkeleton v-for="i in 12" class="h-4" />
+          <div class="grid gap-4">
+            <USkeleton v-for="i in 6" class="h-4" />
           </div>
         </div>
       </div>
-      <Product v-else-if="product" :item="product" />
+      <Comment v-else-if="comment" :item="comment" />
 
     </div>
   </div>

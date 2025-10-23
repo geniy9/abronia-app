@@ -4,54 +4,48 @@ export default () => {
   const toast = useToast()
   return {
     imageUrl,
-    productUnits: [{
-      name: 'Литры',
-      value: 'liter',
-    },{
-      name: 'Кг',
-      value: 'kg',
-    }],
-    unitMeasurement: (data) => {
+    productUnits: [
+      { name: 'Литры', value: 'liter' },
+      { name: 'Кг', value: 'kg' }
+    ],
+    unitMeasurement: (data, n) => {
       switch (data) {
-        case 'liter': return ' Литры'
-        case 'kg': return ' Кг'
-        default: return ''
+        case 'liter':
+          if (typeof n === 'number') {
+            let lastDigit = n % 10;
+            let lastTwoDigits = n % 100;
+            if (lastTwoDigits >= 11 && lastTwoDigits <= 14) { return ' литров' }
+            if (lastDigit === 1) { return ' литр' }
+            if (lastDigit >= 2 && lastDigit <= 4) { return ' литра' }
+            return ' литров';
+          }
+          return ' литры';
+        case 'kg': return ' кг';
+        default: return '';
       }
     },
+    orderStatusList: [
+      { name: 'в ожидании', value: 'pending' },
+      { name: 'отправлен', value: 'shipped' },
+      { name: 'завершён', value: 'completed' },
+      { name: 'отменён', value: 'cancelled' },
+    ],
     statusOrder: (data) => {
       switch (data) {
-        case 'pending': return 'в ожидании'
-        case 'shipped': return 'отправлен'
-        case 'completed': return 'доставлен'
-        case 'cancelled': return 'отменён'
+        case 'pending': return { name: 'в ожидании', color: 'info' }
+        case 'shipped': return { name: 'отправлен', color: 'warning' }
+        case 'completed': return { name: 'завершён', color: 'success' }
+        case 'cancelled': return { name: 'отменён', color: 'error' }
         default: return ''
-      }
-    },
-    colorStatusOrder: (data) => {
-      switch (data) {
-        case 'pending': return 'info'
-        case 'shipped': return 'warning'
-        case 'completed': return 'success'
-        case 'cancelled': return 'error'
-        default: return 'info'
       }
     },
     statusInvoice: (data) => {
       switch (data) {
-        case 'draft': return 'черновик'
-        case 'sent': return 'отправлен'
-        case 'partially_paid': return 'оплачен частично'
-        case 'paid': return 'оплачен'
+        case 'draft': return { name: 'черновик', color: 'info' }
+        case 'sent': return { name: 'отправлен', color: 'error' }
+        case 'partially_paid': return { name: 'оплачен частично', color: 'warning' }
+        case 'paid': return { name: 'оплачен', color: 'success' }
         default: return ''
-      }
-    },
-    colorStatusInvoice: (data) => {
-      switch (data) {
-        case 'draft': return 'info'
-        case 'sent': return 'error'
-        case 'partially_paid': return 'warning'
-        case 'paid': return 'success'
-        default: return 'info'
       }
     },
     copyBoofer: (str) => {

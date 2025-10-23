@@ -10,8 +10,8 @@ const props = defineProps({
 const inStock = ref(props.item?.parLevel)
 </script>
 <template>
-  <div class="flex items-center justify-between w-full p-2">
-    <h3 class="font-bold text-gray-900 dark:text-white px-2">
+  <div class="flex items-center justify-between bg-gray-200 dark:bg-gray-900 rounded-lg p-2">
+    <h3 class="font-bold text-gray-900 dark:text-white">
       {{ truncate(item.name, 20) }}
     </h3>
     <div class="flex items-center justify-center">

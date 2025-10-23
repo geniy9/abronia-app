@@ -1,6 +1,7 @@
 <script setup>
 import { useApiStore } from '~/store/api'
 const apiStore = useApiStore()
+const route = useRoute()
 
 definePageMeta({
   middleware: 'auth'
@@ -9,6 +10,7 @@ definePageMeta({
 onMounted(async () => { await apiStore.getComments() })
 
 const comments = computed(() => apiStore.comments)
+const isAdd = computed(() => route.hash === '#add')
 </script>
 <template>
   <div class="body_layout">
@@ -18,10 +20,13 @@ const comments = computed(() => apiStore.comments)
           Заметки
         </h2>
       </div>
-      <UButton to="/comments#add" color="primary" block icon="hugeicons:message-add-01">
-        Добавить заметку
-      </UButton>
-      <CommentList :items="comments" :loading="apiStore.loadingComments" />
+      <CommentAdd v-if="isAdd" />
+      <div v-else class="flex flex-col gap-4">
+        <UButton to="/comments#add" color="primary" block icon="hugeicons:message-add-01">
+          Добавить заметку
+        </UButton>
+        <CommentList :items="comments" :loading="apiStore.loadingComments" />
+      </div>
     </div>
   </div>
 </template>

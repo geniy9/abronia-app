@@ -85,7 +85,7 @@ const isDisabled = computed(() => { return !data.name || !data.contactName })
       <h2 class="main_title">{{ data.name || 'Новый клиент' }}</h2>
     </template>
 
-    <UForm :schema="schema" :state="data" class="space-y-3" @submit.prevent="onSubmit">
+    <UForm :schema="schema" :state="data" class="space-y-4" @submit.prevent="onSubmit">
       <UFormField label="Клиент" name="name" required>
         <UInput v-model="data.name" placeholder="Название компании / Имя клиента" type="text" class="w-full" />
       </UFormField>
@@ -96,7 +96,7 @@ const isDisabled = computed(() => { return !data.name || !data.contactName })
         <UInput v-model="data.contactName" placeholder="Контактное лицо" type="text" class="w-full" />
       </UFormField>
 
-      <h3 class="font-semibold text-lg mt-6 mb-2">Контактная информация</h3>
+      <h3 class="font-semibold mt-6 mb-2">Контактная информация</h3>
       <UFormField label="Телефон" name="contacts.phone">
         <UInput v-model="data.contacts.phone" placeholder="+993 (XX) XX-XX-XX" type="text" class="w-full" />
       </UFormField>
@@ -104,7 +104,10 @@ const isDisabled = computed(() => { return !data.name || !data.contactName })
         <UInput v-model="data.contacts.email" placeholder="example@company.com" type="email" class="w-full" />
       </UFormField>
       <UFormField label="Сайт" name="contacts.website">
-        <UInput v-model="data.contacts.website" placeholder="www.company.com" type="text" class="w-full" />
+        <UFieldGroup class="w-80">
+          <UBadge color="neutral" variant="outline" label="https://" />
+          <UInput v-model="data.contacts.website" placeholder="www.company.com" type="text" class="w-full" />
+        </UFieldGroup>
       </UFormField>
       
       <div class="flex items-center justify-between">

@@ -43,7 +43,7 @@ onUnmounted(() => { order.value = null })
     <div class="flex flex-col gap-4 bg-white dark:bg-gray-700 p-2 rounded-xl w-full">
 
       <div v-if="data.loading" class="grid grid-cols-1 gap-4">
-        <USkeleton class="w-full h-12" />
+        <USkeleton class="w-full h-15" />
         <div class="w-full flex flex-col gap-4">
           <div class="grid grid-cols-2 gap-4">
             <USkeleton v-for="i in 12" class="h-4" />

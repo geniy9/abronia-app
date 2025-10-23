@@ -1,6 +1,5 @@
 <script setup>
-const { copyBoofer, humanDateTime, unitMeasurement, statusOrder, colorStatusOrder } = useConfig()
-
+const { copyBoofer, humanDateTime, unitMeasurement, statusOrder } = useConfig()
 const props = defineProps({
   item: {
     type: Object,
@@ -8,6 +7,7 @@ const props = defineProps({
   }
 })
 
+const statusObject = computed(() => statusOrder(props.item.orderStatus))
 const columns = [{
   accessorKey: 'product.name',
   header: 'Товар'
@@ -19,7 +19,7 @@ const columns = [{
 <template>
   <div class="flex flex-col w-full gap-4">
 
-    <UChip :color="colorStatusOrder(item.orderStatus)" :text="statusOrder(item.orderStatus)" size="3xl" position="bottom-center">
+    <UChip :color="statusObject?.color" :text="statusObject?.name" size="3xl" position="bottom-center">
       <div class="bg-primary text-white text-center rounded-lg w-full p-2">
         <p class="text-xs">Заказ</p>
         <h2 @click="copyBoofer(item.orderNumber)" class="text-lg font-bold cursor-pointer">
@@ -58,15 +58,14 @@ const columns = [{
         <template #quantity-cell="{ row }">
           <div class="flex items-center justify-end gap-1">
             <p>{{ row.original.quantity }}</p>
-            <p>{{ unitMeasurement(row.original.product?.unit) }}</p>
+            <p>{{ unitMeasurement(row.original.product?.unit, row.original.quantity) }}</p>
           </div>
         </template>
       </UTable>
-      <div v-if="item.comment" class="flex flex-col justify-between gap-1">
-        <span class="text-gray-900 dark:text-white">
-          Комментарий
-        </span>
-        <UTextarea v-model="item.comment.message" disabled placeholder="Оставить комментарий..." />
+      <div v-if="item.comment" class="flex flex-col items-stretch gap-2 bg-gray-200 dark:bg-gray-800 rounded-md p-2">
+        <div v-html="item.comment.message" class="text-sm text-gray-700 dark:text-gray-400"></div>
+        <UButton :to="`/comments/${item.comment.documentId}`" color="neutral" variant="soft" icon="hugeicons:link-square-02" trailing size="sm" class="self-end">
+        </UButton>
       </div>
       <!-- <div v-if="(item.totalAmount > item.paidAmount)">
         <NotifyDatePicker :notified="item.remindPaymentDate" />

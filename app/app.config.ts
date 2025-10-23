@@ -2,7 +2,7 @@ export default defineAppConfig({
   ui: {
 
     icons: {
-      loading: 'line-md:loading-loop'
+      loading: 'svg-spinners:90-ring'
     },
 
     button: {

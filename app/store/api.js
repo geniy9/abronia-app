@@ -203,7 +203,7 @@ export const useApiStore = defineStore('api', {
           this.hasSamples = null
         }
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Ошибка запроса образцов:", error);
         this.samples = [];
         this.totalSamples = 0;
         this.hasSamples = null
@@ -212,42 +212,17 @@ export const useApiStore = defineStore('api', {
       }
     },
 
-    async fetchProducts() {
+    async getProducts() {
       this.loadingProducts = true
       const { find } = useStrapi()
-      
-      const finalFilters = {}
-      const trimmedSearchValue = this.searchValue?.trim()
-
-      if (trimmedSearchValue) {
-        finalFilters.$or = [
-          { name: { $containsi: trimmedSearchValue } },
-          { sku: { $containsi: trimmedSearchValue } }
-        ]
-      } else {
-        const fitmentFilters = {};
-
-        if (Object.keys(fitmentFilters).length > 0) {
-          finalFilters.fitments = fitmentFilters
-          this.selectedCategory = null
-        } else if (this.selectedCategory?.length > 0) {
-          finalFilters.category = { slug: { $eq: this.selectedCategory[0].slug } }
-        }
-      }
-
       try {
         const res = await find('products', {
-          populate: {
-            category: true,
-            variants: { populate: ['images'] }
-          },
-          filters: finalFilters,
+          populate: { category: true },
           pagination: {
             page: this.currentPage,
             pageSize: this.pageSize
           }
         });
-
         if (res?.data) {
           this.products = res.data
           this.totalProducts = res.meta?.pagination?.total || 0
@@ -272,14 +247,9 @@ export const useApiStore = defineStore('api', {
       const { find } = useStrapi()
       try {
         const res = await find('products', {
-          populate: {
-            category: true,
-            // variants: { populate: ['images'] }
-          },
+          populate: { category: true },
           filters: { 
-            category: { 
-              documentId: { $eq: docId } 
-            } 
+            category: { documentId: { $eq: docId } } 
           },
           pagination: {
             page: this.currentPage,
@@ -309,7 +279,7 @@ export const useApiStore = defineStore('api', {
       this.selectedCategory = null
       this.products.length = 0
       this.searchValue = ''
-      this.fetchProducts()
+      this.getProducts()
     },
 
     // async paginate(value, id = null) {
@@ -318,7 +288,7 @@ export const useApiStore = defineStore('api', {
     //   if (id) {
     //     await this.getProductsByCategory(id)
     //   } else {
-    //     await this.fetchProducts()
+    //     await this.getProducts()
     //   }
     // },
 

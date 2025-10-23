@@ -1,11 +1,12 @@
 <script setup>
-const { humanDate, statusInvoice, colorStatusInvoice }= useConfig()
+const { humanDate, statusInvoice }= useConfig()
 const props = defineProps({
   item: {
     type: Object,
     default: null
   }
 })
+const statusObject = computed(() => statusInvoice(props.item.invoiceStatus))
 const invoiceYear = new Date(props.item?.shipmentDate).getFullYear()
 </script>
 <template>
@@ -13,8 +14,8 @@ const invoiceYear = new Date(props.item?.shipmentDate).getFullYear()
     <div class="text-gray-900 dark:text-white">
       {{ item.invoiceNumber }}
     </div>
-    <UBadge :color="colorStatusInvoice(item.invoiceStatus)" size="xs" class="rounded-full">
-      {{ statusInvoice(item.invoiceStatus) }}
+    <UBadge :color="statusObject?.color" size="sm" class="rounded-full">
+      {{ statusObject?.name }}
     </UBadge>
     <div class="flex items-center justify-center text-gray-900 dark:text-white">
       {{ humanDate(item.shipmentDate) }}
