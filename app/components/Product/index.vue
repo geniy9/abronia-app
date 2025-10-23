@@ -47,7 +47,7 @@ const props = defineProps({
           Количество
         </span>
         <span class="text-gray-900 dark:text-white text-sm font-medium">
-          {{ item.quantityInStock + unitMeasurement(item.unit) }}
+          {{ item.quantityInStock + unitMeasurement(item.unit, item.quantityInStock) }}
         </span>
       </div>
       <div v-if="item.comment" class="flex flex-col items-stretch gap-2 bg-gray-200 dark:bg-gray-800 rounded-md p-2">
