@@ -3,22 +3,27 @@ import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalize
 
 const props = defineProps({
   notified: {
-    type: Date,
+    type: [String, Date],
     default: null
   }
 })
-const df = new DateFormatter('ru-RU', {
-  dateStyle: 'medium'
-})
+const df = new DateFormatter('ru-RU', { dateStyle: 'medium' })
 
+const notifiedDate = computed(() => {
+  if (props.notified instanceof Date) {
+    return props.notified;
+  }
+  if (typeof props.notified === 'string') {
+    return new Date(props.notified);
+  }
+  return null;
+});
 const modelValue = shallowRef(
-  props.notified 
-    ? new CalendarDate(
-        props.notified.getFullYear(),
-        props.notified.getMonth() + 1,
-        props.notified.getDate()
-      )
-    : null
+  notifiedDate.value ? new CalendarDate(
+    notifiedDate.value.getFullYear(),
+    notifiedDate.value.getMonth() + 1,
+    notifiedDate.value.getDate()
+  ) : null
 )
 </script>
 <template>

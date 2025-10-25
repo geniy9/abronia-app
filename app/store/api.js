@@ -15,6 +15,8 @@ export const useApiStore = defineStore('api', {
     customers: [],
     comments: [],
 
+    invoice: null,
+
     loadingSamples: false,
     loadingProducts: false,
     loadingInvoices: false,
@@ -44,7 +46,17 @@ export const useApiStore = defineStore('api', {
 
     getterCategory(state) {
       return state.products.length > 0 ? state.products[0]?.category : null
-    }
+    },
+
+    getterInvoice(state) {
+      if (state.invoice) {
+        return {
+          ...state.invoice,
+          attachments: Array.isArray(state.invoice.attachments) ? state.invoice.attachments : []
+        };
+      }
+      return state.invoice;
+    },
 
   },
 
@@ -105,6 +117,48 @@ export const useApiStore = defineStore('api', {
       } finally {
         this.loadingInvoices = false
       }
+    },
+
+    async getInvoice(id) {
+      try {
+        this.loadingInvoices = true
+        const { findOne } = useStrapi()
+        const res = await findOne('invoices', id, {
+          populate: { 
+            order: {
+              populate: {
+                customer: true,
+                productItems: { populate: ['product'] }
+              },
+            },
+            attachments: true,
+            comment: true
+          }
+        })
+        if (res?.data) {
+          this.invoice = res.data
+        } else {
+          this.invoice = null
+        }
+      } catch (error) {
+        console.error("Error fetching invoice:", error)
+        this.invoice = null
+      } finally {
+        this.loadingInvoices = false
+      }
+    },
+
+    addAttachmentsToInvoice(newAttachments) {
+      if (!this.invoice) {
+        console.warn('Нет активного инвойса для добавления вложений.');
+        return;
+      }
+      if (!Array.isArray(this.invoice.attachments)) {
+        this.invoice.attachments = [];
+      }
+      const existingAttachmentIds = this.invoice.attachments.map(att => att.id);
+      const uniqueNewAttachments = newAttachments.filter(newAtt => !existingAttachmentIds.includes(newAtt.id));
+      this.invoice.attachments = [...uniqueNewAttachments, ...this.invoice.attachments]
     },
 
     async getOrders() {

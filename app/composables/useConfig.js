@@ -8,6 +8,18 @@ export default () => {
       { name: 'Литры', value: 'liter' },
       { name: 'Кг', value: 'kg' }
     ],
+    orderStatusList: [
+      { name: 'в ожидании', value: 'pending' },
+      { name: 'отправлен', value: 'shipped' },
+      { name: 'завершён', value: 'completed' },
+      { name: 'отменён', value: 'cancelled' },
+    ],
+    invoiceStatusList: [
+      { name: 'черновик', value: 'draft' },
+      { name: 'отправлен', value: 'sent' },
+      { name: 'оплачен частично', value: 'partially_paid' },
+      { name: 'оплачен', value: 'paid' },
+    ],
     unitMeasurement: (data, n) => {
       switch (data) {
         case 'liter':
@@ -24,12 +36,6 @@ export default () => {
         default: return '';
       }
     },
-    orderStatusList: [
-      { name: 'в ожидании', value: 'pending' },
-      { name: 'отправлен', value: 'shipped' },
-      { name: 'завершён', value: 'completed' },
-      { name: 'отменён', value: 'cancelled' },
-    ],
     statusOrder: (data) => {
       switch (data) {
         case 'pending': return { name: 'в ожидании', color: 'info' }

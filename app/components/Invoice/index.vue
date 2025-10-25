@@ -7,6 +7,7 @@ const props = defineProps({
     default: null
   }
 })
+
 const statusObject = computed(() => statusInvoice(props.item.invoiceStatus))
 const columns = [{
   accessorKey: 'product.name',
@@ -86,22 +87,38 @@ const columns = [{
           {{ (item.totalAmount - item.paidAmount) }} $
         </span>
       </div>
-      <div v-if="(item.totalAmount > item.paidAmount)">
-        <NotifyDatePicker :notified="item.remindPaymentDate" />
+      <div v-if="(item.totalAmount > item.paidAmount)" class="print:hidden">
+        <NotifyDate :notified="item.remindPaymentDate" />
       </div>
-      <UFileUpload 
-        icon="hugeicons:file-upload"
-        color="neutral"
-        highlight
-        label="Прикрепить инвойс"
-        description="JPG, PNG или PDF (max. 2MB)"
-        class="w-full min-h-32" />
+      <div class="grid gap-2 print:hidden">
+        <div v-if="item.attachments?.length" class="grid gap-2">
+          <span class="text-gray-900 dark:text-white">
+            Вложенные файлы
+          </span>
+          <Slider :items="item.attachments" />
+        </div>
+        <UAccordion :items="[{
+            label: 'Приложить файлы',
+            icon: 'hugeicons:plus-sign-circle',
+            slot: 'upload',
+          }]">
+          <template #upload>
+            <InvoiceUploadFiles :document-id="item.documentId" />
+          </template>
+        </UAccordion>
+      </div>
 
-      <div v-if="item.comment" class="flex flex-col items-stretch gap-2 bg-gray-200 dark:bg-gray-800 rounded-md p-2">
-        <div v-html="item.comment.message" class="text-sm text-gray-700 dark:text-gray-400"></div>
-        <UButton :to="`/comments/${item.comment.documentId}`" color="neutral" variant="soft" icon="hugeicons:link-square-02" trailing size="sm" class="self-end">
-        </UButton>
+      <div class="grid gap-2">
+        <span class="text-gray-900 dark:text-white">
+          Комментарий
+        </span>
+        <div v-if="item.comment" class="flex flex-col items-stretch gap-2 bg-gray-200 dark:bg-gray-800 rounded-md p-2 print:hidden">
+          <div v-html="item.comment.message" class="text-sm text-gray-700 dark:text-gray-400"></div>
+          <UButton :to="`/comments/${item.comment.documentId}`" color="neutral" variant="soft" icon="hugeicons:link-square-02" trailing size="sm" class="self-end" />
+        </div>
       </div>
+
+      
     </div>
 
   </div>

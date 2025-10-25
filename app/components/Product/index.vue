@@ -52,8 +52,7 @@ const props = defineProps({
       </div>
       <div v-if="item.comment" class="flex flex-col items-stretch gap-2 bg-gray-200 dark:bg-gray-800 rounded-md p-2">
         <div v-html="item.comment.message" class="text-sm text-gray-700 dark:text-gray-400"></div>
-        <UButton :to="`/comments/${item.comment.documentId}`" color="neutral" variant="soft" icon="hugeicons:link-square-02" trailing size="sm" class="self-end">
-        </UButton>
+        <UButton :to="`/comments/${item.comment.documentId}`" color="neutral" variant="soft" icon="hugeicons:link-square-02" trailing size="sm" class="self-end" />
       </div>
     </div>
 

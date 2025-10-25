@@ -27,29 +27,29 @@ const invoiceYear = (item) => {
         </div>
         
         <UFieldGroup v-if="item.product" class="self-end">
-          <UBadge color="primary" variant="soft" label="Продукт" />
-          <UButton :to="`/stock/${item.product.category?.documentId}/${item.product.documentId}`" color="primary" variant="soft" icon="hugeicons:link-circle-02" trailing>
+          <UBadge color="primary" variant="soft" label="Товар" />
+          <UButton :to="`/stock/${item.product.category?.documentId}/${item.product.documentId}`" color="primary" variant="soft" icon="hugeicons:link-square-02" size="sm" trailing>
             {{ item.product.name }}
           </UButton>
         </UFieldGroup>
 
         <UFieldGroup v-if="item.order" class="self-end">
           <UBadge color="primary" variant="soft" label="Номер заказа" />
-          <UButton :to="`/orders/${item.order.documentId}`" color="primary" variant="soft" icon="hugeicons:link-circle-02" trailing>
+          <UButton :to="`/orders/${item.order.documentId}`" color="primary" variant="soft" icon="hugeicons:link-square-02" size="sm" trailing>
             {{ item.order.orderNumber }}
           </UButton>
         </UFieldGroup>
 
         <UFieldGroup v-if="item.invoice" class="self-end">
           <UBadge color="primary" variant="soft" label="Номер инвойса" />
-          <UButton :to="`/invoices/${invoiceYear(item.invoice.createdAt)}/${item.invoice.documentId}`" color="primary" variant="soft" icon="hugeicons:link-circle-02" trailing>
+          <UButton :to="`/invoices/${invoiceYear(item.invoice.createdAt)}/${item.invoice.documentId}`" color="primary" variant="soft" icon="hugeicons:link-square-02" size="sm" trailing>
             {{ item.invoice.invoiceNumber }}
           </UButton>
         </UFieldGroup>
 
         <UFieldGroup v-if="item.customer" class="self-end">
           <UBadge color="primary" variant="soft" label="Клиент" />
-          <UButton :to="`/customers/${item.customer.documentId}`" color="primary" variant="soft" icon="hugeicons:link-circle-02" trailing>
+          <UButton :to="`/customers/${item.customer.documentId}`" color="primary" variant="soft" icon="hugeicons:link-square-02" size="sm" trailing>
             {{ item.customer.name }}
           </UButton>
         </UFieldGroup>
