@@ -31,9 +31,7 @@ const data = reactive({
 onMounted(async () => {
   data.loading = true;
   try {
-    if (apiStore.orders?.length === 0) {
-      await apiStore.getOrders();
-    }
+    await apiStore.getOrders();
     data.orders = apiStore.orders.map(item => ({ 
       label: item.orderNumber, 
       value: item.documentId
@@ -74,6 +72,7 @@ async function onSubmit(event) {
       body: { data: invoicePayload },
     });
     const newInvoiceId = invoiceResponse.data.documentId;
+    const invoiceYear = new Date(invoiceResponse.data?.createdAt).getFullYear()
 
     toast.add({
       title: 'Инвойс успешно создан',
@@ -81,7 +80,7 @@ async function onSubmit(event) {
       icon: 'hugeicons:checkmark-circle-02',
     });
     clearForm();
-    router.push(`/invoices/${newInvoiceId}`);
+    router.push(`/invoices/${invoiceYear}/${newInvoiceId}`);
 
   } catch (e) {
     console.error('Ошибка при создании инвойса:', e);

@@ -55,8 +55,6 @@ function updateQuantity(productId, quantity) {
   const item = localSelectedProducts.value.find(p => p.id === productId);
   if (item) { item.quantity = quantity }
 }
-
-// Отправляет выбранные товары в родительский компонент
 function confirmSelection() {
   for (const item of localSelectedProducts.value) {
     try {
@@ -108,20 +106,28 @@ defineExpose({ openCart });
             :class="isProductSelected(product) ? 'bg-gray-200 dark:bg-gray-800' : ''">
             <div class="flex flex-1 justify-between items-center">
               <UCheckbox 
+                icon="hugeicons:add-01"
                 :label="product.name"
+                :description="product.category"
                 :model-value="isProductSelected(product)"
                 @update:model-value="toggleProductSelection(product)" 
-                class="py-2" size="lg" />
+                variant="card"
+                class="py-2" 
+                size="lg" />
               <div v-if="isProductSelected(product)" class="flex items-center gap-2">
                 <span class="text-gray-600 dark:text-gray-400 text-xs uppercase w-12 text-right">
                   {{ unitMeasurement(product.unit) }}
                 </span>
                 <UInputNumber 
-                  orientation="vertical"
                   :model-value="localSelectedProducts.find(item => item.id === product.documentId)?.quantity"
                   @update:model-value="val => updateQuantity(product.documentId, Number(val))"
-                  :min="1"
-                  :ui="{ base: 'w-20' }" />
+                  :min="0" 
+                  :ui="{ base: 'bg-white dark:bg-gray-950 text-black dark:text-white text-sm leading-3 font-bold' }"
+                  :increment="{ icon: 'hugeicons:plus-sign-circle', size: 'md', class: 'p-0' }"
+                  :decrement="{ icon: 'hugeicons:minus-sign-circle', size: 'md', class: 'p-0' }" 
+                  variant="none" 
+                  class="w-28" 
+                  size="sm" />
               </div>
             </div>
           </div>

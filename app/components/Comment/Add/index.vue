@@ -6,7 +6,7 @@ const toast = useToast()
 const router = useRouter()
 
 const schema = z.object({
-  message: z.string().min(3, 'Добавьте текст заметки'),
+  message: z.string().min(1, 'Добавьте текст заметки'),
 });
 const data = reactive({
   message: '',

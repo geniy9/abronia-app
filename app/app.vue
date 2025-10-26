@@ -8,7 +8,7 @@ useHead({
 <template>
   <UApp>
     <div class="flex flex-col min-h-screen overflow-hidden bg-black text-white">
-      <Background />
+      <!-- <Background /> -->
       <Headers />
       <div class="flex-grow py-16 px-2 z-0">
         <NuxtLayout>

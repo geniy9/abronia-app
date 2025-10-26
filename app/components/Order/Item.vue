@@ -10,9 +10,12 @@ const statusObject = computed(() => statusOrder(props.item.orderStatus))
 </script>
 <template>
   <NuxtLink :to="`/orders/${item.documentId}`" class="flex justify-between gap-2 items-center cursor-pointer w-full text-sm bg-gray-200 dark:bg-gray-900 rounded-lg p-2">
-    <h3 class="flex flex-1 flex-col gap-0.5 font-bold text-gray-900 dark:text-white px-2">
-      <span class="text-xs opacity-80">Заказ</span>
-      <span>{{ item.customer?.name }}</span>
+    <h3 class="flex flex-1 flex-col gap-0.5 text-gray-900 dark:text-white px-2">
+      <div class="flex items-center gap-2">
+        <span class="text-xs opacity-80">Заказ</span>
+        <span class="text-xs">{{ item.orderNumber }}</span>
+      </div>
+      <span class="font-bold">{{ item.customer?.name }}</span>
     </h3>
     <UBadge :color="statusObject?.color" size="sm" class="rounded-full">
       {{ statusObject?.name }}

@@ -27,20 +27,18 @@ const data = reactive({
 })
 
 onMounted(async () => {
-  if (apiStore.categories?.length === 0) {
-    try {
-      data.loading = true
-      await apiStore.getCategories()
-    } catch (error) {
-      toast.add({
-        title: 'Ошибка загрузки категорий',
-        description: 'Не удалось загрузить список категорий. Попробуйте обновить страницу.',
-        color: 'error',
-        icon: 'i-heroicons-x-circle',
-      });
-    } finally {
-      data.loading = false
-    }
+  try {
+    data.loading = true
+    await apiStore.getCategories()
+  } catch (error) {
+    toast.add({
+      title: 'Ошибка загрузки категорий',
+      description: 'Не удалось загрузить список категорий. Попробуйте обновить страницу.',
+      color: 'error',
+      icon: 'hugeicons:cancel-circle',
+    });
+  } finally {
+    data.loading = false
   }
 });
 
@@ -61,8 +59,6 @@ async function onSubmit(event) {
       type: 'stock_in',
       quantity: quantity,
       product: { connect: [newProductId] },
-      // order: {},
-      // comment: {},
     };
     await client('/stocks', {
       method: 'POST',

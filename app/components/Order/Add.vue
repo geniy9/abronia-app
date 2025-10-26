@@ -1,6 +1,7 @@
 <script setup>
 import { useApiStore } from '~/store/api'
 import { z } from 'zod'
+import { promise } from 'zod/mini'
 
 const apiStore = useApiStore()
 const client = useStrapiClient()
@@ -35,16 +36,12 @@ const data = reactive({
 onMounted(async () => {
   data.loading = true;
   try {
-    if (apiStore.customers?.length === 0) {
-      await apiStore.getCustomers();
-    }
-    data.customers = apiStore.customers.map(item => ({ label: item.name, value: item.documentId }));
+    await Promise.all([apiStore.getCustomers(), apiStore.getProducts()])
 
-    if (apiStore.products?.length === 0) {
-      await apiStore.getProducts();
-    }
+    data.customers = apiStore.customers.map(item => ({ label: item.name, value: item.documentId }));
     data.products = apiStore.products.map(item => ({
       documentId: item.documentId,
+      category: item.category?.name,
       name: item.name,
       unit: item.unit,
     }));
@@ -192,7 +189,10 @@ const isDisabled = computed(() => {
     <OrderCart
       ref="cartComponent"
       :products="data.products"
-      :initial-selected="state.productItems.map(item => ({ product: { documentId: item.id, name: item.name }, quantity: item.quantity }))"
+      :initial-selected="state.productItems.map(item => ({ 
+        product: { documentId: item.id, name: item.name }, 
+        quantity: item.quantity 
+      }))"
       @add-to-order="handleProductsAdded" />
   </UCard>
 </template>

@@ -61,6 +61,14 @@ export default defineAppConfig({
       }
     },
 
+    accordion: {
+      slots: {
+        leadingIcon: 'text-gray-900 dark:text-white',
+        trailingIcon: 'text-gray-900 dark:text-white',
+        label: 'text-gray-900 dark:text-white'
+      }
+    },
+
     pagination: {
       slots: {
         first: 'cursor-pointer',
