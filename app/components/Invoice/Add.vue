@@ -48,13 +48,6 @@ onMounted(async () => {
   }
 });
 
-function clearForm() {
-  state.invoiceNumber = '';
-  state.invoiceStatus = 'draft';
-  state.orderId = '';
-  state.shipmentDate = new Date();
-}
-
 async function onSubmit(event) {
   data.loading = true;
   try {
@@ -67,20 +60,20 @@ async function onSubmit(event) {
       shipmentDate: state.shipmentDate.toISOString()
     };
 
-    const invoiceResponse = await client('/invoices', {
+    const res = await client('/invoices', {
       method: 'POST',
       body: { data: invoicePayload },
     });
-    const newInvoiceId = invoiceResponse.data.documentId;
-    const invoiceYear = new Date(invoiceResponse.data?.createdAt).getFullYear()
-
-    toast.add({
-      title: 'Инвойс успешно создан',
-      color: 'success',
-      icon: 'hugeicons:checkmark-circle-02',
-    });
-    clearForm();
-    router.push(`/invoices/${invoiceYear}/${newInvoiceId}`);
+    if (res?.data) {
+      const newInvoiceId = res.data.documentId;
+      const invoiceYear = new Date(res.data.createdAt).getFullYear()
+      toast.add({
+        title: 'Инвойс успешно создан',
+        color: 'success',
+        icon: 'hugeicons:checkmark-circle-02',
+      });
+      router.push(`/invoices/${invoiceYear}/${newInvoiceId}`);
+    }
 
   } catch (e) {
     console.error('Ошибка при создании инвойса:', e);
@@ -95,8 +88,15 @@ async function onSubmit(event) {
       icon: 'hugeicons:cancel-circle',
     });
   } finally {
+    clearForm();
     data.loading = false;
   }
+}
+function clearForm() {
+  state.invoiceNumber = '';
+  state.invoiceStatus = 'draft';
+  state.orderId = '';
+  state.shipmentDate = new Date();
 }
 
 const isDisabled = computed(() => {
@@ -111,7 +111,7 @@ const isDisabled = computed(() => {
 
     <UForm :schema="schema" :state="state" class="space-y-4" @submit.prevent="onSubmit">
       <UFormField label="Номер инвойса" name="invoiceNumber" required>
-        <UInput v-model="state.invoiceNumber" placeholder="Номер/код инвойса" type="text" class="w-xs" />
+        <UInput v-model="state.invoiceNumber" placeholder="Номер/код инвойса" type="text" class="w-full" />
       </UFormField>
 
       <UFormField label="Заказ" name="orderId" required>

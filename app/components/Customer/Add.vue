@@ -40,19 +40,19 @@ async function onSubmit(event) {
       ...event.data, 
       contacts: contactsPayload
     };
-    const customerResponse = await client('/customers', {
+    const res = await client('/customers', {
       method: 'POST',
       body: { data: customerPayload },
     });
-    const newCustomerId = customerResponse.data.documentId;
-
-    toast.add({ 
-      title: 'Клиент успешно добавлен', 
-      color: 'success', 
-      icon: 'hugeicons:checkmark-circle-02'
-    });
-    clearData()
-    router.push(`/customers/${newCustomerId}`)
+    if (res?.data) {
+      const newCustomerId = res.data.documentId;
+      toast.add({ 
+        title: 'Клиент успешно добавлен', 
+        color: 'success', 
+        icon: 'hugeicons:checkmark-circle-02'
+      });
+      router.push(`/customers/${newCustomerId}`)
+    }
 
   } catch (e) {
     toast.add({ 

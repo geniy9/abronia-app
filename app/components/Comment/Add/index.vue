@@ -16,19 +16,19 @@ const data = reactive({
 async function onSubmit(event) {
   data.loading = true;
   try {
-    const commentPayload = { ...event.data };
-    const commentResponse = await client('/comments', {
+    const res = await client('/comments', {
       method: 'POST',
-      body: { data: commentPayload },
+      body: { data: { ...event.data } },
     });
-    toast.add({ 
-      title: 'Заметка добавлена', 
-      color: 'success', 
-      icon: 'hugeicons:checkmark-circle-02'
-    });
-    const newCommentId = commentResponse.data.documentId;
-    router.push(`/comments/${newCommentId}`);
-
+    if (res?.data) {
+      toast.add({ 
+        title: 'Заметка добавлена', 
+        color: 'success', 
+        icon: 'hugeicons:checkmark-circle-02'
+      });
+      const newCommentId = res.data.documentId;
+      router.push(`/comments/${newCommentId}`);
+    }
   } catch (e) {
     toast.add({ 
       title: 'Ошибка', 

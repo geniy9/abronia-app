@@ -1,6 +1,8 @@
 <script setup>
+import { useApiStore } from '~/store/api'
 import { z } from 'zod'
 
+const apiStore = useApiStore()
 const client = useStrapiClient()
 const { productUnits } = useConfig()
 const toast = useToast()
@@ -22,18 +24,20 @@ const data = reactive({
 async function onSubmit(event) {
   data.loading = true;
   try {
-    const productPayload = { ...event.data };
-    await client('/samples', {
+    const sampleResponse = await client('/samples', {
       method: 'POST',
-      body: { data: productPayload },
+      body: { data: { ...event.data } },
     });
-    toast.add({ 
-      title: 'Образец успешно добавлен', 
-      color: 'success', 
-      icon: 'hugeicons:checkmark-circle-02'
-    });
-    clearData()
-    router.push('/stock/samples/')
+
+    if (sampleResponse?.data) { 
+      apiStore.addEntryToState('samples', sampleResponse.data)
+      toast.add({ 
+        title: 'Образец успешно добавлен', 
+        color: 'success', 
+        icon: 'hugeicons:checkmark-circle-02'
+      });
+      router.push('/stock/samples')
+    }
 
   } catch (e) {
     toast.add({ 
@@ -66,7 +70,7 @@ const isDisabled = computed(() => {
 
     <UForm :schema="schema" :state="data" class="space-y-3" @submit.prevent="onSubmit">
       <UFormField label="Название" name="name" required>
-        <UInput v-model="data.name" placeholder="Наименование образца" type="text" class="w-xs" />
+        <UInput v-model="data.name" placeholder="Наименование образца" type="text" class="w-full" />
       </UFormField>
 
       <UFormField label="Количество" name="parLevel" required>
@@ -74,7 +78,7 @@ const isDisabled = computed(() => {
           v-model.number="data.parLevel"
           type="number"
           min="0"
-          class="w-xs" />
+          class="w-40" />
       </UFormField>
 
       <UFormField label="Единица измерения" name="unit" required>

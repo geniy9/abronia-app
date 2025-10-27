@@ -4,9 +4,9 @@ import { useApiStore } from '~/store/api'
 const apiStore = useApiStore()
 const route = useRoute()
 
-const data = reactive({
-  currentPage: 1
-})
+// const data = reactive({
+//   currentPage: 1
+// })
 
 async function getSamples() {
   try {
@@ -42,7 +42,7 @@ const isAdd = computed(() => route.hash === '#add')
           Образцы пока отсутствуют
         </div>
 
-        <div v-if="(apiStore.totalSamples > apiStore.pageSize)" class="flex justify-center w-full mt-10">
+        <!-- <div v-if="(apiStore.totalSamples > apiStore.pageSize)" class="flex justify-center w-full mt-10">
           <UPagination 
             v-model:page="currentPage" 
             :items-per-page="apiStore.pageSize" 
@@ -53,7 +53,7 @@ const isAdd = computed(() => route.hash === '#add')
             prevIcon="material-symbols:chevron-left-rounded" 
             nextIcon="material-symbols:chevron-right-rounded" 
             lastIcon="material-symbols:keyboard-double-arrow-right-rounded" />
-        </div>
+        </div> -->
       </div>
 
     </div>

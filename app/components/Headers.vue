@@ -9,9 +9,9 @@ const hideHeader = computed(() => {
 })
 </script>
 <template>
-  <header class="fixed top-0 w-full p-3 z-20 bg-white rounded-b-2xl transition-all duration-300" 
+  <header class="fixed top-0 w-full p-2 z-20 bg-white rounded-b-2xl transition-all duration-300" 
     :class="[hideHeader ? 'rounded-b-none -translate-y-full' : 'rounded-b-2xl translate-y-0']">
-    <div class="section grid grid-cols-3 items-center gap-4">
+    <div class="section grid grid-cols-[auto_1fr_auto] items-center gap-4">
       
       <ToggleTheme />
       <!-- <div></div> -->

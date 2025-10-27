@@ -107,6 +107,7 @@ export const useApiStore = defineStore('api', {
         const startDate = `${year}-01-01T00:00:00.000Z`;
         const endDate = `${year}-12-31T23:59:59.999Z`;
         const res = await find('invoices', {
+          sort: ["createdAt:desc"],
           filters: {
             shipmentDate: { $gte: startDate, $lte: endDate }
           }
@@ -166,10 +167,8 @@ export const useApiStore = defineStore('api', {
         this.loadingOrders = true
         const { find } = useStrapi()
         const res = await find('orders', {
-          populate: {
-            customer: true
-          },
-          sort: ["createdAt:asc"]
+          sort: ["createdAt:desc"],
+          populate: { customer: true }
         })
         if (res?.data) { 
           this.orders = res.data
@@ -192,11 +191,11 @@ export const useApiStore = defineStore('api', {
         this.loadingCustomers = true
         const { find } = useStrapi()
         const res = await find('customers', {
+          sort: ["name:asc"],
           populate: {
             contacts: true,
             comment: true
-          },
-          sort: ["createdAt:asc"]
+          }
         })
         if (res?.data) { 
           this.customers = res.data
@@ -242,6 +241,7 @@ export const useApiStore = defineStore('api', {
       const { find } = useStrapi()
       try {
         const res = await find('samples', {
+          sort: ["name:asc"],
           pagination: {
             page: this.currentPage,
             pageSize: this.pageSize
@@ -271,6 +271,7 @@ export const useApiStore = defineStore('api', {
       const { find } = useStrapi()
       try {
         const res = await find('products', {
+          sort: ["name:asc"],
           populate: { category: true },
           pagination: {
             page: this.currentPage,
@@ -301,6 +302,7 @@ export const useApiStore = defineStore('api', {
       const { find } = useStrapi()
       try {
         const res = await find('products', {
+          sort: ["name:asc"],
           populate: { category: true },
           filters: { 
             category: { documentId: { $eq: docId } } 
@@ -345,6 +347,42 @@ export const useApiStore = defineStore('api', {
     //     await this.getProducts()
     //   }
     // },
+
+    addEntryToState(api, obj) {
+      switch (api) {
+        case 'samples': this.samples = this.samples.unshift(obj);
+        break;
+        case 'products': this.products = this.products.unshift(obj);
+        break;
+        case 'invoices': this.invoices = this.invoices.unshift(obj);
+        break;
+        case 'orders': this.orders = this.orders.unshift(obj);
+        break;
+        case 'customers': this.customers = this.customers.unshift(obj);
+        break;
+        case 'comments': this.comments = this.comments.unshift(obj);
+        break;
+        default: console.warn(`Неизвестный тип API: ${api}`);
+      }
+    },
+
+    removeEntryFromState(api, id) {
+      switch (api) {
+        case 'samples': this.samples = this.samples.filter(i => i.documentId !== id);
+        break;
+        case 'products': this.products = this.products.filter(i => i.documentId !== id);
+        break;
+        case 'invoices': this.invoices = this.invoices.filter(i => i.documentId !== id);
+        break;
+        case 'orders': this.orders = this.orders.filter(i => i.documentId !== id);
+        break;
+        case 'customers': this.customers = this.customers.filter(i => i.documentId !== id);
+        break;
+        case 'comments': this.comments = this.comments.filter(i => i.documentId !== id);
+        break;
+        default: console.warn(`Неизвестный тип API: ${api}`);
+      }
+    }
 
   },
 

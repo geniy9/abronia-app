@@ -31,8 +31,13 @@ watch(() => data.currentPage, (value) => {
         </h2>
       </div>
       <ProductList :items="apiStore.products" :loading="apiStore.loadingProducts" />
-      <div v-if="(apiStore.hasProducts === 0)" class="text-center text-gray-500 py-4">
-        Продукция в данной категории пока отсутствует
+      <div v-if="(apiStore.hasProducts === 0)" class="flex flex-col gap-4 items-center p-4">
+        <span class="text-center text-gray-400">
+          Товары в данной категории пока отсутствуют
+        </span>
+        <UButton to="/stock#add" color="primary" icon="hugeicons:package-add">
+          Добавить товар
+        </UButton>
       </div>
 
       <div v-if="(apiStore.totalProducts > apiStore.pageSize)" class="flex justify-center w-full mt-10">

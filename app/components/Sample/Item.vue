@@ -1,6 +1,6 @@
 <script setup>
 const { truncate, unitMeasurement } = useConfig()
-const { update } = useStrapi()
+const { update, delete: _delete } = useStrapi()
 const toast = useToast()
 
 const props = defineProps({
@@ -39,7 +39,7 @@ async function onSubmit() {
 </script>
 <template>
   <div class="flex items-center justify-between bg-gray-200 dark:bg-gray-900 rounded-lg px-3">
-    <UAccordion :items="[{ trailingIcon: 'hugeicons:settings-01', slot: 'sample' }]">
+    <UAccordion :items="[{ trailingIcon: 'hugeicons:arrow-down-01', slot: 'sample' }]">
       <template #leading>
         <div class="flex justify-between items-center w-full gap-2 text-gray-900 dark:text-white">
           <h3 class="font-bold">
@@ -52,12 +52,8 @@ async function onSubmit() {
         </div>
       </template>
       <template #sample>
-        <div class="flex justify-between items-center pb-3">
-          <h3 class="font-bold text-gray-900 dark:text-white">
-            {{ item.name }}
-          </h3>
-          <div class="flex items-center justify-center gap-2">
-            <!-- <span class="text-xs uppercase opacity-50">{{ unitMeasurement(item.unit, inStock) }}:</span> -->
+        <div class="grid gap-4 pb-3">
+          <div class="flex justify-end">
             <UInputNumber 
               v-model="inStock" 
               :min="0" 
@@ -68,6 +64,9 @@ async function onSubmit() {
               variant="none" 
               class="w-28" 
               size="sm" />
+          </div>
+          <div class="flex items-center justify-between gap-2">
+            <RemoveEntry :id="item.documentId" api="samples" :entry-name="`образец ${item.name}`" />
             <UButton @click="onSubmit" :loading="data.loading" size="sm">
               Сохранить
             </UButton>

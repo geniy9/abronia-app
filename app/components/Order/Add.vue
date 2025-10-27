@@ -63,12 +63,6 @@ function openProductSelection() {
 function handleProductsAdded(selectedProducts) {
   state.productItems = selectedProducts
 }
-function clearForm() {
-  state.orderNumber = '';
-  state.orderStatus = 'pending';
-  state.customerId = '';
-  state.productItems = [];
-}
 
 async function onSubmit(event) {
   data.loading = true;
@@ -93,7 +87,7 @@ async function onSubmit(event) {
 
     for (const item of state.productItems) {
       const stockPayload = {
-        type: 'sale', // Тип движения "продажа"
+        type: 'sale',
         quantity: item.quantity,
         product: { connect: [item.id] },
         order: { connect: [newOrderId] },
@@ -108,7 +102,6 @@ async function onSubmit(event) {
       color: 'success',
       icon: 'hugeicons:checkmark-circle-02',
     });
-    clearForm();
     router.push(`/orders/${newOrderId}`);
 
   } catch (e) {
@@ -124,8 +117,15 @@ async function onSubmit(event) {
       icon: 'hugeicons:cancel-circle',
     });
   } finally {
+    clearForm();
     data.loading = false;
   }
+}
+function clearForm() {
+  state.orderNumber = '';
+  state.orderStatus = 'pending';
+  state.customerId = '';
+  state.productItems = [];
 }
 
 const isDisabled = computed(() => {
@@ -140,7 +140,7 @@ const isDisabled = computed(() => {
 
     <UForm :schema="schema" :state="state" class="space-y-4" @submit.prevent="onSubmit">
       <UFormField label="Номер заказа" name="orderNumber" required>
-        <UInput v-model="state.orderNumber" placeholder="Номер/код заказа" type="text" class="w-xs" />
+        <UInput v-model="state.orderNumber" placeholder="Номер/код заказа" type="text" class="w-full" />
       </UFormField>
       
       <UFormField label="Товары" name="productItems" required>

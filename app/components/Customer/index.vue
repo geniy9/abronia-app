@@ -22,11 +22,19 @@ function handleComment(data) {
 <template>
   <div class="flex flex-col w-full gap-2">
 
-    <div class="bg-primary text-white text-center rounded-lg w-full p-2">
-      <p class="text-xs">Клиент</p>
-      <h2 class="text-lg font-bold cursor-pointer">
-        {{ item.name }}
-      </h2>
+    <div class="grid grid-cols-[auto_1fr_auto] items-center bg-primary text-white rounded-lg p-2">
+      <NuxtLink to="/customers" class="text-2xl leading-0 p-2">
+        <UIcon name="hugeicons:link-backward" />
+      </NuxtLink>
+      <div class="text-center">
+        <p class="text-xs">Клиент</p>
+        <h2 class="text-lg font-bold cursor-pointer">
+          {{ item.name }}
+        </h2>
+      </div>
+      <NuxtLink to="#" class="text-2xl leading-0 p-2">
+        <UIcon name="hugeicons:settings-01" class="text-2xl" />
+      </NuxtLink>
     </div>
 
     <div class="flex flex-col gap-2 pb-2">

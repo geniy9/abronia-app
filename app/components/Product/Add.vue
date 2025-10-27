@@ -70,7 +70,6 @@ async function onSubmit(event) {
       color: 'success', 
       icon: 'hugeicons:checkmark-circle-02'
     });
-    clearData()
     router.push(`/stock/${categoryId}/${newProductId}`)
 
   } catch (e) {

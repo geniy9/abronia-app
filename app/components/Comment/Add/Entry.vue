@@ -2,11 +2,9 @@
 import { z } from 'zod'
 
 const client = useStrapiClient()
-const toast = useToast()
-const router = useRouter()
-
 const emit = defineEmits(['update:modelValue', 'handle-comment']);
-const isOpen = ref(false);
+const isOpen = ref(false)
+const toast = useToast()
 
 const props = defineProps({
   entryId: {
@@ -34,17 +32,18 @@ async function onSubmit(event) {
     if (props.entryName) {
       commentPayload[props.entryName] = { connect: [props.entryId] }
     }
-    const commentResponse = await client('/comments', {
+    const res = await client('/comments', {
       method: 'POST',
       body: { data: commentPayload },
     });
-    toast.add({ 
-      title: 'Комментарий добавлен', 
-      color: 'success', 
-      icon: 'hugeicons:checkmark-circle-02'
-    });
-    const newComment = commentResponse.data;
-    emit('handle-comment', newComment);
+    if (res?.data) {
+      toast.add({ 
+        title: 'Комментарий добавлен', 
+        color: 'success', 
+        icon: 'hugeicons:checkmark-circle-02'
+      });
+      emit('handle-comment', res.data);
+    }
 
   } catch (e) {
     toast.add({ 

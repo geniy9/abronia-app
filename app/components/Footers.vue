@@ -17,9 +17,9 @@ function backStep() {
 }
 </script>
 <template>
-  <footer class="fixed bottom-0 w-full bg-primary rounded-t-2xl p-3 transition-all duration-300" 
+  <footer class="fixed bottom-0 w-full bg-primary rounded-t-2xl p-2 transition-all duration-300" 
     :class="[hideFooter ? 'rounded-t-none translate-y-full' : 'rounded-t-2xl translate-y-0']">
-    <div class="section grid grid-cols-3 items-center text-white gap-4">
+    <div class="section grid grid-cols-[auto_1fr_auto] items-center text-white gap-4">
 
       <UIcon name="hugeicons:link-backward" 
         @click="backStep" 
