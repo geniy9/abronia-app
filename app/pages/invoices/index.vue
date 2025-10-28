@@ -27,17 +27,25 @@ const isAdd = computed(() => route.hash === '#add')
 <template>
   <div class="body_layout">
     <div class="body_content">
-      <NuxtLink to="/invoices" class="body_head">
-        <img src="/img/invoice.png" alt="Склад" />
-      </NuxtLink>
-      <h2 class="main_title">Инвойсы</h2>
+
+      <div class="grid grid-cols-[auto_1fr_auto] items-center dark:text-white text-black">
+        <NuxtLink to="/home" class="text-2xl leading-0 p-2">
+          <UIcon name="hugeicons:link-backward" />
+        </NuxtLink>
+        <div>
+          <NuxtLink to="/invoices" class="body_head">
+            <img src="/img/invoice.png" alt="Склад" />
+          </NuxtLink>
+          <h2 class="main_title">Инвойсы</h2>
+        </div>
+        <NuxtLink :to="isAdd ? '/invoices' : '/invoices#add'" class="text-2xl leading-0 p-2">
+          <UIcon :name="isAdd ? 'hugeicons:cancel-square' : 'hugeicons:add-invoice'" class="text-2xl" />
+        </NuxtLink>
+      </div>
 
       <InvoiceAdd v-if="isAdd" />
       <div v-else class="flex flex-col gap-4">
         <SearchBar placeholder="Поиск по инвойсам" api="invoices" />
-        <UButton to="/invoices#add" color="primary" block icon="hugeicons:add-invoice">
-          Создать новый инвойс
-        </UButton>
         <InvoiceByYears :items="yearsForSelect" :loading="apiStore.loadingInvoices" />
       </div>
 

@@ -1,14 +1,19 @@
 <script setup>
 const { humanDateTime } = useConfig()
+const route = useRoute()
 const props = defineProps({
   item: {
     type: Object,
     default: null
   }
 })
-const invoiceYear = (item) => {
-  return new Date(item).getFullYear()
+const message = ref(props.item?.message)
+const invoiceYear = (item) => { return new Date(item).getFullYear() }
+
+function onEdited(obj) { 
+  message.value = obj.message
 }
+const isEdit = computed(() => route.hash === '#edit')
 </script>
 <template>
   <div class="grid gap-2 w-full">
@@ -19,19 +24,28 @@ const invoiceYear = (item) => {
       </NuxtLink>
       <div class="text-center">
         <p class="text-xs">Заметка</p>
-        <h2 class="text-lg font-bold cursor-pointer">
+        <h2 class="text-lg font-bold">
           {{ humanDateTime(item.createdAt) }}
         </h2>
       </div>
-      <NuxtLink to="#" class="text-2xl leading-0 py-2">
-        <UIcon name="hugeicons:settings-01" class="text-2xl" />
+      <NuxtLink :to="isEdit ? route.path : `${route.path}#edit`" class="text-2xl leading-0 py-2">
+        <UIcon :name="isEdit ? 'hugeicons:cancel-square' : 'hugeicons:settings-01'" class="text-2xl" />
       </NuxtLink>
     </div>
     
-    <div class="grid gap-1">
+    <CommentEdit 
+      v-if="isEdit" 
+      :id="item.documentId" 
+      :message="message" 
+      @onEdited="onEdited" />
+    <div v-else class="grid gap-1">
       <div class="flex flex-col items-stretch bg-gray-200 dark:bg-gray-900 rounded-lg p-2 gap-4">
         <div class="text-gray-900 dark:text-white">
-          {{ item.message }}
+          <span class="flex items-center gap-1 text-xs opacity-60">
+            <UIcon name="hugeicons:checkmark-circle-04" class="text-sm" />
+            <span>{{ humanDateTime(item.updatedAt) }}</span>
+          </span>
+          <span>{{ message }}</span>
         </div>
         
         <UFieldGroup v-if="item.product" class="self-end">

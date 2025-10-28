@@ -13,7 +13,7 @@ async function getCustomer() {
     data.loading = true
     const { findOne } = useStrapi()
     const res = await findOne('customers', data.id, {
-      populate: { contacts: true, comment: true }
+      populate: { comment: true }
     })
     if (res?.data) {
       customer.value = res.data
@@ -42,7 +42,7 @@ onUnmounted(() => { customer.value = null })
           </div>
         </div>
       </div>
-      <Customer v-else-if="customer" :item="customer" />
+      <Customer v-else-if="customer" :customer="customer" />
       <div v-else-if="hasCustomer === 0" class="text-center text-gray-500 py-4">
         Клиентов пока нет
       </div>

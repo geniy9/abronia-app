@@ -63,21 +63,10 @@ defineExpose({ openCommentPrompt });
 const isDisabled = computed(() => { return !data.message })
 </script>
 <template>
-  <UModal v-model:open="isOpen">
-    <template #header>
-      <div class="flex items-center justify-between w-full">
-        <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-          Комментарий
-        </h3>
-        <UButton
-          color="gray"
-          variant="ghost"
-          icon="hugeicons:cancel-01"
-          class="-my-1"
-          @click="isOpen = false"
-        />
-      </div>
-    </template>
+  <UModal v-model:open="isOpen" 
+    title="Комментарий" 
+    close-icon="hugeicons:cancel-01"
+    :ui="{ content: 'max-w-sm' }">
 
     <template #body>
       <UForm :schema="schema" :state="data" class="space-y-3" @submit.prevent="onSubmit">

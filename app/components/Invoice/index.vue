@@ -28,16 +28,25 @@ const columns = [{
   header: () => h('div', { class: 'text-right' }, 'Кол-во'),
 }]
 const statusObject = computed(() => statusInvoice(props.item.invoiceStatus))
+const invoiceYear = new Date(props.item?.createdAt).getFullYear()
 </script>
 <template>
   <div class="flex flex-col w-full gap-4">
 
     <UChip :color="statusObject?.color" :text="statusObject?.name" size="3xl" position="bottom-center">
-      <div class="bg-primary text-white text-center rounded-lg w-full p-2">
-        <p class="text-xs">Инвойс</p>
-        <h2 @click="copyBoofer(item.invoiceNumber)" class="text-lg font-bold cursor-pointer">
-          {{ item.invoiceNumber }}
-        </h2>
+      <div class="grid w-full grid-cols-[auto_1fr_auto] items-center bg-primary text-white rounded-lg p-2">
+        <NuxtLink :to="`/invoices/${invoiceYear}`" class="text-2xl leading-0 p-2">
+          <UIcon name="hugeicons:link-backward" />
+        </NuxtLink>
+        <div class="text-center">
+          <p class="text-xs">Инвойс</p>
+          <h2 class="text-lg font-bold">
+            {{ item.invoiceNumber }}
+          </h2>
+        </div>
+        <NuxtLink to="#" class="text-2xl leading-0 p-2">
+          <UIcon name="hugeicons:settings-01" class="text-2xl" />
+        </NuxtLink>
       </div>
     </UChip>
 

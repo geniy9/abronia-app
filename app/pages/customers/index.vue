@@ -15,7 +15,7 @@ const isAdd = computed(() => route.hash === '#add')
     <div class="body_content">
 
       <div class="grid grid-cols-[auto_1fr_auto] items-center dark:text-white text-black">
-        <NuxtLink to="/home" class="text-2xl leading-0 px-2 py-4">
+        <NuxtLink to="/home" class="text-2xl leading-0 p-2">
           <UIcon name="hugeicons:link-backward" />
         </NuxtLink>
         <div>
@@ -24,8 +24,8 @@ const isAdd = computed(() => route.hash === '#add')
           </NuxtLink>
           <h2 class="main_title">База клиентов</h2>
         </div>
-        <NuxtLink to="/customers#add" class="text-2xl leading-0 px-2 py-4">
-          <UIcon name="hugeicons:user-add-02" class="text-2xl" />
+        <NuxtLink :to="isAdd ? '/customers' : '/customers#add'" class="text-2xl leading-0 p-2">
+          <UIcon :name="isAdd ? 'hugeicons:cancel-square' : 'hugeicons:user-add-02'" class="text-2xl" />
         </NuxtLink>
       </div>
 

@@ -5,6 +5,7 @@ const apiStore = useApiStore()
 const { delete: _delete } = useStrapi()
 const toast = useToast()
 const isOpen = ref(false)
+const emit = defineEmits(['on-removed'])
 
 const props = defineProps({
   id: {
@@ -30,11 +31,12 @@ async function onSubmit() {
     if (props.id && props.api) {
       await _delete(props.api, props.id);
       toast.add({ 
-        title: 'Успешно удален', 
+        title: `${props.entryName} успешно удален`, 
         color: 'success', 
         icon: 'hugeicons:checkmark-circle-02'
       });
       apiStore.removeEntryFromState(props.api, props.id)
+      eimt('on-removed')
     }
   } catch (e) {
     toast.add({ 

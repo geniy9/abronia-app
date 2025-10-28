@@ -45,7 +45,7 @@ export const useApiStore = defineStore('api', {
   getters: {
 
     getterCategory(state) {
-      return state.products.length > 0 ? state.products[0]?.category : null
+      return state.products.length > 0 ? state.products[0]?.category : ''
     },
 
     getterInvoice(state) {
@@ -192,10 +192,7 @@ export const useApiStore = defineStore('api', {
         const { find } = useStrapi()
         const res = await find('customers', {
           sort: ["name:asc"],
-          populate: {
-            contacts: true,
-            comment: true
-          }
+          populate: { comment: true }
         })
         if (res?.data) { 
           this.customers = res.data

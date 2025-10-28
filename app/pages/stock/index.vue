@@ -29,17 +29,25 @@ const isAdd = computed(() => route.hash === '#add')
 <template>
   <div class="body_layout">
     <div class="body_content">
-      <NuxtLink to="/stock" class="body_head">
-        <img src="/img/stock.png" alt="Склад" />
-      </NuxtLink>
-      <h2 class="main_title">Склад</h2>
+      
+      <div class="grid grid-cols-[auto_1fr_auto] items-center dark:text-white text-black">
+        <NuxtLink to="/home" class="text-2xl leading-0 p-2">
+          <UIcon name="hugeicons:link-backward" />
+        </NuxtLink>
+        <div>
+          <NuxtLink to="/stock" class="body_head">
+            <img src="/img/stock.png" alt="Склад" />
+          </NuxtLink>
+          <h2 class="main_title">Склад</h2>
+        </div>
+        <NuxtLink :to="isAdd ? '/stock' : '/stock#add'" class="text-2xl leading-0 p-2">
+          <UIcon :name="isAdd ? 'hugeicons:cancel-square' : 'hugeicons:package-add'" class="text-2xl" />
+        </NuxtLink>
+      </div>
 
       <ProductAdd v-if="isAdd" />
       <div v-else class="flex flex-col gap-4">
         <SearchBar placeholder="Поиск по товарам" api="products" />
-        <UButton to="/stock#add" color="primary" block icon="hugeicons:package-add">
-          Добавить новый товар
-        </UButton>
 
         <NuxtLink to="/stock/samples" class="bg-primary dark:bg-primary/50 rounded-lg p-2">
           <div class="flex items-center justify-between w-full">

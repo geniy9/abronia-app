@@ -25,11 +25,22 @@ watch(() => data.currentPage, (value) => {
 <template>
   <div class="body_layout">
     <div class="flex flex-col gap-4 bg-white dark:bg-gray-700 p-2 rounded-xl w-full">
-      <div v-if="apiStore.getterCategory" class="bg-primary rounded-lg p-3">
-        <h2 class="text-center text-lg font-bold text-white">
-          {{ apiStore.getterCategory.name }}
-        </h2>
+
+      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-2 bg-primary text-white rounded-lg p-2">
+        <NuxtLink to="/stock" class="text-2xl leading-0 p-2">
+          <UIcon name="hugeicons:link-backward" />
+        </NuxtLink>
+        <div class="text-center">
+          <p class="text-xs">Склад</p>
+          <h2 class="text-lg font-bold">
+            {{ apiStore.getterCategory.name }}
+          </h2>
+        </div>
+        <NuxtLink :to="isAdd ? '/stock' : '/stock#add'" class="text-2xl leading-0 p-2">
+          <UIcon :name="isAdd ? 'hugeicons:cancel-square' : 'hugeicons:package-add'" class="text-2xl" />
+        </NuxtLink>
       </div>
+
       <ProductList :items="apiStore.products" :loading="apiStore.loadingProducts" />
       <div v-if="(apiStore.hasProducts === 0)" class="flex flex-col gap-4 items-center p-4">
         <span class="text-center text-gray-400">

@@ -15,11 +15,6 @@ const isAdd = computed(() => route.hash === '#add')
 <template>
   <div class="body_layout">
     <div class="relative flex flex-col gap-4 bg-white dark:bg-gray-700 p-2 rounded-xl w-full">
-      <!-- <div class="bg-primary text-white text-center rounded-lg w-full p-2">
-        <h2 class="text-lg font-bold">
-          Заметки
-        </h2>
-      </div> -->
       <div class="grid grid-cols-[auto_1fr_auto] items-center gap-2 bg-primary text-white rounded-lg p-2">
         <NuxtLink to="/home" class="text-2xl leading-0 py-2">
           <UIcon name="hugeicons:link-backward" />
@@ -29,8 +24,8 @@ const isAdd = computed(() => route.hash === '#add')
             Заметки
           </h2>
         </div>
-        <NuxtLink to="/comments#add" class="text-2xl leading-0 py-2">
-          <UIcon name="hugeicons:message-add-01" />
+        <NuxtLink :to="isAdd ? '/comments' : '/comments#add'" class="text-2xl leading-0 py-2">
+          <UIcon :name="isAdd ? 'hugeicons:cancel-square' : 'hugeicons:message-add-01'" />
         </NuxtLink>
       </div>
 

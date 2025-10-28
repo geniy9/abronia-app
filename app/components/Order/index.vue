@@ -30,14 +30,22 @@ const columns = [{
 const statusObject = computed(() => statusOrder(props.item.orderStatus))
 </script>
 <template>
-  <div class="flex flex-col w-full gap-4">
+  <div class="grid gap-4">
 
     <UChip :color="statusObject?.color" :text="statusObject?.name" size="3xl" position="bottom-center">
-      <div class="bg-primary text-white text-center rounded-lg w-full p-2">
-        <p class="text-xs">Заказ</p>
-        <h2 @click="copyBoofer(item.orderNumber)" class="text-lg font-bold cursor-pointer">
-          {{ item.orderNumber }}
-        </h2>
+      <div class="grid w-full grid-cols-[auto_1fr_auto] items-center gap-2 bg-primary text-white rounded-lg p-2">
+        <NuxtLink to="/orders" class="text-2xl leading-0 py-2">
+          <UIcon name="hugeicons:link-backward" />
+        </NuxtLink>
+        <div class="text-center">
+          <p class="text-xs">Заказ</p>
+          <h2 class="text-lg font-bold">
+            {{ item.orderNumber }}
+          </h2>
+        </div>
+        <NuxtLink to="#" class="text-2xl leading-0 py-2">
+          <UIcon name="hugeicons:settings-01" class="text-2xl" />
+        </NuxtLink>
       </div>
     </UChip>
 
