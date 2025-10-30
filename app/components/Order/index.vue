@@ -1,11 +1,13 @@
 <script setup>
-const { copyBoofer, humanDateTime, unitMeasurement, statusOrder } = useConfig()
+const { humanDateTime, unitMeasurement, statusOrder } = useConfig()
+const route = useRoute()
 const props = defineProps({
-  item: {
+  order: {
     type: Object,
     default: null
   }
 })
+const item = ref(props.order)
 
 const commentPrompt = ref(null)
 const currentComment = ref({
@@ -19,6 +21,7 @@ function handleComment(data) {
   currentComment.value.message = data.message
   currentComment.value.documentId = data.documentId
 }
+function onEdited(obj) { item.value = obj }
 
 const columns = [{
   accessorKey: 'product.name',
@@ -27,7 +30,9 @@ const columns = [{
   accessorKey: 'quantity',
   header: () => h('div', { class: 'text-right' }, 'Кол-во'),
 }]
-const statusObject = computed(() => statusOrder(props.item.orderStatus))
+
+const statusObject = computed(() => statusOrder(item.value.orderStatus))
+const isEdit = computed(() => route.hash === '#edit')
 </script>
 <template>
   <div class="grid gap-4">
@@ -43,14 +48,18 @@ const statusObject = computed(() => statusOrder(props.item.orderStatus))
             {{ item.orderNumber }}
           </h2>
         </div>
-        <NuxtLink to="#" class="text-2xl leading-0 py-2">
-          <UIcon name="hugeicons:settings-01" class="text-2xl" />
+        <NuxtLink :to="isEdit ? route.path : `${route.path}#edit`" class="text-2xl leading-0 py-2">
+          <UIcon :name="isEdit ? 'hugeicons:cancel-square' : 'hugeicons:settings-01'" class="text-2xl" />
         </NuxtLink>
       </div>
     </UChip>
 
-    <div class="flex flex-col gap-2 px-2 pb-2">
-
+    <OrderEdit 
+      v-if="isEdit" 
+      :id="item.documentId" 
+      :orderData="item" 
+      @onEdited="onEdited" />
+    <div v-else class="flex flex-col gap-2 px-2 pb-2">
       <div v-if="item.orderNumber" class="flex items-center justify-between gap-2">
         <span class="text-gray-900 dark:text-white">
           Номер заказа

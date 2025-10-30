@@ -44,12 +44,7 @@ const isEdit = computed(() => route.hash === '#edit')
     <CustomerEdit 
       v-if="isEdit" 
       :id="item.documentId" 
-      :name="item.name" 
-      :description="item.description" 
-      :contactName="item.contactName" 
-      :phone="item.phone" 
-      :email="item.email" 
-      :website="item.website" 
+      :customerData="item" 
       @onEdited="onEdited" />
     <div v-else class="flex flex-col gap-2 pb-2">
       <div v-if="item.description" class="flex items-center justify-center">

@@ -12,48 +12,28 @@ const props = defineProps({
     type: String,
     required: true
   },
-  name: {
-    type: String,
-    default: ''
+  customerData: {
+    type: Object,
+    default: null
   },
-  description: {
-    type: String,
-    default: ''
-  },
-  contactName: {
-    type: String,
-    default: ''
-  },
-  phone: {
-    type: String,
-    default: ''
-  },
-  email: {
-    type: String,
-    default: ''
-  },
-  website: {
-    type: String,
-    default: ''
-  }
 })
 
 const schema = z.object({
   name: z.string().min(3, 'Укажите название компании или имя клиента'),
   description: z.optional(z.string()),
   contactName: z.string().min(3, 'Укажите контактное лицо'),
-  phone: z.string().min(6, 'Укажите номер телефона').optional(), 
+  phone: z.string().optional(), 
   email: z.email('Неверный формат email').optional(),
   website: z.string().optional(),
 });
 
 const data = reactive({
-  name: props.name || '',
-  description: props.description || '',
-  contactName: props.contactName || '',
-  phone: props.phone || '',
-  email: props.email || '',
-  website: props.website || '',
+  name: props.customerData?.name || '',
+  description: props.customerData?.description || '',
+  contactName: props.customerData?.contactName || '',
+  phone: props.customerData?.phone || '',
+  email: props.customerData?.email || '',
+  website: props.customerData?.website || '',
   loading: false,
 })
 

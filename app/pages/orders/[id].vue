@@ -16,6 +16,7 @@ async function getOrder() {
       populate: { 
         customer: true,
         comment: true,
+        stocks: true, // FOR EDIT
         productItems: {
           populate: {
             product: true
@@ -50,7 +51,7 @@ onUnmounted(() => { order.value = null })
           </div>
         </div>
       </div>
-      <Order v-else-if="order" :item="order" />
+      <Order v-else-if="order" :order="order" />
       <div v-else-if="hasOrder === 0" class="text-center text-gray-500 py-4">
         Ивойса нет
       </div>
