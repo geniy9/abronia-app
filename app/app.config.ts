@@ -42,9 +42,9 @@ export default defineAppConfig({
 
     card: {
       slots: {
-        header: 'p-2 sm:px-4',
-        body: 'p-2 sm:p-4',
-        footer: 'p-2 sm:px-4'
+        header: 'p-4 sm:px-4',
+        body: 'p-4 sm:p-4',
+        footer: 'p-4 sm:px-4'
       }
     },
 

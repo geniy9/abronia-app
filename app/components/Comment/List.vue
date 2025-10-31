@@ -19,7 +19,7 @@ const props = defineProps({
       </div>
     </div>
     <div v-else class="flex flex-col gap-2 pb-2">
-      <NuxtLink :to="`/comments/${item.documentId}`" v-for="(item, i) in items" :key="i" class="flex flex-col gap-2 w-full bg-gray-200 dark:bg-gray-900 rounded-lg p-2 text-gray-900 dark:text-white">
+      <NuxtLink :to="`/comments/${item.documentId}`" v-for="(item, i) in items" :key="i" class="flex flex-col gap-2 w-full bg-gray-200 dark:bg-gray-900 rounded-lg p-4 text-gray-900 dark:text-white">
         <span class="flex items-center justify-between text-xs opacity-60">
           <span>{{ humanDateTime(item.createdAt) }}</span>
           <UIcon name="hugeicons:link-square-02" />

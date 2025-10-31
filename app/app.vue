@@ -24,7 +24,7 @@ const { $pwa } = useNuxtApp();
 
     <ClientOnly>
       <div v-if="$pwa?.offlineReady || $pwa?.needRefresh"
-        class="fixed bottom-4 right-4 m-4 p-4 border border-gray-300 rounded-md shadow-lg z-[9999] text-left bg-white text-gray-800"
+        class="fixed bottom-4 w-full sm:w-auto sm:right-4 m-4 p-4 border border-gray-300 rounded-md shadow-lg z-[9999] text-left bg-white text-gray-800"
         role="alert">
         <div class="mb-2">
           <span v-if="$pwa.offlineReady">

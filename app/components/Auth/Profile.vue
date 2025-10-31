@@ -17,13 +17,7 @@ onMounted(() => {
 <template>
   <div class="flex flex-col gap-8">
     <UCard v-if="user">
-      <template #header>
-        <h2 class="text-2xl font-bold dark:text-white text-gray-700">
-          Профиль
-        </h2>
-      </template>
-
-      <div class="space-y-4">
+      <div class="space-y-6">
         <div>
           <p class="text-sm text-gray-500">Имя пользователя</p>
           <p class="font-medium dark:text-white text-gray-700">{{ user.username }}</p>

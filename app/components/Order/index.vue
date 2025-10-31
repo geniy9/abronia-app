@@ -39,7 +39,7 @@ const isEdit = computed(() => route.hash === '#edit')
 
     <UChip :color="statusObject?.color" :text="statusObject?.name" size="3xl" position="bottom-center">
       <div class="grid w-full grid-cols-[auto_1fr_auto] items-center gap-2 bg-primary text-white rounded-lg p-2">
-        <NuxtLink to="/orders" class="text-2xl leading-0 py-2">
+        <NuxtLink to="/orders" class="text-2xl leading-0 p-2">
           <UIcon name="hugeicons:link-backward" />
         </NuxtLink>
         <div class="text-center">
@@ -48,7 +48,7 @@ const isEdit = computed(() => route.hash === '#edit')
             {{ item.orderNumber }}
           </h2>
         </div>
-        <NuxtLink :to="isEdit ? route.path : `${route.path}#edit`" class="text-2xl leading-0 py-2">
+        <NuxtLink :to="isEdit ? route.path : `${route.path}#edit`" class="text-2xl leading-0 p-2">
           <UIcon :name="isEdit ? 'hugeicons:cancel-square' : 'hugeicons:settings-01'" class="text-2xl" />
         </NuxtLink>
       </div>

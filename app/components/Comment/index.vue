@@ -19,16 +19,16 @@ const isEdit = computed(() => route.hash === '#edit')
   <div class="grid gap-2 w-full">
 
     <div class="grid grid-cols-[auto_1fr_auto] items-center gap-2 bg-primary text-white rounded-lg p-2">
-      <NuxtLink to="/comments" class="text-2xl leading-0 py-2">
+      <NuxtLink to="/comments" class="text-2xl leading-0 p-2">
         <UIcon name="hugeicons:link-backward" />
       </NuxtLink>
       <div class="text-center">
         <p class="text-xs">Заметка</p>
-        <h2 class="text-lg font-bold">
+        <h2 class="font-bold">
           {{ humanDateTime(item.createdAt) }}
         </h2>
       </div>
-      <NuxtLink :to="isEdit ? route.path : `${route.path}#edit`" class="text-2xl leading-0 py-2">
+      <NuxtLink :to="isEdit ? route.path : `${route.path}#edit`" class="text-2xl leading-0 p-2">
         <UIcon :name="isEdit ? 'hugeicons:cancel-square' : 'hugeicons:settings-01'" class="text-2xl" />
       </NuxtLink>
     </div>
@@ -39,9 +39,9 @@ const isEdit = computed(() => route.hash === '#edit')
       :message="message" 
       @onEdited="onEdited" />
     <div v-else class="grid gap-1">
-      <div class="flex flex-col items-stretch bg-gray-200 dark:bg-gray-900 rounded-lg p-2 gap-4">
+      <div class="flex flex-col items-stretch bg-gray-200 dark:bg-gray-900 rounded-lg p-4 gap-4">
         <div class="text-gray-900 dark:text-white">
-          <span class="flex items-center gap-1 text-xs opacity-60">
+          <span class="flex items-center gap-1 text-xs opacity-60 mb-2">
             <UIcon name="hugeicons:checkmark-circle-04" class="text-sm" />
             <span>{{ humanDateTime(item.updatedAt) }}</span>
           </span>
