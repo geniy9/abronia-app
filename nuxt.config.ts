@@ -67,8 +67,8 @@ export default defineNuxtConfig({
       name: 'Abronia Global App',
       short_name: 'Abronia Global',
       description: 'Abronia Global Application',
-      theme_color: '#ffffff',
-      background_color: '#ffffff',
+      theme_color: '#000000',
+      background_color: '#000000',
       display: 'standalone',
       orientation: 'portrait',
       id: '/app/',
@@ -90,18 +90,13 @@ export default defineNuxtConfig({
           purpose: 'any maskable',
         },
       ],
-      // splash_pages: { // Дополнительно: настройка splash screen для некоторых устройств
-      //   '480x320': 'icons/splash-480x320.png',
-      //   // и т.д.
-      // }
     },
     workbox: {
       sourcemap: process.env.NODE_ENV === 'development',
-      navigateFallback: '/app/', // Путь, на который будет перенаправляться офлайн
+      navigateFallback: '/app/',
       globPatterns: [
-        '**/*.{js,css,html,png,svg,ico,woff2,json}' // Убедитесь, что здесь перечислены все типы файлов, которые должны быть кэшированы
+        '**/*.{js,css,html,png,svg,ico,woff2,json}' // типы файлов, которые должны быть кэшированы
       ],
-      // Настройка маршрутов кэширования
       runtimeCaching: [
         {
           urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -124,7 +119,7 @@ export default defineNuxtConfig({
             cacheName: 'google-fonts-gstatic-cache',
             expiration: {
               maxEntries: 10,
-              maxAgeSeconds: 60 * 60 * 24 * 365 // < Практически никогда не истекает
+              maxAgeSeconds: 60 * 60 * 24 * 365
             },
             cacheableResponse: {
               statuses: [0, 200]
@@ -161,7 +156,7 @@ export default defineNuxtConfig({
     },
     client: {
       installPrompt: true, // Показать запрос на установку PWA
-      // registrationStrategy: 'registerImmediately', // Или 'prompt'
+      // registrationStrategy: 'prompt', // Или 'registerImmediately'
       // periodicSyncForUpdates: 20 // Проверять обновления каждые 20 часов
     },
     devOptions: {
