@@ -120,13 +120,14 @@ async function onSubmit() {
       </UFileUpload>
     </UFormField>
 
-    <div class="flex justify-end">
+    <div class="flex">
       <UButton 
         icon="hugeicons:file-upload" 
         type="submit" 
         label="Загрузить" 
         color="neutral" 
-        variant="outline"
+        variant="outline" 
+        block
         :loading="state.loading" />
     </div>
   </UForm>

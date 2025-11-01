@@ -54,6 +54,7 @@ export default () => {
         default: return ''
       }
     },
+    invoiceYear: (data) => { return new Date(data).getFullYear() },
     copyBoofer: (str) => {
       if (import.meta.client) {
         navigator.clipboard.writeText(str)
@@ -93,12 +94,14 @@ export default () => {
       }
     },
     largeImg: (img) => {
-      if (img?.formats.large) {
-        return `${imageUrl}${img.formats.large.url}`
-      } else if (img?.formats.medium) {
-        return `${imageUrl}${img.formats.medium.url}`
-      } else if (img?.formats.small) {
-        return `${imageUrl}${img.formats.small.url}`
+      if (img?.formats) {
+        if (img.formats?.large) {
+          return `${imageUrl}${img.formats.large.url}`
+        } else if (img.formats?.medium) {
+          return `${imageUrl}${img.formats.medium.url}`
+        } else if (img.formats?.small) {
+          return `${imageUrl}${img.formats.small.url}`
+        }
       } else {
         return `${imageUrl}${img.url}`
       }

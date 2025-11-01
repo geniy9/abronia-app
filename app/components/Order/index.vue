@@ -1,5 +1,6 @@
 <script setup>
-const { humanDateTime, unitMeasurement, statusOrder } = useConfig()
+const { humanDateTime, unitMeasurement, statusOrder, invoiceYear } = useConfig()
+const router = useRouter()
 const route = useRoute()
 const props = defineProps({
   order: {
@@ -80,9 +81,9 @@ const isEdit = computed(() => route.hash === '#edit')
         <span class="text-gray-900 dark:text-white">
           Заказчик
         </span>
-        <span class="text-white bg-primary dark:bg-gray-900 px-2 py-1 text-sm rounded-lg">
+        <UButton :to="`/customers/${item.customer?.documentId}`" color="neutral" variant="soft" icon="hugeicons:link-square-02" size="sm" trailing>
           {{ item.customer.name }}
-        </span>
+        </UButton>
       </div>
       <UTable v-if="item.productItems" :data="item.productItems" :columns="columns" class="flex-1">
         <template #quantity-cell="{ row }">
@@ -94,13 +95,37 @@ const isEdit = computed(() => route.hash === '#edit')
       </UTable>
 
       <UAccordion :items="[{
+          label: 'Инвойсы',
+          icon: 'hugeicons:invoice-01',
+          trailingIcon: 'hugeicons:arrow-down-01',
+          slot: 'invoices',
+        }]">
+        <template #invoices>
+          <div class="flex items-center flex-wrap gap-2 bg-gray-200 dark:bg-gray-800 rounded-md p-4">
+            <UButton v-if="item.invoices.length" v-for="inv in item.invoices" 
+              :label="inv.invoiceNumber"
+              :to="`/invoices/${invoiceYear(inv.createdAt)}/${inv.documentId}`" 
+              color="neutral" variant="outline" 
+              icon="hugeicons:link-square-02" 
+              trailing size="sm" />
+            <UButton
+              icon="hugeicons:plus-sign-circle"
+              label="Добавить инвойс" 
+              color="primary" 
+              size="sm"
+              @click="router.push({ path: '/invoices', hash: '#add', query: { orderId: item.documentId} })" />
+          </div>
+        </template>
+      </UAccordion>
+
+      <UAccordion :items="[{
           label: 'Комментарий',
           icon: 'hugeicons:message-01',
           trailingIcon: 'hugeicons:arrow-down-01',
           slot: 'comment',
         }]">
         <template #comment>
-          <div v-if="currentComment.documentId" class="flex flex-col items-stretch gap-2 bg-gray-200 dark:bg-gray-800 rounded-md p-2">
+          <div v-if="currentComment.documentId" class="flex flex-col items-stretch gap-4 bg-gray-200 dark:bg-gray-800 rounded-md p-4">
             <div v-html="currentComment.message" class="text-sm text-gray-700 dark:text-gray-400"></div>
             <UButton :to="`/comments/${currentComment.documentId}`" 
               color="neutral" variant="soft" 

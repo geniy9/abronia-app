@@ -1,5 +1,5 @@
 <script setup>
-const { copyBoofer, humanDateTime, unitMeasurement, statusInvoice } = useConfig()
+const { humanDateTime, unitMeasurement, statusInvoice, invoiceYear } = useConfig()
 
 const props = defineProps({
   item: {
@@ -28,14 +28,13 @@ const columns = [{
   header: () => h('div', { class: 'text-right' }, 'Кол-во'),
 }]
 const statusObject = computed(() => statusInvoice(props.item.invoiceStatus))
-const invoiceYear = new Date(props.item?.createdAt).getFullYear()
 </script>
 <template>
   <div class="flex flex-col w-full gap-4">
 
     <UChip :color="statusObject?.color" :text="statusObject?.name" size="3xl" position="bottom-center">
       <div class="grid w-full grid-cols-[auto_1fr_auto] items-center bg-primary text-white rounded-lg p-2">
-        <NuxtLink :to="`/invoices/${invoiceYear}`" class="text-2xl leading-0 p-2">
+        <NuxtLink :to="`/invoices/${invoiceYear(item?.createdAt)}`" class="text-2xl leading-0 p-2">
           <UIcon name="hugeicons:link-backward" />
         </NuxtLink>
         <div class="text-center">
@@ -50,7 +49,7 @@ const invoiceYear = new Date(props.item?.createdAt).getFullYear()
       </div>
     </UChip>
 
-    <div class="flex flex-col gap-2 px-2 pb-2">
+    <div class="flex flex-col gap-4 px-2 pb-2">
 
       <div v-if="item.invoiceNumber" class="flex items-center justify-between gap-2">
         <span class="text-gray-900 dark:text-white">
@@ -72,9 +71,12 @@ const invoiceYear = new Date(props.item?.createdAt).getFullYear()
         <span class="text-gray-900 dark:text-white">
           Заказчик
         </span>
-        <span class="text-white bg-primary dark:bg-gray-900 px-2 py-1 text-sm rounded-lg">
+        <!-- <span class="text-white bg-primary dark:bg-gray-900 px-2 py-1 text-sm rounded-lg">
           {{ item.order?.customer.name }}
-        </span>
+        </span> -->
+        <UButton :to="`/customers/${item.order.customer?.documentId}`" color="neutral" variant="soft" icon="hugeicons:link-square-02" size="sm" trailing>
+          {{ item.order.customer?.name }}
+        </UButton>
       </div>
       <UTable v-if="item.order?.productItems" :data="item.order.productItems" :columns="columns" class="flex-1">
         <template #quantity-cell="{ row }">

@@ -8,17 +8,17 @@ const props = defineProps({
 })
 
 const carousel = useTemplateRef('carousel')
+const activeImage = ref(null)
 const activeIndex = ref(0)
 const isOpen = ref(false)
 
-function onClickPrev() {
-  activeIndex.value--
-}
-function onClickNext() {
-  activeIndex.value++
-}
-function onSelect(index) {
-  activeIndex.value = index
+function onClickPrev() { activeIndex.value-- }
+function onClickNext() { activeIndex.value++ }
+function onSelect(index) { activeIndex.value = index }
+
+function popupImage(data) {
+  isOpen.value = true
+  activeImage.value = data
 }
 </script>
 <template>
@@ -39,20 +39,12 @@ function onSelect(index) {
         next: 'end-0 sm:end-0 hidden sm:flex'
         }">
       <div class="flex justify-center items-center">
-        <UModal v-model:open="isOpen" v-if="(item.mime === 'image/jpeg' || item.mime === 'image/png')" fullscreen>
-          <img :src="smallImg(item)" class="rounded-lg w-36 h-36 object-cover cursor-pointer" />
-          <template #content>
-            <UButton 
-              @click="isOpen = false"
-              icon="hugeicons:cancel-01" 
-              color="neutral" 
-              variant="outline" 
-              class="absolute top-2 right-2" />
-            <div class="flex items-center justify-center w-full h-screen">
-              <img :src="largeImg(items[activeIndex])" class="w-full h-auto" />
-            </div>
-          </template>
-        </UModal>
+        <!-- <div v-if="(item.mime === 'image/jpeg' || item.mime === 'image/png')">
+          <NuxtImg :src="smallImg(item)" class="rounded-lg w-36 h-36 object-cover cursor-pointer" />
+        </div> -->
+        <div v-if="(item.mime === 'image/jpeg' || item.mime === 'image/png')">
+          <img @click="popupImage(item)" :src="smallImg(item)" class="rounded-lg w-36 h-36 object-cover cursor-pointer" />
+        </div>
         <a v-else-if="(item.mime === 'application/pdf')" :href="imageUrl + item.url" target="_blank" 
           class="grid place-items-center rounded-lg w-36 h-36 bg-black/20">
           <UIcon name="hugeicons:pdf-02" class="w-8 h-8 text-gray-500" />
@@ -65,5 +57,19 @@ function onSelect(index) {
         </div>
       </div>
     </UCarousel>
+
+    <UModal v-model:open="isOpen" close-icon="hugeicons:cancel-01" fullscreen>
+      <template #content>
+        <UButton 
+          @click="isOpen = false"
+          icon="hugeicons:cancel-01" 
+          color="neutral" 
+          variant="outline" 
+          class="absolute top-2 right-2" />
+        <div class="flex items-center justify-center w-full h-screen">
+          <img :src="largeImg(activeImage)" class="h-full w-auto" />
+        </div>
+      </template>
+    </UModal>
   </div>
 </template>

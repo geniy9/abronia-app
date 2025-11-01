@@ -1,5 +1,5 @@
 <script setup>
-const { humanDateTime } = useConfig()
+const { humanDateTime, invoiceYear } = useConfig()
 const route = useRoute()
 const props = defineProps({
   item: {
@@ -8,7 +8,6 @@ const props = defineProps({
   }
 })
 const message = ref(props.item?.message)
-const invoiceYear = (item) => { return new Date(item).getFullYear() }
 
 function onEdited(obj) { 
   message.value = obj.message

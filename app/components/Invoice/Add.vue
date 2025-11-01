@@ -1,35 +1,37 @@
 <script setup>
-import { today, CalendarDate } from '@internationalized/date'
 import { useApiStore } from '~/store/api'
 import { z } from 'zod'
-import ShipmentDate from '../ShipmentDate.vue'
 
 const apiStore = useApiStore()
 const client = useStrapiClient()
-const { invoiceStatusList, unitMeasurement } = useConfig()
+const { invoiceStatusList, invoiceYear } = useConfig()
 const toast = useToast()
 const router = useRouter()
+const route = useRoute()
 
 const schema = z.object({
   invoiceNumber: z.string().min(1, 'Укажите артикул/номер инвойса'),
   invoiceStatus: z.enum(invoiceStatusList.map(unit => unit.value)),
   orderId: z.string().min(1, 'Выберите заказ'),
+  totalAmount: z.number().min(0, 'Введите сумму к оплате'),
   shipmentDate: z.date()
 });
 
 const state = reactive({
   invoiceNumber: '',
   invoiceStatus: 'draft',
-  orderId: '',
+  orderId: route.query?.orderId || '',
+  totalAmount: 0,
   shipmentDate: new Date()
 });
 const data = reactive({
   orders: [],
   loading: false,
+  loadingOrders: false
 });
 
 onMounted(async () => {
-  data.loading = true;
+  data.loadingOrders = true;
   try {
     await apiStore.getOrders();
     data.orders = apiStore.orders.map(item => ({ 
@@ -44,7 +46,7 @@ onMounted(async () => {
       icon: 'hugeicons:cancel-circle',
     });
   } finally {
-    data.loading = false;
+    data.loadingOrders = false;
   }
 });
 
@@ -56,6 +58,7 @@ async function onSubmit(event) {
     const invoicePayload = {
       invoiceNumber: state.invoiceNumber,
       invoiceStatus: state.invoiceStatus,
+      totalAmount: state.totalAmount,
       order: { connect: [state.orderId] },
       shipmentDate: state.shipmentDate.toISOString()
     };
@@ -66,13 +69,12 @@ async function onSubmit(event) {
     });
     if (res?.data) {
       const newInvoiceId = res.data.documentId;
-      const invoiceYear = new Date(res.data.createdAt).getFullYear()
       toast.add({
         title: 'Инвойс успешно создан',
         color: 'success',
         icon: 'hugeicons:checkmark-circle-02',
       });
-      router.push(`/invoices/${invoiceYear}/${newInvoiceId}`);
+      router.push(`/invoices/${invoiceYear(res.data.createdAt)}/${newInvoiceId}`);
     }
 
   } catch (e) {
@@ -93,14 +95,15 @@ async function onSubmit(event) {
   }
 }
 function clearForm() {
-  state.invoiceNumber = '';
-  state.invoiceStatus = 'draft';
-  state.orderId = '';
-  state.shipmentDate = new Date();
+  state.invoiceNumber = ''
+  state.invoiceStatus = 'draft'
+  state.orderId = ''
+  state.shipmentDate = new Date()
+  state.totalAmount = 0
 }
 
 const isDisabled = computed(() => {
-  return data.loading || !state.invoiceNumber || !state.orderId
+  return data.loading || !state.invoiceNumber || !state.orderId || state.totalAmount <= 0
 });
 </script>
 <template>
@@ -109,7 +112,7 @@ const isDisabled = computed(() => {
       <h2 class="main_title">{{ state.invoiceNumber || 'Новый инвойс' }}</h2>
     </template>
 
-    <UForm :schema="schema" :state="state" class="space-y-4" @submit.prevent="onSubmit">
+    <UForm :schema="schema" :state="state" class="space-y-5" @submit.prevent="onSubmit">
       <UFormField label="Номер инвойса" name="invoiceNumber" required>
         <UInput v-model="state.invoiceNumber" placeholder="Номер/код инвойса" type="text" class="w-full" />
       </UFormField>
@@ -119,7 +122,22 @@ const isDisabled = computed(() => {
           v-model="state.orderId"
           :items="data.orders"
           placeholder="Выберите заказ"
-          :loading="data.loading" class="w-60" />
+          :loading="data.loadingOrders" class="w-60" />
+      </UFormField>
+
+      <UFormField label="Итоговая сумма" name="totalAmount" required>
+        <UInput 
+          v-model.number="state.totalAmount" 
+          placeholder="Сумма инвойса" 
+          type="number" 
+          class="w-44" 
+          :ui="{ trailing: 'pointer-events-none' }">
+          <template #trailing>
+            <div class="text-muted tabular-nums" role="currency">
+              $
+            </div>
+          </template>
+        </UInput>
       </UFormField>
 
       <ShipmentDate v-model:shipment="state.shipmentDate" />
@@ -131,7 +149,6 @@ const isDisabled = computed(() => {
         <UButton 
           type="submit" 
           :disabled="isDisabled" 
-          :class="isDisabled ? 'opacity-50' : 'opacity-100'"
           :loading="data.loading">
           Создать инвойс
         </UButton>

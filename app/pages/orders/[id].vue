@@ -16,7 +16,8 @@ async function getOrder() {
       populate: { 
         customer: true,
         comment: true,
-        stocks: true, // FOR EDIT
+        stocks: true,
+        invoices: true,
         productItems: {
           populate: {
             product: true

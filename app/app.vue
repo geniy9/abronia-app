@@ -28,7 +28,7 @@ const { $pwa } = useNuxtApp();
         role="alert">
         <div class="mb-2">
           <span v-if="$pwa.offlineReady">
-            Приложение готово к утсновке
+            Приложение готово к установке
           </span>
           <span v-else>
             Доступен новый контент, нажмите "Обновить", чтобы применить.
