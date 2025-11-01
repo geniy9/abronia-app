@@ -25,7 +25,7 @@ const hasInvoice = computed(() => {
           </div>
         </div>
       </div>
-      <Invoice v-else-if="apiStore.getterInvoice" :item="apiStore.getterInvoice" />
+      <Invoice v-else-if="apiStore.getterInvoice" :invoice="apiStore.getterInvoice" />
       <div v-else-if="hasInvoice === 0" class="text-center text-gray-500 py-4">
         Ивойса нет
       </div>

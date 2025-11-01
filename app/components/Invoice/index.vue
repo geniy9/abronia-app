@@ -1,12 +1,15 @@
 <script setup>
 const { humanDateTime, unitMeasurement, statusInvoice, invoiceYear } = useConfig()
+const route = useRoute()
 
 const props = defineProps({
-  item: {
+  invoice: {
     type: Object,
     default: null
   }
 })
+const item = ref(props.invoice)
+
 const commentPrompt = ref(null)
 const currentComment = ref({
   message: props.item?.comment?.message,
@@ -19,6 +22,7 @@ function handleComment(data) {
   currentComment.value.message = data.message
   currentComment.value.documentId = data.documentId
 }
+function onEdited(obj) { item.value = obj }
 
 const columns = [{
   accessorKey: 'product.name',
@@ -27,7 +31,9 @@ const columns = [{
   accessorKey: 'quantity',
   header: () => h('div', { class: 'text-right' }, 'Кол-во'),
 }]
-const statusObject = computed(() => statusInvoice(props.item.invoiceStatus))
+
+const statusObject = computed(() => statusInvoice(item.value?.invoiceStatus))
+const isEdit = computed(() => route.hash === '#edit')
 </script>
 <template>
   <div class="flex flex-col w-full gap-4">
@@ -43,14 +49,18 @@ const statusObject = computed(() => statusInvoice(props.item.invoiceStatus))
             {{ item.invoiceNumber }}
           </h2>
         </div>
-        <NuxtLink to="#" class="text-2xl leading-0 p-2">
-          <UIcon name="hugeicons:settings-01" class="text-2xl" />
+        <NuxtLink :to="isEdit ? route.path : `${route.path}#edit`" class="text-2xl leading-0 p-2">
+          <UIcon :name="isEdit ? 'hugeicons:cancel-square' : 'hugeicons:settings-01'" class="text-2xl" />
         </NuxtLink>
       </div>
     </UChip>
 
-    <div class="flex flex-col gap-4 px-2 pb-2">
-
+    <InvoiceEdit 
+      v-if="isEdit" 
+      :id="item.documentId" 
+      :invoiceData="item" 
+      @onEdited="onEdited" />
+    <div v-else class="flex flex-col gap-4 px-2 pb-2">
       <div v-if="item.invoiceNumber" class="flex items-center justify-between gap-2">
         <span class="text-gray-900 dark:text-white">
           Номер инвойса
@@ -71,9 +81,6 @@ const statusObject = computed(() => statusInvoice(props.item.invoiceStatus))
         <span class="text-gray-900 dark:text-white">
           Заказчик
         </span>
-        <!-- <span class="text-white bg-primary dark:bg-gray-900 px-2 py-1 text-sm rounded-lg">
-          {{ item.order?.customer.name }}
-        </span> -->
         <UButton :to="`/customers/${item.order.customer?.documentId}`" color="neutral" variant="soft" icon="hugeicons:link-square-02" size="sm" trailing>
           {{ item.order.customer?.name }}
         </UButton>

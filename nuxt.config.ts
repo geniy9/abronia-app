@@ -61,6 +61,7 @@ export default defineNuxtConfig({
   },
 
   pwa: {
+    enabled: true,
     scope: '/app/',
     base: '/app/',
     manifest: {
@@ -99,35 +100,7 @@ export default defineNuxtConfig({
       ],
       runtimeCaching: [
         {
-          urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'google-fonts-cache',
-            expiration: {
-              maxEntries: 10,
-              maxAgeSeconds: 60 * 60 * 24 * 365 // < Практически никогда не истекает
-            },
-            cacheableResponse: {
-              statuses: [0, 200]
-            }
-          }
-        },
-        {
-          urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'google-fonts-gstatic-cache',
-            expiration: {
-              maxEntries: 10,
-              maxAgeSeconds: 60 * 60 * 24 * 365
-            },
-            cacheableResponse: {
-              statuses: [0, 200]
-            }
-          }
-        },
-        {
-          urlPattern: ({ url }) => url.origin === process.env.STRAPI_URL, // Кэшируем запросы к Strapi API
+          urlPattern: ({ url }) => url.origin === STRAPI_URL_PWA, // Кэшируем запросы к Strapi API
           handler: 'NetworkFirst', // Сначала сеть, затем кэш
           options: {
             cacheName: 'abronia-api-cache',
@@ -141,17 +114,17 @@ export default defineNuxtConfig({
           }
         },
         // Пример кэширования изображений
-        // {
-        //   urlPattern: /\.(?:png|gif|jpg|jpeg|svg|webp)$/i,
-        //   handler: 'CacheFirst',
-        //   options: {
-        //     cacheName: 'images-cache',
-        //     expiration: {
-        //       maxEntries: 50,
-        //       maxAgeSeconds: 60 * 60 * 24 * 30, // Кэш на 30 дней
-        //     },
-        //   },
-        // },
+        {
+          urlPattern: /\.(?:png|gif|jpg|jpeg|svg|webp)$/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'images-cache',
+            expiration: {
+              maxEntries: 50,
+              maxAgeSeconds: 60 * 60 * 24 * 30, // Кэш на 30 дней
+            },
+          },
+        },
       ],
     },
     client: {
@@ -163,6 +136,9 @@ export default defineNuxtConfig({
       enabled: true, 
       suppressWarnings: true,
       type: 'module',
+    },
+    define: {
+      STRAPI_URL_PWA: JSON.stringify(process.env.STRAPI_URL), // Или runtimeConfig.public.STRAPI_URL
     },
   },
 })

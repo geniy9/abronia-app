@@ -39,9 +39,6 @@ function popupImage(data) {
         next: 'end-0 sm:end-0 hidden sm:flex'
         }">
       <div class="flex justify-center items-center">
-        <!-- <div v-if="(item.mime === 'image/jpeg' || item.mime === 'image/png')">
-          <NuxtImg :src="smallImg(item)" class="rounded-lg w-36 h-36 object-cover cursor-pointer" />
-        </div> -->
         <div v-if="(item.mime === 'image/jpeg' || item.mime === 'image/png')">
           <img @click="popupImage(item)" :src="smallImg(item)" class="rounded-lg w-36 h-36 object-cover cursor-pointer" />
         </div>

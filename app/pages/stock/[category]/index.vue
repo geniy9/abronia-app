@@ -21,6 +21,8 @@ onMounted(async () => { await getProductsByCategory() })
 watch(() => data.currentPage, (value) => {
   if (value) { apiStore.paginate(value, data.id) }
 })
+
+const isAdd = computed(() => route.hash === '#add')
 </script>
 <template>
   <div class="body_layout">
