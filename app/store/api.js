@@ -133,7 +133,8 @@ export const useApiStore = defineStore('api', {
               },
             },
             attachments: true,
-            comment: true
+            comment: true,
+            remind: true,
           }
         })
         if (res?.data) {
@@ -347,7 +348,7 @@ export const useApiStore = defineStore('api', {
 
     addEntryToState(api, obj) {
       switch (api) {
-        case 'samples': this.samples = this.samples.unshift(obj);
+        case 'samples': this.samples.unshift(obj);
         break;
         case 'products': this.products = this.products.unshift(obj);
         break;

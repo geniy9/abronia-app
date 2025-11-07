@@ -122,6 +122,7 @@ defineExpose({ openCart });
                   :model-value="localSelectedProducts.find(item => item.id === product.documentId)?.quantity"
                   @update:model-value="val => updateQuantity(product.documentId, Number(val))"
                   :min="0" 
+                  :step="0.01"
                   :ui="{ base: 'bg-white dark:bg-gray-950 text-black dark:text-white text-sm leading-3 font-bold' }"
                   :increment="{ icon: 'hugeicons:plus-sign-circle', size: 'md', class: 'p-0' }"
                   :decrement="{ icon: 'hugeicons:minus-sign-circle', size: 'md', class: 'p-0' }" 

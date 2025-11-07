@@ -38,7 +38,7 @@ function popupImage(data) {
         prev: 'start-0 sm:start-0 hidden sm:flex', 
         next: 'end-0 sm:end-0 hidden sm:flex'
         }">
-      <div class="flex justify-center items-center">
+      <div class="flex justify-start items-center gap-2">
         <div v-if="(item.mime === 'image/jpeg' || item.mime === 'image/png')">
           <img @click="popupImage(item)" :src="smallImg(item)" class="rounded-lg w-36 h-36 object-cover cursor-pointer" />
         </div>

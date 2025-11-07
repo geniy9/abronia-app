@@ -9,11 +9,11 @@ const toast = useToast()
 const router = useRouter()
 
 const schema = z.object({
-  name: z.string().min(3, 'Укажите как минимум 3 символа'),
-  sku: z.string().min(3, 'Укажите как минимум 3 символа'),
+  name: z.string().min(1, 'Укажите наименование товара'),
+  sku: z.string().min(1, 'Укажите артикул товара'),
   unit: z.enum(productUnits.map(unit => unit.value)),
   categoryId: z.string().min(1, 'Выберите категорию'),
-  quantity: z.number().min(1, 'Укажите количество товара для прихода'),
+  quantity: z.number().min(0, 'Укажите количество товара для прихода'),
 });
 
 const data = reactive({
@@ -108,15 +108,19 @@ const isDisabled = computed(() => {
         <UInput v-model="data.name" placeholder="Наименование товара" type="text" class="w-xs" />
       </UFormField>
       <UFormField label="Артикул" name="sku" required>
-        <UInput v-model="data.sku" placeholder="Артикул или код товара" type="text" class="w-xs" />
+        <UInput v-model="data.sku" placeholder="Артикул товара" type="text" class="w-xs" />
       </UFormField>
 
       <UFormField label="Количество" name="quantity" required>
-        <UInput
+        <UInputNumber 
           v-model.number="data.quantity"
-          type="number"
-          min="0"
-          class="w-xs" />
+          :min="0" 
+          :step="0.01"
+          :ui="{ base: 'bg-white dark:bg-gray-950 text-black dark:text-white text-sm leading-3 font-bold' }"
+          :increment="{ icon: 'hugeicons:plus-sign-circle', size: 'md', class: 'p-0' }"
+          :decrement="{ icon: 'hugeicons:minus-sign-circle', size: 'md', class: 'p-0' }" 
+          variant="none" 
+          class="w-40" />
       </UFormField>
 
       <UFormField label="Единица измерения" name="unit" required>

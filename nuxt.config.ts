@@ -21,7 +21,7 @@ export default defineNuxtConfig({
   app: {
     baseURL: '/app/',
     head: {
-      charset: 'utf-16',
+      charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0',
       link: [
         { rel: "icon", type: "image/ico", sizes: "32x32", href: "/favicon.ico" },
@@ -49,19 +49,22 @@ export default defineNuxtConfig({
     public: {
       ORIGIN: process.env.ORIGIN,
       STRAPI_URL: process.env.STRAPI_URL,
+
+      NUXT_PUBLIC_FIREBASE_API_KEY: process.env.NUXT_PUBLIC_FIREBASE_API_KEY,
+      NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN: process.env.NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+      NUXT_PUBLIC_FIREBASE_PROJECT_ID: process.env.NUXT_PUBLIC_FIREBASE_PROJECT_ID,
+      NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET: process.env.NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+      NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: process.env.NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+      NUXT_PUBLIC_FIREBASE_APP_ID: process.env.NUXT_PUBLIC_FIREBASE_APP_ID,
+      NUXT_PUBLIC_FCM_VAPID_KEY: process.env.NUXT_PUBLIC_FCM_VAPID_KEY,
     }
   },
 
-  css: ['~/assets/css/main.css', '~/assets/scss/app.scss'],
-
-  vite: {
-    plugins: [
-      tailwindcss()
-    ],
-  },
-
   pwa: {
-    enabled: true,
+    strategies: 'injectManifest',
+    srcDir: 'service-worker',
+    filename: 'sw.ts',
+    registerType: 'autoUpdate',
     scope: '/app/',
     base: '/app/',
     manifest: {
@@ -93,52 +96,26 @@ export default defineNuxtConfig({
       ],
     },
     workbox: {
-      sourcemap: process.env.NODE_ENV === 'development',
-      navigateFallback: '/app/',
-      globPatterns: [
-        '**/*.{js,css,html,png,svg,ico,woff2,json}' // типы файлов, которые должны быть кэшированы
-      ],
-      runtimeCaching: [
-        {
-          urlPattern: ({ url }) => url.origin === STRAPI_URL_PWA, // Кэшируем запросы к Strapi API
-          handler: 'NetworkFirst', // Сначала сеть, затем кэш
-          options: {
-            cacheName: 'abronia-api-cache',
-            expiration: {
-              maxEntries: 100,
-              maxAgeSeconds: 60 * 60 * 24 * 7 // Кэш на 7 дней
-            },
-            cacheableResponse: {
-              statuses: [0, 200]
-            }
-          }
-        },
-        // Пример кэширования изображений
-        {
-          urlPattern: /\.(?:png|gif|jpg|jpeg|svg|webp)$/i,
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'images-cache',
-            expiration: {
-              maxEntries: 50,
-              maxAgeSeconds: 60 * 60 * 24 * 30, // Кэш на 30 дней
-            },
-          },
-        },
-      ],
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+    },
+    injectManifest: {
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
     },
     client: {
-      installPrompt: true, // Показать запрос на установку PWA
-      // registrationStrategy: 'prompt', // Или 'registerImmediately'
-      // periodicSyncForUpdates: 20 // Проверять обновления каждые 20 часов
+      installPrompt: true,
+      periodicSyncForUpdates: 20,
     },
     devOptions: {
-      enabled: true, 
+      enabled: true,
       suppressWarnings: true,
       type: 'module',
     },
-    define: {
-      STRAPI_URL_PWA: JSON.stringify(process.env.STRAPI_URL), // Или runtimeConfig.public.STRAPI_URL
-    },
   },
+
+  css: ['~/assets/css/main.css', '~/assets/scss/app.scss'],
+
+  vite: {
+    plugins: [ tailwindcss() ],
+  },
+
 })

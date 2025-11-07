@@ -20,6 +20,7 @@ const { menuMain } = useMenu()
     </NuxtLink>
 
     <div class="flex flex-col gap-2 items-start w-full">
+
       <NuxtLink v-for="(m, i) in menuMain" :key="i" :to="m.to" 
         class="flex items-center gap-4 rounded-xl p-2 bg-white dark:bg-gray-900 w-full">
         <img v-if="m.img" :src="m.img" :alt="m.name" class="w-20 h-20 bg-gray-300 dark:bg-gray-600 rounded-lg p-1" />

@@ -42,9 +42,14 @@ async function onSubmit() {
     <UAccordion :items="[{ trailingIcon: 'hugeicons:arrow-down-01', slot: 'sample' }]">
       <template #leading>
         <div class="flex justify-between items-center w-full gap-2 text-gray-900 dark:text-white">
-          <h3 class="font-bold">
-            {{ truncate(item.name, 20) }}
-          </h3>
+          <div class="flex flex-col items-start gap-1">
+            <h3 class="font-bold">
+              {{ truncate(item.name, 20) }}
+            </h3>
+            <span class="text-xs opacity-50">
+              {{ item.sku }}
+            </span>
+          </div>
           <div>
             <span class="font-bold">{{ inStock }}</span>
             <span class="text-xs uppercase opacity-50">{{ unitMeasurement(item.unit, inStock) }}</span>
@@ -57,7 +62,7 @@ async function onSubmit() {
             <UInputNumber 
               v-model="inStock" 
               :min="0" 
-              :step="1" 
+              :step="0.01"
               :ui="{ base: 'bg-white dark:bg-gray-950 text-black dark:text-white text-sm leading-3 font-bold' }"
               :increment="{ icon: 'hugeicons:plus-sign-circle', size: 'md', class: 'p-0' }"
               :decrement="{ icon: 'hugeicons:minus-sign-circle', size: 'md', class: 'p-0' }" 

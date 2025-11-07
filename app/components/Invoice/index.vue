@@ -1,6 +1,9 @@
 <script setup>
 const { humanDateTime, unitMeasurement, statusInvoice, invoiceYear } = useConfig()
+const { update } = useStrapi()
+const client = useStrapiClient()
 const route = useRoute()
+const toast = useToast()
 
 const props = defineProps({
   invoice: {
@@ -9,12 +12,16 @@ const props = defineProps({
   }
 })
 const item = ref(props.invoice)
-
+const newRemindDate = ref('')
 const commentPrompt = ref(null)
 const currentComment = ref({
   message: props.item?.comment?.message,
   documentId: props.item?.comment?.documentId
 })
+const data = reactive({
+  loadingNotify: false
+});
+
 function openCommentPrompt() {
   commentPrompt.value?.openCommentPrompt()
 }
@@ -23,6 +30,49 @@ function handleComment(data) {
   currentComment.value.documentId = data.documentId
 }
 function onEdited(obj) { item.value = obj }
+function onSetRemindDate(newDate) {
+  newRemindDate.value = new Date(newDate).toISOString()
+}
+async function saveRemindPaymentDate() {
+  data.loadingNotify = true;
+  try {
+    if (!newRemindDate.value) return
+
+    const remindId = item.value.remind?.documentId
+
+    const remindPayload = {
+      remindDate: newRemindDate.value,
+      message: `Напоминание по инвойсу ${item.value.invoiceNumber || ''}`,
+      invoice: item.value.documentId, 
+      sent: false,
+    }
+    if (remindId) {
+      const res = await update('reminds', remindId, remindPayload)
+      item.value.remind = res?.data // мержим локально при обновлении
+    } else {
+      const res = await client('/reminds', {
+        method: 'POST',
+        body: { data: remindPayload },
+      });
+      item.value.remind = res?.data // мержим локально при добавлении
+    }
+    toast.add({
+      title: 'Напоминание успешно сохранено',
+      description: `Сработает ${humanDateTime(newRemindDate.value)}`,
+      color: 'success',
+      icon: 'hugeicons:checkmark-circle-02',
+    });
+  } catch (e) {
+    toast.add({
+      title: 'Ошибка',
+      description: `Ошибка при создании напоминания: ${e}`,
+      color: 'error',
+      icon: 'hugeicons:cancel-circle',
+    });
+  } finally {
+    data.loadingNotify = false
+  }
+}
 
 const columns = [{
   accessorKey: 'product.name',
@@ -117,10 +167,28 @@ const isEdit = computed(() => route.hash === '#edit')
           {{ (item.totalAmount - item.paidAmount) }} $
         </span>
       </div>
-      <div v-if="(item.totalAmount > item.paidAmount)" class="print:hidden">
-        <NotifyDate :notified="item.remindPaymentDate" />
-      </div>
+
       <div class="grid print:hidden">
+        <UAccordion :items="[{
+            label: `Напоминание ${item.remind ? humanDateTime(item.remind.remindDate) : ''}`,
+            icon: item.remind ? 'hugeicons:notification-01' : 'hugeicons:notification-block-01',
+            trailingIcon: 'hugeicons:arrow-down-01',
+            slot: 'notify',
+          }]">
+          <template #notify>
+            <div class="flex items-end gap-2 p-4 border border-gray-400 dark:border-gray-600 rounded-md">
+              <NotifyDate 
+                :dateOfRemind="item.remind?.remindDate" 
+                @on-set-date="onSetRemindDate" 
+                class="flex-1" />
+              <UButton 
+                :label="item.remind?.remindDate ? 'Обновить' : 'Сохранить'" 
+                @click="saveRemindPaymentDate" 
+                :loading="data.loadingNotify" />
+            </div>
+          </template>
+        </UAccordion>
+
         <div v-if="item.attachments?.length" class="grid gap-2">
           <span class="text-gray-900 dark:text-white">
             Вложенные файлы

@@ -1,4 +1,6 @@
 <script setup>
+import FcmNotify from '../FcmNotify.vue';
+
 const user = useStrapiUser()
 const { logout } = useStrapiAuth()
 const router = useRouter()
@@ -26,9 +28,17 @@ onMounted(() => {
           <p class="text-sm text-gray-500">Email</p>
           <p class="font-medium dark:text-white text-gray-700">{{ user.email }}</p>
         </div>
+
         <UFormField label="Тема дизайна">
           <ToggleTheme legend />
         </UFormField>
+
+        <ClientOnly>
+          <UFormField label="Push уведомления">
+            <FcmNotify />
+          </UFormField>
+        </ClientOnly>
+
         <UCollapsible class="flex flex-col gap-2 w-full">
           <UButton
             class="group"
