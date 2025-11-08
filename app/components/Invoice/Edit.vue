@@ -4,8 +4,7 @@ import { z } from 'zod'
 
 const apiStore = useApiStore()
 const { update, findOne } = useStrapi()
-const client = useStrapiClient()
-const { invoiceStatusList, invoiceYear } = useConfig()
+const { invoiceStatusList } = useConfig()
 const toast = useToast()
 const router = useRouter()
 const route = useRoute()

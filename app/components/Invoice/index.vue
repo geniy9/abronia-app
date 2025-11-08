@@ -90,7 +90,7 @@ const isEdit = computed(() => route.hash === '#edit')
 
     <UChip :color="statusObject?.color" :text="statusObject?.name" size="3xl" position="bottom-center">
       <div class="grid w-full grid-cols-[auto_1fr_auto] items-center bg-primary text-white rounded-lg p-2">
-        <NuxtLink :to="`/invoices/${invoiceYear(item?.createdAt)}`" class="text-2xl leading-0 p-2">
+        <NuxtLink :to="`/invoices/invoices-${invoiceYear(item?.createdAt)}`" class="text-2xl leading-0 p-2">
           <UIcon name="hugeicons:link-backward" />
         </NuxtLink>
         <div class="text-center">
@@ -170,7 +170,7 @@ const isEdit = computed(() => route.hash === '#edit')
 
       <div class="grid print:hidden">
         <UAccordion :items="[{
-            label: `Напоминание ${item.remind ? humanDateTime(item.remind.remindDate) : ''}`,
+            label: 'Напоминание',
             icon: item.remind ? 'hugeicons:notification-01' : 'hugeicons:notification-block-01',
             trailingIcon: 'hugeicons:arrow-down-01',
             slot: 'notify',

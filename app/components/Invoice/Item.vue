@@ -1,5 +1,5 @@
 <script setup>
-const { humanDate, statusInvoice, invoiceYear }= useConfig()
+const { humanDate, statusInvoice }= useConfig()
 const props = defineProps({
   item: {
     type: [Object, Date],
@@ -9,7 +9,7 @@ const props = defineProps({
 const statusObject = computed(() => statusInvoice(props.item.invoiceStatus))
 </script>
 <template>
-  <NuxtLink :to="`/invoices/${invoiceYear(item?.createdAt)}/${item.documentId}`" class="flex justify-between items-center cursor-pointer w-full text-sm bg-gray-200 dark:bg-gray-900 rounded-lg p-2">
+  <NuxtLink :to="`/invoices/${item.documentId}`" class="flex justify-between items-center cursor-pointer w-full text-sm bg-gray-200 dark:bg-gray-900 rounded-lg p-2">
     <div class="flex flex-col gap-1 text-gray-900 dark:text-white">
       <div class="opacity-50">
         <span class="px-0.5">#</span>

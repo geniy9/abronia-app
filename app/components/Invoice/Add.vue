@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 const apiStore = useApiStore()
 const client = useStrapiClient()
-const { invoiceStatusList, invoiceYear } = useConfig()
+const { invoiceStatusList } = useConfig()
 const toast = useToast()
 const router = useRouter()
 const route = useRoute()
@@ -74,7 +74,7 @@ async function onSubmit(event) {
         color: 'success',
         icon: 'hugeicons:checkmark-circle-02',
       });
-      router.push(`/invoices/${invoiceYear(res.data.createdAt)}/${newInvoiceId}`);
+      router.push(`/invoices/${newInvoiceId}`);
     }
 
   } catch (e) {

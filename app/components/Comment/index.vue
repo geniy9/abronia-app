@@ -1,5 +1,5 @@
 <script setup>
-const { humanDateTime, invoiceYear } = useConfig()
+const { humanDateTime } = useConfig()
 const route = useRoute()
 const props = defineProps({
   item: {
@@ -63,7 +63,7 @@ const isEdit = computed(() => route.hash === '#edit')
 
         <UFieldGroup v-if="item.invoice" class="self-end">
           <UBadge color="neutral" variant="soft" icon="hugeicons:invoice-01" />
-          <UButton :to="`/invoices/${invoiceYear(item.invoice.createdAt)}/${item.invoice.documentId}`" color="neutral" variant="soft" icon="hugeicons:link-square-02" size="sm" trailing>
+          <UButton :to="`/invoices/${item.invoice.documentId}`" color="neutral" variant="soft" icon="hugeicons:link-square-02" size="sm" trailing>
             {{ item.invoice.invoiceNumber }}
           </UButton>
         </UFieldGroup>

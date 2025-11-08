@@ -3,6 +3,11 @@ export {}
 declare const self: ServiceWorkerGlobalScope
 
 import { precacheAndRoute } from 'workbox-precaching'
+import { registerRoute } from 'workbox-routing'
+import { CacheFirst } from 'workbox-strategies'
+// import { CacheableResponsePlugin } from 'workbox-cacheable-response'
+import { ExpirationPlugin } from 'workbox-expiration'
+
 precacheAndRoute(self.__WB_MANIFEST)
 
 import { initializeApp } from 'firebase/app'
@@ -30,7 +35,6 @@ async function initFCM() {
       data
     })
   })
-
   initialized = true
 }
 
@@ -48,7 +52,7 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('notificationclick', (event: any) => {
   event.notification.close();
   const d = event.notification?.data || {};
-  const target = d.link || (d.invoiceId ? `/app/invoices/2025/${d.invoiceId}` : '/app/'); // изменить ссылку!
+  const target = d.link || (d.invoiceId ? `/app/invoices/${d.invoiceId}` : '/app/');
 
   event.waitUntil((async () => {
     const all = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
@@ -67,7 +71,6 @@ self.addEventListener('push', (event: any) => {
   let title = 'Push';
   let body = 'New notification';
   let data: any = { source: 'push' };
-
   try {
     const json = event?.data?.json?.();
     if (json && typeof json === 'object') {
@@ -95,3 +98,16 @@ self.addEventListener('push', (event: any) => {
     })
   );
 });
+
+registerRoute(
+  ({request}) => request.destination === 'image',
+  new CacheFirst({
+    cacheName: 'images-cache',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries:  100,
+        maxAgeSeconds:  365 * 24 * 60 *  60,
+      }),
+    ]
+  })
+)

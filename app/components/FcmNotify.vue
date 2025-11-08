@@ -10,13 +10,13 @@ const done = computed(() => permission.value === 'granted' && !!token.value)
 
 async function askPermission() {
   try {
+    loading.value = true
     error.value = null
     if (!$fcmSupported) {
       error.value = 'Браузер не поддерживает Web Push (FCM)'
       return
     }
-    loading.value = true
-
+    
     if (permission.value !== 'granted') {
       const result = await Notification.requestPermission()
       permission.value = result
@@ -25,7 +25,6 @@ async function askPermission() {
         return
       }
     }
-
     token.value = await $fcmGetToken()
     if (!token.value) {
       error.value = 'Не удалось получить FCM токен'
@@ -49,8 +48,8 @@ async function askPermission() {
 onMounted(() => {
   if ($fcmSupported) {
     $fcmOnMessage((payload) => {
-      const title = payload?.notification?.title || 'Reminder'
-      const body  = payload?.notification?.body  || 'You have a new reminder'
+      const title = payload?.notification?.title || 'Напоминания'
+      const body  = payload?.notification?.body  || 'У вас новое напоминание'
       console.log('[FCM] foreground message', payload)
       if (Notification.permission === 'granted') {
         new Notification(title, { body, icon: '/app/icons/icon-192x192.png', data: payload?.data || {} })

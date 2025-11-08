@@ -1,5 +1,5 @@
 <script setup>
-const { humanDateTime, unitMeasurement, statusOrder, invoiceYear } = useConfig()
+const { humanDateTime, unitMeasurement, statusOrder } = useConfig()
 const router = useRouter()
 const route = useRoute()
 const props = defineProps({
@@ -104,7 +104,7 @@ const isEdit = computed(() => route.hash === '#edit')
           <div class="flex items-center flex-wrap gap-2 bg-gray-200 dark:bg-gray-800 rounded-md p-4">
             <UButton v-if="item.invoices.length" v-for="inv in item.invoices" 
               :label="inv.invoiceNumber"
-              :to="`/invoices/${invoiceYear(inv.createdAt)}/${inv.documentId}`" 
+              :to="`/invoices/${inv.documentId}`" 
               color="neutral" variant="outline" 
               icon="hugeicons:link-square-02" 
               trailing size="sm" />

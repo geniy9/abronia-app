@@ -82,7 +82,7 @@ export const useApiStore = defineStore('api', {
         this.loadingInvoices = true
         const { find } = useStrapi()
         const res = await find('invoices', { 
-          sort: ["shipmentDate:asc"]
+          sort: ["createdAt:desc"]
         })
         if (res?.data) { 
           this.invoices = res.data
