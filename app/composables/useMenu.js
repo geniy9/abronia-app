@@ -21,18 +21,20 @@ export default () => {
     },{
       name: 'Заметки',
       to: '/comments',
-      img: null
+      img: `${baseURL}/img/comment.png`
     }],
     menuAdding: [
       [{
         label: 'Новый Товар',
         icon: 'hugeicons:package-add',
         to: '/stock#add'
-      },{
+      }],
+      [{
         label: 'Создать Заказ',
         icon: 'hugeicons:shopping-basket-add-03',
         to: '/orders#add'
-      },{
+      }],
+      [{
         label: 'Создать Инвойс',
         icon: 'hugeicons:add-invoice',
         to: '/invoices#add'

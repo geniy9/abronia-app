@@ -108,7 +108,8 @@ export default defineNuxtPlugin(async () => {
     messagingSenderId: r.NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     appId: r.NUXT_PUBLIC_FIREBASE_APP_ID,
   }
-  const vapidKey = r.NUXT_PUBLIC_FCM_VAPID_KEY
+  // const vapidKey = r.NUXT_PUBLIC_FCM_VAPID_KEY
+  const vapidKey = "BCci20uhuyd-GQ1YrboExuGqiqKrT-o4cVsA1Z8ThUYVZmFQQrxO2ZPCT9Nc_qXnLMTlOYTYWoYYKw-hIv2TayE"
 
   // отчёт по окружению
   const env = supportReport()
