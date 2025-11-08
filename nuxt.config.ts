@@ -20,8 +20,8 @@ export default defineNuxtConfig({
   },
 
   icon: {
-    serverBundle: {
-      collections: ['hugeicons', 'svg-spinners']
+    clientBundle: {
+      scan: true,
     }
   },
 
@@ -103,7 +103,7 @@ export default defineNuxtConfig({
       ],
     },
     workbox: {
-      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      globPatterns: ['**/*.{js,css,html,png,svg,xml,svg+xml,ico}'],
     },
     injectManifest: {
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],

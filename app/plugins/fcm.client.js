@@ -98,17 +98,26 @@ function supportReport() {
 }
 
 export default defineNuxtPlugin(async () => {
-  const r = useRuntimeConfig().public
+  // const r = useRuntimeConfig().public
 
-  const firebaseConfig = {
-    apiKey: r.NUXT_PUBLIC_FIREBASE_API_KEY,
-    authDomain: r.NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: r.NUXT_PUBLIC_FIREBASE_PROJECT_ID,
-    storageBucket: r.NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: r.NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-    appId: r.NUXT_PUBLIC_FIREBASE_APP_ID,
-  }
+  // const firebaseConfig = {
+  //   apiKey: r.NUXT_PUBLIC_FIREBASE_API_KEY,
+  //   authDomain: r.NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  //   projectId: r.NUXT_PUBLIC_FIREBASE_PROJECT_ID,
+  //   storageBucket: r.NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  //   messagingSenderId: r.NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  //   appId: r.NUXT_PUBLIC_FIREBASE_APP_ID,
+  // }
   // const vapidKey = r.NUXT_PUBLIC_FCM_VAPID_KEY
+  const firebaseConfig = {
+    apiKey: "AIzaSyAlcYvv8uucFD9JayqvjxvJ5i0uMBMowLo",
+    authDomain: "abronia-global.firebaseapp.com",
+    projectId: "abronia-global",
+    storageBucket: "abronia-global.firebasestorage.app",
+    messagingSenderId: "773221777990",
+    appId: "1:773221777990:web:905d8f50c30c6a253b4047",
+    measurementId: "G-1HMHSSVSL6"
+  }
   const vapidKey = "BCci20uhuyd-GQ1YrboExuGqiqKrT-o4cVsA1Z8ThUYVZmFQQrxO2ZPCT9Nc_qXnLMTlOYTYWoYYKw-hIv2TayE"
 
   // отчёт по окружению
