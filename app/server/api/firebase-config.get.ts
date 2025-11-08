@@ -8,5 +8,6 @@ export default defineEventHandler((event) => {
     storageBucket: p.NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
     messagingSenderId: p.NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     appId: p.NUXT_PUBLIC_FIREBASE_APP_ID,
+    vapidKey: p.NUXT_PUBLIC_FCM_VAPID_KEY,
   }
 })

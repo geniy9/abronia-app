@@ -79,6 +79,124 @@
 //   }
 // })
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { initializeApp, getApps, getApp } from 'firebase/app'
+// import { getMessaging, getToken, onMessage, isSupported } from 'firebase/messaging'
+
+// function supportReport() {
+//   const report = {
+//     https: location.protocol === 'https:' || location.hostname === 'localhost',
+//     serviceWorker: 'serviceWorker' in navigator,
+//     notification: 'Notification' in window,
+//     pushManager: 'PushManager' in window,
+//     indexedDB: (() => { try { return !!indexedDB } catch { return false } })(),
+//     scopeOk: location.pathname.startsWith('/app/'),
+//   }
+//   report.ok = Object.values(report).every(Boolean)
+//   return report
+// }
+
+// export default defineNuxtPlugin(async () => {
+//   const r = useRuntimeConfig().public
+
+//   const firebaseConfig = {
+//     apiKey: r.NUXT_PUBLIC_FIREBASE_API_KEY,
+//     authDomain: r.NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+//     projectId: r.NUXT_PUBLIC_FIREBASE_PROJECT_ID,
+//     storageBucket: r.NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+//     messagingSenderId: r.NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+//     appId: r.NUXT_PUBLIC_FIREBASE_APP_ID,
+//   }
+//   const vapidKey = r.NUXT_PUBLIC_FCM_VAPID_KEY
+
+//   // отчёт по окружению
+//   const env = supportReport()
+
+//   // быстрый pre-check окружения
+//   if (!env.ok) {
+//     console.warn('[FCM] env support report:', env)
+//     return { provide: { fcmSupported: false, fcmWhy: env } }
+//   }
+
+//   // доп.проверка из SDK
+//   const sdkSupported = await isSupported().catch(() => false)
+//   if (!sdkSupported) {
+//     console.warn('[FCM] firebase.isSupported() = false')
+//     return { provide: { fcmSupported: false, fcmWhy: { ...env, isSupported: false } } }
+//   }
+
+//   if (!vapidKey) {
+//     console.error('[FCM] missing VAPID key')
+//     return { provide: { fcmSupported: false, fcmWhy: { ...env, vapidKey: false } } }
+//   }
+
+//   const app = getApps().length ? getApp() : initializeApp(firebaseConfig)
+//   const messaging = getMessaging(app)
+
+//   async function getRegistration() {
+//     const reg = await navigator.serviceWorker.ready
+//     return reg
+//   }
+
+//   async function fcmGetToken() {
+//     try {
+//       const reg = await getRegistration()
+//       const token = await getToken(messaging, { vapidKey, serviceWorkerRegistration: reg })
+//       return token || null
+//     } catch (err) {
+//       console.error('[FCM] getToken error:', err)
+//       return null
+//     }
+//   }
+
+//   function fcmOnMessage(cb) {
+//     try { return onMessage(messaging, cb) } catch { return () => {} }
+//   }
+
+//   return { provide: { fcmSupported: true, fcmWhy: { ...env, isSupported: true }, fcmGetToken, fcmOnMessage } }
+// })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import { initializeApp, getApps, getApp } from 'firebase/app'
 import { getMessaging, getToken, onMessage, isSupported } from 'firebase/messaging'
 
@@ -96,50 +214,45 @@ function supportReport() {
 }
 
 export default defineNuxtPlugin(async () => {
-  const r = useRuntimeConfig().public
-
-  const firebaseConfig = {
-    apiKey: r.NUXT_PUBLIC_FIREBASE_API_KEY,
-    authDomain: r.NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: r.NUXT_PUBLIC_FIREBASE_PROJECT_ID,
-    storageBucket: r.NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: r.NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-    appId: r.NUXT_PUBLIC_FIREBASE_APP_ID,
-  }
-  const vapidKey = r.NUXT_PUBLIC_FCM_VAPID_KEY
-
-  // отчёт по окружению
   const env = supportReport()
-
-  // быстрый pre-check окружения
   if (!env.ok) {
     console.warn('[FCM] env support report:', env)
     return { provide: { fcmSupported: false, fcmWhy: env } }
   }
 
-  // доп.проверка из SDK
   const sdkSupported = await isSupported().catch(() => false)
   if (!sdkSupported) {
     console.warn('[FCM] firebase.isSupported() = false')
     return { provide: { fcmSupported: false, fcmWhy: { ...env, isSupported: false } } }
   }
 
+  // ⚠️ Берём конфиг и VAPID с сервера (как и SW)
+  const origin = window.location.origin
+  const urls = ['/app/api/firebase-config', '/api/firebase-config'].map(p => new URL(p, origin).toString())
+  let firebaseConfig = null
+  for (const u of urls) {
+    try {
+      const r = await fetch(u, { cache: 'no-store' })
+      if (r.ok) { firebaseConfig = await r.json(); break }
+    } catch {}
+  }
+  if (!firebaseConfig) {
+    console.error('[FCM] cannot load /api/firebase-config')
+    return { provide: { fcmSupported: false, fcmWhy: { ...env, api: false } } }
+  }
+
+  const { vapidKey, ...fb } = firebaseConfig
   if (!vapidKey) {
-    console.error('[FCM] missing VAPID key')
+    console.error('[FCM] missing VAPID from server config')
     return { provide: { fcmSupported: false, fcmWhy: { ...env, vapidKey: false } } }
   }
 
-  const app = getApps().length ? getApp() : initializeApp(firebaseConfig)
+  const app = getApps().length ? getApp() : initializeApp(fb)
   const messaging = getMessaging(app)
-
-  async function getRegistration() {
-    const reg = await navigator.serviceWorker.ready
-    return reg
-  }
 
   async function fcmGetToken() {
     try {
-      const reg = await getRegistration()
+      const reg = await navigator.serviceWorker.ready
       const token = await getToken(messaging, { vapidKey, serviceWorkerRegistration: reg })
       return token || null
     } catch (err) {
@@ -154,3 +267,5 @@ export default defineNuxtPlugin(async () => {
 
   return { provide: { fcmSupported: true, fcmWhy: { ...env, isSupported: true }, fcmGetToken, fcmOnMessage } }
 })
+
+
