@@ -59,13 +59,29 @@ onMounted(() => {
 })
 </script>
 
-<template>
+<!-- <template>
   <div class="flex items-center gap-2">
     <UButton @click="askPermission" :loading="loading" color="primary" icon="hugeicons:notification-01">
       Разрешить уведомления
     </UButton>
     <span v-if="done" class="text-xs opacity-70">Готово</span>
     <span v-else-if="!$fcmSupported" class="text-xs opacity-70">Не поддерживается</span>
+    <span v-if="error" class="text-xs text-red-400">{{ error }}</span>
+  </div>
+</template> -->
+
+<template>
+  <div class="flex items-center gap-2">
+    <UButton @click="askPermission" :loading="loading" color="primary" icon="hugeicons:notification-01">
+      Разрешить уведомления
+    </UButton>
+
+    <span v-if="done" class="text-xs opacity-70">Готово</span>
+    <span v-else-if="!$fcmSupported" class="text-xs text-red-400">
+      Не поддерживается
+      <UTooltip :text="JSON.stringify($fcmWhy)" />
+    </span>
+
     <span v-if="error" class="text-xs text-red-400">{{ error }}</span>
   </div>
 </template>
