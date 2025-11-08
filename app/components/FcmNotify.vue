@@ -1,5 +1,5 @@
 <script setup>
-const { $fcmGetToken, $fcmOnMessage, $fcmSupported } = useNuxtApp()
+const { $fcmGetToken, $fcmOnMessage, $fcmSupported, $fcmWhy } = useNuxtApp()
 const config = useRuntimeConfig()
 
 const permission = ref(Notification.permission)
