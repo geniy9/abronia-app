@@ -24,7 +24,7 @@ const { $pwa } = useNuxtApp();
 
     <ClientOnly>
       <div v-if="$pwa?.offlineReady || $pwa?.needRefresh"
-        class="fixed bottom-4 w-full sm:w-auto sm:right-4 m-4 p-4 border border-gray-300 rounded-md shadow-lg z-[9999] text-left bg-white text-gray-800"
+        class="fixed left-4 bottom-4 w-full max-w-lg m-4 p-4 rounded-md shadow-lg z-[9999] text-left bg-white text-gray-800"
         role="alert">
         <div class="mb-2">
           <span v-if="$pwa.offlineReady">
@@ -36,7 +36,7 @@ const { $pwa } = useNuxtApp();
         </div>
         <button v-if="$pwa.needRefresh"
           @click="$pwa.updateServiceWorker()"
-          class="bg-gray-800 text-white border border-gray-800 outline-none mr-2 rounded-md px-3 py-1 cursor-pointer hover:opacity-80 transition-opacity duration-200">
+          class="bg-primary text-white outline-none mr-2 rounded-md px-3 py-1 cursor-pointer hover:bg-primary/80 transition-colors duration-200">
           Обновить
         </button>
         <button @click="$pwa.cancelPrompt()"
@@ -47,7 +47,7 @@ const { $pwa } = useNuxtApp();
 
       <!-- Запрос на установку -->
       <div v-if="$pwa?.showInstallPrompt && !$pwa?.offlineReady && !$pwa?.needRefresh"
-        class="fixed bottom-4 right-4 m-4 p-4 border border-gray-300 rounded-md shadow-lg z-[9999] text-left bg-white text-gray-800" role="alert">
+        class="fixed left-4 bottom-4 w-full max-w-lg m-4 p-4 rounded-md shadow-lg z-[9999] text-left bg-white text-gray-800" role="alert">
         <div class="mb-2">
           <span>Установить Abronia App?</span>
         </div>
