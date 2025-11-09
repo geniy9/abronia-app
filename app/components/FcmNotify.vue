@@ -58,28 +58,18 @@ onMounted(() => {
   }
 })
 </script>
-
-<!-- <template>
-  <div class="flex flex-col items-start gap-2">
-    <UButton @click="askPermission" :loading="loading" color="primary" icon="hugeicons:notification-01">
-      Разрешить уведомления
-    </UButton>
-    <span v-if="done" class="text-xs opacity-70">Готово</span>
-    <span v-else-if="!$fcmSupported" class="text-xs opacity-70">Не поддерживается</span>
-    <span v-if="error" class="text-xs text-red-400">{{ error }}</span>
-  </div>
-</template> -->
-
 <template>
   <div class="flex flex-col items-start gap-2">
-    <UButton @click="askPermission" :loading="loading" color="primary" icon="hugeicons:notification-01">
+    <UButton @click="askPermission" :loading="loading" color="primary">
       Разрешить уведомления
     </UButton>
 
-    <span v-if="done" class="text-xs opacity-70">Готово</span>
+    <UBadge v-if="done" icon="hugeicons:notification-01" size="md" color="success" variant="solid">
+      Уведомления разрешены!
+    </UBadge>
     <span v-else-if="!$fcmSupported" class="flex flex-col items-start gap-2 text-xs text-red-400">
       <div>Не поддерживается</div>
-      <div>
+      <div class="wrap-break-word">
         {{ JSON.stringify($fcmWhy) }}
       </div>
     </span>
