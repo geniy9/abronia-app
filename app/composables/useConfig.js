@@ -15,7 +15,7 @@ export default () => {
       { name: 'отменён', value: 'cancelled' },
     ],
     invoiceStatusList: [
-      { name: 'черновик', value: 'draft' },
+      { name: 'новый', value: 'new' },
       { name: 'отправлен', value: 'sent' },
       { name: 'оплачен частично', value: 'partially_paid' },
       { name: 'оплачен', value: 'paid' },
@@ -38,8 +38,8 @@ export default () => {
     },
     statusOrder: (data) => {
       switch (data) {
-        case 'pending': return { name: 'в ожидании', color: 'info' }
-        case 'shipped': return { name: 'отправлен', color: 'warning' }
+        case 'pending': return { name: 'в ожидании', color: 'warning' }
+        case 'shipped': return { name: 'отправлен', color: 'info' }
         case 'completed': return { name: 'завершён', color: 'success' }
         case 'cancelled': return { name: 'отменён', color: 'error' }
         default: return ''
@@ -47,9 +47,9 @@ export default () => {
     },
     statusInvoice: (data) => {
       switch (data) {
-        case 'draft': return { name: 'черновик', color: 'info' }
+        case 'new': return { name: 'новый', color: 'warning' }
         case 'sent': return { name: 'отправлен', color: 'error' }
-        case 'partially_paid': return { name: 'оплачен частично', color: 'warning' }
+        case 'partially_paid': return { name: 'оплачен частично', color: 'info' }
         case 'paid': return { name: 'оплачен', color: 'success' }
         default: return ''
       }

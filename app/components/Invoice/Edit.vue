@@ -33,7 +33,7 @@ const schema = z.object({
 
 const state = reactive({
   invoiceNumber: props.invoiceData?.invoiceNumber || '',
-  invoiceStatus: props.invoiceData?.invoiceStatus || 'draft',
+  invoiceStatus: props.invoiceData?.invoiceStatus || 'new',
   orderId: props.invoiceData?.order?.documentId || '',
   totalAmount: props.invoiceData?.totalAmount || 0,
   paidAmount: props.invoiceData?.paidAmount || 0,

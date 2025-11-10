@@ -19,7 +19,7 @@ const schema = z.object({
 
 const state = reactive({
   invoiceNumber: '',
-  invoiceStatus: 'draft',
+  invoiceStatus: 'new',
   orderId: route.query?.orderId || '',
   totalAmount: 0,
   shipmentDate: new Date()
@@ -96,7 +96,7 @@ async function onSubmit(event) {
 }
 function clearForm() {
   state.invoiceNumber = ''
-  state.invoiceStatus = 'draft'
+  state.invoiceStatus = 'new'
   state.orderId = ''
   state.shipmentDate = new Date()
   state.totalAmount = 0

@@ -1,7 +1,4 @@
 <script setup>
-import { useCartStore } from '@/store/cart'
-
-const cartStore = useCartStore()
 const { copyBoofer, unitMeasurement } = useConfig()
 
 const props = defineProps({
