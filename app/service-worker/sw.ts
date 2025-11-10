@@ -2,6 +2,13 @@
 export {}
 declare const self: ServiceWorkerGlobalScope
 
+declare const __SW_FIREBASE_API_KEY__: string
+declare const __SW_FIREBASE_AUTH_DOMAIN__: string
+declare const __SW_FIREBASE_PROJECT_ID__: string
+declare const __SW_FIREBASE_STORAGE_BUCKET__: string
+declare const __SW_FIREBASE_MESSAGING_SENDER_ID__: string
+declare const __SW_FIREBASE_APP_ID__: string
+
 import { precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { CacheFirst } from 'workbox-strategies'
@@ -16,9 +23,19 @@ let initialized = false
 
 async function initFCM() {
   if (initialized) return
-  const res = await fetch('/app/api/firebase-config', { cache: 'no-store' })
-  if (!res.ok) { console.error('[SW] Failed to load firebase-config'); return }
-  const firebaseConfig = await res.json()
+  // const res = await fetch('/app/api/firebase-config', { cache: 'no-store' })
+  // if (!res.ok) { console.error('[SW] Failed to load firebase-config'); return }
+  // const firebaseConfig = await res.json()
+
+  const firebaseConfig = {
+    apiKey: import.meta.env.NUXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: import.meta.env.NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.NUXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.NUXT_PUBLIC_FIREBASE_APP_ID,
+  }
+  
   if (!firebaseConfig?.projectId) { console.error('[SW] Missing projectId'); return }
 
   const app = initializeApp(firebaseConfig)

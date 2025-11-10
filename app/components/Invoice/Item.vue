@@ -9,16 +9,19 @@ const props = defineProps({
 const statusObject = computed(() => statusInvoice(props.item.invoiceStatus))
 </script>
 <template>
-  <NuxtLink :to="`/invoices/${item.documentId}`" class="flex justify-between items-center cursor-pointer w-full text-sm bg-gray-200 dark:bg-gray-900 rounded-lg p-2">
+  <NuxtLink :to="`/invoices/${item.documentId}`" 
+    class="grid grid-cols-[auto_auto_1fr] items-center gap-4 cursor-pointer w-full text-sm bg-gray-200 dark:bg-gray-900 rounded-lg p-2">
     <div class="flex flex-col gap-1 text-gray-900 dark:text-white">
       <div class="opacity-50">
         <span class="px-0.5">#</span>
         <span>{{ item.invoiceNumber }}</span>
       </div>
     </div>
-    <UBadge :color="statusObject?.color" size="sm" class="rounded-full">
-      {{ statusObject?.name }}
-    </UBadge>
+    <div class="flex items-center">
+      <UBadge :color="statusObject?.color" size="sm" class="rounded-full">
+        {{ statusObject?.name }}
+      </UBadge>
+    </div>
     <div class="flex flex-col items-end gap-1 text-gray-900 dark:text-white">
       <div class="px-0.5 opacity-50">{{ humanDate(item.createdAt) }}</div>
       <div class="flex items-center gap-2">
