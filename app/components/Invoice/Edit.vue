@@ -28,7 +28,6 @@ const schema = z.object({
   totalAmount: z.number().min(0, 'Введите сумму к оплате'),
   paidAmount: z.number().min(0, 'Введите оплаченную сумму'),
   shipmentDate: z.date(),
-  remindPaymentDate: z.date().nullable(),
 });
 
 const state = reactive({
@@ -38,7 +37,6 @@ const state = reactive({
   totalAmount: props.invoiceData?.totalAmount || 0,
   paidAmount: props.invoiceData?.paidAmount || 0,
   shipmentDate: props.invoiceData?.shipmentDate ? new Date(props.invoiceData.shipmentDate) : new Date(),
-  remindPaymentDate: props.invoiceData?.remindPaymentDate ? new Date(props.invoiceData.remindPaymentDate) : null,
 });
 const data = reactive({
   orders: [],
@@ -78,7 +76,6 @@ async function onSubmit(event) {
       paidAmount: state.paidAmount,
       order: { connect: [state.orderId] },
       shipmentDate: state.shipmentDate.toISOString(),
-      remindPaymentDate: state.remindPaymentDate ? state.remindPaymentDate.toISOString() : null,
     };
 
     const res = await update('invoices', props.id, invoicePayload);
@@ -184,14 +181,6 @@ const isDisabled = computed(() => {
       </UFormField>
 
       <ShipmentDate v-model:shipment="state.shipmentDate" />
-
-      <UFormField label="Напомнить об оплате" name="remindPaymentDate">
-        <UInput 
-          v-model="state.remindPaymentDate" 
-          type="date" 
-          placeholder="Дата напоминания" 
-          clearable />
-      </UFormField>
       
       <div class="flex items-center justify-between">
         <RemoveEntry 

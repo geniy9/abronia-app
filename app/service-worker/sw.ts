@@ -2,13 +2,6 @@
 export {}
 declare const self: ServiceWorkerGlobalScope
 
-declare const __SW_FIREBASE_API_KEY__: string
-declare const __SW_FIREBASE_AUTH_DOMAIN__: string
-declare const __SW_FIREBASE_PROJECT_ID__: string
-declare const __SW_FIREBASE_STORAGE_BUCKET__: string
-declare const __SW_FIREBASE_MESSAGING_SENDER_ID__: string
-declare const __SW_FIREBASE_APP_ID__: string
-
 import { precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { CacheFirst } from 'workbox-strategies'
@@ -23,9 +16,6 @@ let initialized = false
 
 async function initFCM() {
   if (initialized) return
-  // const res = await fetch('/app/api/firebase-config', { cache: 'no-store' })
-  // if (!res.ok) { console.error('[SW] Failed to load firebase-config'); return }
-  // const firebaseConfig = await res.json()
 
   const firebaseConfig = {
     apiKey: import.meta.env.NUXT_PUBLIC_FIREBASE_API_KEY,
@@ -35,6 +25,7 @@ async function initFCM() {
     messagingSenderId: import.meta.env.NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     appId: import.meta.env.NUXT_PUBLIC_FIREBASE_APP_ID,
   }
+  const vapidKey = import.meta.env.NUXT_PUBLIC_FCM_VAPID_KEY
   
   if (!firebaseConfig?.projectId) { console.error('[SW] Missing projectId'); return }
 
@@ -42,8 +33,8 @@ async function initFCM() {
   const messaging = getMessaging(app)
 
   onBackgroundMessage(messaging, (payload) => {
-    const title = payload?.notification?.title ?? 'Reminder'
-    const body  = payload?.notification?.body  ?? 'You have a new reminder'
+    const title = payload?.notification?.title ?? 'Напоминание'
+    const body  = payload?.notification?.body  ?? 'У Вас новое напоминание'
     const data  = payload?.data ?? {}
     self.registration.showNotification(title, {
       body,
@@ -84,7 +75,7 @@ self.addEventListener('notificationclick', (event: any) => {
 
 // DevTools/произвольных push-сообщений
 self.addEventListener('push', (event: any) => {
-  let title = 'Push';
+  let title = 'Тестовый Push';
   let body = 'New notification';
   let data: any = { source: 'push' };
   try {
