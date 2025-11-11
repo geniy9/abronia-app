@@ -175,7 +175,7 @@ const isDisabled = computed(() => {
           :loading="data.loadingFields" class="w-60" />
       </UFormField>
       
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between mt-8">
         <UButton to="/orders" color="primary" variant="ghost">
           Отмена
         </UButton>

@@ -8,6 +8,13 @@ export default () => {
       { name: 'Литры', value: 'liter' },
       { name: 'Кг', value: 'kg' }
     ],
+    stockStatusList: [
+      { name: 'приход', value: 'stock_in' },
+      { name: 'возврат', value: 'return' },
+      { name: 'списание', value: 'write_off' },
+      { name: 'отмена заказа', value: 'cancellation' },
+      { name: 'продажа', value: 'sale' },
+    ],
     orderStatusList: [
       { name: 'в ожидании', value: 'pending' },
       { name: 'отправлен', value: 'shipped' },

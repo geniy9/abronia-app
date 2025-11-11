@@ -43,7 +43,7 @@ onUnmounted(() => { product.value = null })
           </div>
         </div>
       </div>
-      <Product v-else-if="product" :item="product" />
+      <Product v-else-if="product" :product="product" />
 
     </div>
   </div>

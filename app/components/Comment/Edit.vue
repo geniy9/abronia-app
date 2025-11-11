@@ -56,7 +56,7 @@ const isDisabled = computed(() => { return !data.message })
 </script>
 <template>
   <UCard>
-    <UForm :schema="schema" :state="data" class="space-y-3" @submit.prevent="onSubmit">
+    <UForm :schema="schema" :state="data" class="space-y-4" @submit.prevent="onSubmit">
       <UFormField>
         <UTextarea v-model="data.message" name="message" placeholder="Текст сообщения..." 
           class="w-full" :rows="8" required />
@@ -64,7 +64,7 @@ const isDisabled = computed(() => { return !data.message })
       <div class="flex items-center justify-between">
         <RemoveEntry 
           :id="id" api="comments" 
-          :entry-name="`комментарий`" 
+          :entry-name="`комментарий?`" 
           @on-removed="onRemoved" />
         <UFieldGroup>
           <UButton :to="route.path" color="neutral" variant="soft" size="sm">

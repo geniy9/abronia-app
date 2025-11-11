@@ -103,7 +103,7 @@ const isDisabled = computed(() => {
       <h2 class="main_title">{{ data.name || 'Новый товар' }}</h2>
     </template>
 
-    <UForm :schema="schema" :state="data" class="space-y-3" @submit.prevent="onSubmit">
+    <UForm :schema="schema" :state="data" class="space-y-4" @submit.prevent="onSubmit">
       <UFormField label="Название" name="name" required>
         <UInput v-model="data.name" placeholder="Наименование товара" type="text" class="w-xs" />
       </UFormField>
@@ -138,7 +138,7 @@ const isDisabled = computed(() => {
           class="w-xs" />
       </UFormField>
       
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between mt-8">
         <UButton to="/stock" color="primary" variant="ghost">
           Отмена
         </UButton>

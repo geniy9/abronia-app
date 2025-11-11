@@ -16,7 +16,7 @@ const isEdit = computed(() => route.hash === '#edit')
         </NuxtLink>
         <div>
           <NuxtLink to="/auth/profile" class="body_head">
-            <UIcon name="hugeicons:user-circle-02" class="bg-primary w-20 h-20" />
+            <UIcon name="hugeicons:user-circle-02" class="bg-primary w-16 h-16" />
           </NuxtLink>
           <h2 class="main_title">Профиль</h2>
         </div>

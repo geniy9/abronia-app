@@ -93,10 +93,10 @@ const isDisabled = computed(() => { return !data.name })
         </UFieldGroup>
       </UFormField>
       
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between mt-8">
         <RemoveEntry 
           :id="id" api="customers" 
-          :entry-name="`клиент ${data.name}`" 
+          :entry-name="`клиент ${data.name}?`" 
           @on-removed="onRemoved" />
         <UFieldGroup>
           <UButton :to="route.path" color="neutral" variant="soft" size="sm">

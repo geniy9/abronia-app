@@ -61,6 +61,12 @@ export default defineAppConfig({
       }
     },
 
+    select: {
+      slots: {
+        trailingIcon: 'hugeicons:arrow-down-01'
+      }
+    },
+
     accordion: {
       slots: {
         leadingIcon: 'text-gray-900 dark:text-white',

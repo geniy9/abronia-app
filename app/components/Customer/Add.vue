@@ -91,7 +91,7 @@ const isDisabled = computed(() => { return !data.name })
         </UFieldGroup>
       </UFormField>
       
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between mt-8">
         <UButton to="/customers" color="primary" variant="ghost">
           Отмена
         </UButton>

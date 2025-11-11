@@ -142,7 +142,7 @@ const isDisabled = computed(() => {
 
       <ShipmentDate v-model:shipment="state.shipmentDate" />
       
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between mt-8">
         <UButton to="/invoices" color="primary" variant="ghost">
           Отмена
         </UButton>

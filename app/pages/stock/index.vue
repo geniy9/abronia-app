@@ -41,7 +41,7 @@ const isAdd = computed(() => route.hash === '#add')
           <h2 class="main_title">Склад</h2>
         </div>
         <NuxtLink :to="isAdd ? '/stock' : '/stock#add'" class="text-2xl leading-0 p-2">
-          <UIcon :name="isAdd ? 'hugeicons:cancel-square' : 'hugeicons:package-add'" class="text-2xl" />
+          <UIcon :name="isAdd ? 'hugeicons:cancel-square' : 'hugeicons:node-add'" class="text-2xl" />
         </NuxtLink>
       </div>
 

@@ -234,10 +234,10 @@ const isDisabled = computed(() => {
           :loading="data.loadingFields" class="w-60" />
       </UFormField>
       
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between mt-8">
         <RemoveEntry 
           :id="id" api="orders" 
-          :entry-name="`заказ ${state.orderNumber}`" 
+          :entry-name="`заказ ${state.orderNumber}?`" 
           @on-removed="onRemoved" />
         <UFieldGroup>
           <UButton :to="route.path" color="neutral" variant="soft" size="sm">

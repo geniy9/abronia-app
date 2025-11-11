@@ -1,17 +1,19 @@
 <script setup>
 const { copyBoofer, unitMeasurement } = useConfig()
+const route = useRoute()
 
 const props = defineProps({
-  item: {
+  product: {
     type: Object,
     default: null
   }
 })
+const item = ref(props.product)
 
 const commentPrompt = ref(null)
 const currentComment = ref({
-  message: props.item?.comment?.message,
-  documentId: props.item?.comment?.documentId
+  message: item.value?.comment?.message,
+  documentId: item.value?.comment?.documentId
 })
 function openCommentPrompt() {
   commentPrompt.value?.openCommentPrompt()
@@ -20,6 +22,10 @@ function handleComment(data) {
   currentComment.value.message = data.message
   currentComment.value.documentId = data.documentId
 }
+
+function onEdited(obj) { item.value = obj }
+
+const isEdit = computed(() => route.hash === '#edit')
 </script>
 <template>
   <div class="flex flex-col w-full gap-4">
@@ -32,13 +38,17 @@ function handleComment(data) {
         <p class="text-xs">{{ item.category.name }}</p>
         <h2 class="text-lg font-bold">{{ item.name }}</h2>
       </div>
-      <NuxtLink to="#" class="text-2xl leading-0 p-2">
-        <UIcon name="hugeicons:settings-01" class="text-2xl" />
+      <NuxtLink :to="isEdit ? route.path : `${route.path}#edit`" class="text-2xl leading-0 p-2">
+        <UIcon :name="isEdit ? 'hugeicons:cancel-square' : 'hugeicons:settings-01'" class="text-2xl" />
       </NuxtLink>
     </div>
 
-    <div class="flex flex-col gap-2 px-2 pb-2">
-
+    <ProductEdit 
+      v-if="isEdit" 
+      :id="item.documentId" 
+      :productData="item" 
+      @onEdited="onEdited" />
+    <div v-else class="flex flex-col gap-2 px-2 pb-2">
       <div v-if="item.sku" class="flex items-center justify-between gap-2">
         <span class="text-gray-900 dark:text-white">
           Артикул
@@ -48,7 +58,7 @@ function handleComment(data) {
           {{ item.sku }}
         </span>
       </div>
-      <div v-if="item.quantityInStock" class="flex justify-between gap-2">
+      <div class="flex justify-between gap-2">
         <span class="text-gray-900 dark:text-white">
           Количество
         </span>

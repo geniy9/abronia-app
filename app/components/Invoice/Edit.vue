@@ -182,10 +182,10 @@ const isDisabled = computed(() => {
 
       <ShipmentDate v-model:shipment="state.shipmentDate" />
       
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between mt-8">
         <RemoveEntry 
           :id="id" api="invoices" 
-          :entry-name="`инвойс ${state.invoiceNumber}`" 
+          :entry-name="`инвойс ${state.invoiceNumber}?`" 
           @on-removed="onRemoved" />
         <UFieldGroup>
           <UButton :to="route.path" color="neutral" variant="soft" size="sm">
