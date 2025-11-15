@@ -29,6 +29,7 @@ const schema = z.object({
   // stockType: z.enum(stockStatusList.map(item => item.value)),
   categoryId: z.string().min(1, 'Выберите категорию'),
   quantity: z.number().min(0, 'Укажите количество товара'),
+  expireDate: z.date()
 });
 
 const data = reactive({
@@ -38,6 +39,7 @@ const data = reactive({
   categoryId: props.productData?.category?.documentId || '',
   stockType: '',
   quantity: 0,
+  expireDate: props.productData?.expireDate || '',
   loading: false,
 })
 
@@ -128,10 +130,15 @@ const isDisabled = computed(() => {
 
     <UForm :schema="schema" :state="data" class="space-y-4" @submit.prevent="onSubmit">
       <UFormField label="Название" name="name" required>
-        <UInput v-model="data.name" placeholder="Наименование товара" type="text" class="w-xs" />
+        <UInput v-model="data.name" placeholder="Наименование товара" type="text" class="w-full" />
       </UFormField>
+
       <UFormField label="Артикул" name="sku" required>
-        <UInput v-model="data.sku" placeholder="Артикул товара" type="text" class="w-xs" />
+        <UInput v-model="data.sku" placeholder="Артикул товара" type="text" class="w-full" />
+      </UFormField>
+
+      <UFormField label="Срок годности" name="expireDate">
+        <DateModify v-model:inputDate="data.expireDate" />
       </UFormField>
 
       <UFormField label="Категория" name="categoryId" required>

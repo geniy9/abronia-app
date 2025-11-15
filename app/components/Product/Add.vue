@@ -15,6 +15,7 @@ const schema = z.object({
   unit: z.enum(productUnits.map(unit => unit.value)),
   categoryId: z.string().min(1, 'Выберите категорию'),
   quantity: z.number().min(0, 'Укажите количество товара для прихода'),
+  expireDate: z.date()
 });
 
 const data = reactive({
@@ -23,6 +24,7 @@ const data = reactive({
   unit: productUnits[0].value,
   categoryId: route.query?.categoryId || '',
   quantity: 0,
+  expireDate: null,
   categories: apiStore.categories.map(item => ({ label: item.name, value: item.documentId })) || [],
   loading: false,
 })
@@ -92,6 +94,7 @@ function clearData() {
   data.unit = productUnits[0].value;
   data.categoryId = '';
   data.quantity = 0;
+  data.expireDate = null
 }
 
 const isDisabled = computed(() => {
@@ -106,10 +109,15 @@ const isDisabled = computed(() => {
 
     <UForm :schema="schema" :state="data" class="space-y-4" @submit.prevent="onSubmit">
       <UFormField label="Название" name="name" required>
-        <UInput v-model="data.name" placeholder="Наименование товара" type="text" class="w-xs" />
+        <UInput v-model="data.name" placeholder="Наименование товара" type="text" class="w-full" />
       </UFormField>
+
       <UFormField label="Артикул" name="sku" required>
-        <UInput v-model="data.sku" placeholder="Артикул товара" type="text" class="w-xs" />
+        <UInput v-model="data.sku" placeholder="Артикул товара" type="text" class="w-full" />
+      </UFormField>
+
+      <UFormField label="Срок годности" name="expireDate">
+        <DateModify v-model:inputDate="data.expireDate" />
       </UFormField>
 
       <UFormField label="Количество" name="quantity" required>
@@ -146,7 +154,6 @@ const isDisabled = computed(() => {
         <UButton 
           type="submit" 
           :disabled="isDisabled" 
-          :class="isDisabled ? 'opacity-50' : 'opacity-100'"
           :loading="data.loading">
           Создать
         </UButton>

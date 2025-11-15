@@ -61,6 +61,7 @@ function clearData() {
   data.sku = ''
   data.parLevel = 0
   data.unit = productUnits[0].value
+  data.expireDate = null
 }
 
 const isDisabled = computed(() => {
@@ -112,7 +113,6 @@ const isDisabled = computed(() => {
         <UButton 
           type="submit" 
           :disabled="isDisabled" 
-          :class="isDisabled ? 'opacity-50' : 'opacity-100'"
           :loading="data.loading">
           Создать
         </UButton>
