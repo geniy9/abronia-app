@@ -11,19 +11,25 @@ const props = defineProps({
 })
 const data = reactive({
   loading: false,
+  active: null
 })
 
 const inStock = ref(props.item?.parLevel)
+const expireDate = ref(props.item?.expireDate)
 
 async function onSubmit() {
   data.loading = true;
   try {
-    await update('samples', props.item.documentId, { parLevel: inStock.value });
+    await update('samples', props.item.documentId, { 
+      parLevel: inStock.value,
+      expireDate: expireDate.value
+    });
     toast.add({ 
       title: 'Образец обновлен', 
       color: 'success', 
       icon: 'hugeicons:checkmark-circle-02'
     });
+    data.active = null
 
   } catch (e) {
     toast.add({ 
@@ -39,7 +45,7 @@ async function onSubmit() {
 </script>
 <template>
   <div class="flex items-center justify-between bg-gray-200 dark:bg-gray-900 rounded-lg px-3">
-    <UAccordion :items="[{ trailingIcon: 'hugeicons:arrow-down-01', slot: 'sample' }]">
+    <UAccordion v-model="data.active" :items="[{ trailingIcon: 'hugeicons:arrow-down-01', slot: 'sample' }]">
       <template #leading>
         <div class="flex justify-between items-center w-full gap-2 text-gray-900 dark:text-white">
           <div class="flex flex-col items-start gap-1">
@@ -51,8 +57,8 @@ async function onSubmit() {
             </span>
           </div>
           <div class="flex flex-col gap-1 items-end">
-            <UBadge v-if="item.expireDate" :color="expireDateStatus(item.expireDate)" size="sm">
-              {{ humanDate(item.expireDate) }}
+            <UBadge v-if="expireDate" :color="expireDateStatus(expireDate)" size="sm">
+              {{ humanDate(expireDate) }}
             </UBadge>
             <div>
               <span class="font-bold">{{ inStock }}</span>
@@ -63,17 +69,21 @@ async function onSubmit() {
       </template>
       <template #sample>
         <div class="grid gap-4 pb-3">
-          <div class="flex justify-end">
-            <UInputNumber 
-              v-model="inStock" 
-              :min="0" 
-              :step="0.01"
-              :ui="{ base: 'bg-white dark:bg-gray-950 text-black dark:text-white text-sm leading-3 font-bold' }"
-              :increment="{ icon: 'hugeicons:plus-sign-circle', size: 'md', class: 'p-0' }"
-              :decrement="{ icon: 'hugeicons:minus-sign-circle', size: 'md', class: 'p-0' }" 
-              variant="none" 
-              class="w-28" 
-              size="sm" />
+          <USeparator />
+
+          <div class="flex justify-between items-center">
+            <DateModify v-model:inputDate="expireDate" title="Срок годности" />
+            <UFormField label="Количество" class="flex flex-col items-end">
+              <UInputNumber 
+                v-model="inStock" 
+                :min="0" 
+                :step="0.01"
+                :ui="{ base: 'bg-white dark:bg-gray-950 text-black dark:text-white text-base leading-3 font-bold' }"
+                :decrement="{ icon: 'hugeicons:minus-sign-circle', size: 'md', class: 'p-0' }" 
+                :increment="{ icon: 'hugeicons:plus-sign-circle', size: 'md', class: 'p-0' }"
+                variant="none" 
+                class="w-36" />
+            </UFormField>
           </div>
           <div class="flex items-center justify-between gap-2">
             <RemoveEntry :id="item.documentId" api="samples" :entry-name="`образец ${item.name}?`" />

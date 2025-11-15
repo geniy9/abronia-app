@@ -180,7 +180,7 @@ const isDisabled = computed(() => {
         </UInput>
       </UFormField>
 
-      <ShipmentDate v-model:shipment="state.shipmentDate" />
+      <DateModify v-model:inputDate="state.shipmentDate" title="Дата отгрузки" />
       
       <div class="flex items-center justify-between mt-8">
         <RemoveEntry 

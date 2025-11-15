@@ -1,21 +1,25 @@
 <script setup>
 import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
-const emit = defineEmits(['update:shipment'])
+const emit = defineEmits(['update:inputDate'])
 
 const props = defineProps({
-  shipment: {
+  inputDate: {
     type: [String, Date],
     default: null
+  },
+  title: {
+    type: String,
+    default: ''
   }
 })
 const df = new DateFormatter('ru-RU', { dateStyle: 'medium' })
 
 const internalCalendarDate = ref(
-  props.shipment
+  props.inputDate
     ? new CalendarDate(
-        new Date(props.shipment).getFullYear(),
-        new Date(props.shipment).getMonth() + 1,
-        new Date(props.shipment).getDate()
+        new Date(props.inputDate).getFullYear(),
+        new Date(props.inputDate).getMonth() + 1,
+        new Date(props.inputDate).getDate()
       )
     : new CalendarDate(
         new Date().getFullYear(),
@@ -24,7 +28,7 @@ const internalCalendarDate = ref(
       )
 )
 
-watch(() => props.shipment, (newVal) => {
+watch(() => props.inputDate, (newVal) => {
   if (newVal) {
     const date = new Date(newVal);
     internalCalendarDate.value = new CalendarDate(
@@ -33,7 +37,6 @@ watch(() => props.shipment, (newVal) => {
       date.getDate()
     );
   } else {
-    // Если shipment обнуляется, сбрасываем на текущую дату
     internalCalendarDate.value = new CalendarDate(
       new Date().getFullYear(),
       new Date().getMonth() + 1,
@@ -45,7 +48,7 @@ watch(() => props.shipment, (newVal) => {
 function handleDateChange(newCalendarDate) {
   internalCalendarDate.value = newCalendarDate;
   // Эмитируем событие с новой датой в формате Date
-  emit('update:shipment', newCalendarDate.toDate(getLocalTimeZone()));
+  emit('update:inputDate', newCalendarDate.toDate(getLocalTimeZone()));
 }
 
 const displayDate = computed(() => {
@@ -54,20 +57,16 @@ const displayDate = computed(() => {
   }
   return 'Выберите дату';
 });
-
 </script>
 <template>
   <UPopover>
-    <UFormField label="Дата отгрузки">
+    <UFormField :label="title">
       <UButton color="neutral" variant="subtle" block icon="hugeicons:calendar-03">
-        <!-- {{ modelValue ? df.format(modelValue.toDate(getLocalTimeZone())) : 'Выберите дату' }} -->
-          {{ displayDate }}
+        {{ displayDate }}
       </UButton>
     </UFormField>
     <template #content>
-      <!-- <UCalendar v-model="modelValue" class="p-2" /> -->
       <UCalendar :model-value="internalCalendarDate" @update:model-value="handleDateChange" class="p-2" />
     </template>
   </UPopover>
 </template>
-
