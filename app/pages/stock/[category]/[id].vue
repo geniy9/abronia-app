@@ -15,7 +15,7 @@ async function getProduct() {
     const res = await findOne('products', data.id, {
       populate: { 
         category: true,
-        comment: true
+        comment: true,
       }
     })
     if (res) {

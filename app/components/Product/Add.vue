@@ -7,6 +7,7 @@ const client = useStrapiClient()
 const { productUnits } = useConfig()
 const toast = useToast()
 const router = useRouter()
+const route = useRoute()
 
 const schema = z.object({
   name: z.string().min(1, 'Укажите наименование товара'),
@@ -20,7 +21,7 @@ const data = reactive({
   name: '',
   sku: '',
   unit: productUnits[0].value,
-  categoryId: '',
+  categoryId: route.query?.categoryId || '',
   quantity: 0,
   categories: apiStore.categories.map(item => ({ label: item.name, value: item.documentId })) || [],
   loading: false,

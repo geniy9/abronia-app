@@ -82,6 +82,21 @@ export default () => {
         day: 'numeric', month: m, year: y, hour: y, minute: y
       })
     },
+    expireDateStatus: (targetDate) => {
+      const now = new Date();
+      const target = new Date(targetDate);
+    
+      if (isNaN(target.getTime())) { return "neutral" }
+    
+      const diffTime = target.getTime() - now.getTime();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      const diffMonths = diffDays / 30.44;
+    
+      if (diffMonths <= 1 && diffMonths > 0) { return "error" } 
+      else if (diffMonths <= 2 && diffMonths > 1) { return "warning" } 
+      else if (diffMonths > 2) { return "info" } 
+      else { return "error" }
+    },
     truncate: (str, value = 100, ends = '...') => { 
       return `${(str || '').substring(0, value)}${str?.length > value ? ends : ''}`
     },

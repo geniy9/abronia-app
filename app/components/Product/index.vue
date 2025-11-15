@@ -1,5 +1,5 @@
 <script setup>
-const { copyBoofer, unitMeasurement } = useConfig()
+const { humanDate, expireDateStatus, unitMeasurement, copyBoofer } = useConfig()
 const route = useRoute()
 
 const props = defineProps({
@@ -65,6 +65,14 @@ const isEdit = computed(() => route.hash === '#edit')
         <span class="text-gray-900 dark:text-white text-sm font-medium">
           {{ item.quantityInStock + unitMeasurement(item.unit, item.quantityInStock) }}
         </span>
+      </div>
+      <div v-if="item.expireDate" class="flex items-center justify-between gap-2">
+        <span class="text-gray-900 dark:text-white">
+          Срок годности
+        </span>
+        <UBadge :color="expireDateStatus(item.expireDate)">
+          {{ humanDate(item.expireDate) }}
+        </UBadge>
       </div>
 
       <UAccordion :items="[{

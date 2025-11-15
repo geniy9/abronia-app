@@ -2,6 +2,7 @@
 import { useApiStore } from '~/store/api'
 
 const apiStore = useApiStore()
+const router = useRouter()
 const route = useRoute()
 
 const data = reactive({
@@ -38,9 +39,12 @@ const isAdd = computed(() => route.hash === '#add')
             {{ apiStore.getterCategory.name }}
           </h2>
         </div>
-        <NuxtLink :to="isAdd ? '/stock' : '/stock#add'" class="text-2xl leading-0 p-2">
-          <UIcon :name="isAdd ? 'hugeicons:cancel-square' : 'hugeicons:package-add'" class="text-2xl" />
-        </NuxtLink>
+        <div @click="isAdd ? '/stock' : router.push({ 
+          path: '/stock', 
+          hash: '#add', 
+          query: { categoryId: apiStore.getterCategory.documentId } })">
+          <UIcon :name="isAdd ? 'hugeicons:cancel-square' : 'hugeicons:package-add'" class="text-2xl cursor-pointer" />
+        </div>
       </div>
 
       <ProductList :items="apiStore.products" :loading="apiStore.loadingProducts" />

@@ -1,5 +1,5 @@
 <script setup>
-const { truncate, unitMeasurement } = useConfig()
+const { humanDate, expireDateStatus, truncate, unitMeasurement } = useConfig()
 const { update, delete: _delete } = useStrapi()
 const toast = useToast()
 
@@ -50,9 +50,14 @@ async function onSubmit() {
               {{ item.sku }}
             </span>
           </div>
-          <div>
-            <span class="font-bold">{{ inStock }}</span>
-            <span class="text-xs uppercase opacity-50">{{ unitMeasurement(item.unit, inStock) }}</span>
+          <div class="flex flex-col gap-1 items-end">
+            <UBadge v-if="item.expireDate" :color="expireDateStatus(item.expireDate)" size="sm">
+              {{ humanDate(item.expireDate) }}
+            </UBadge>
+            <div>
+              <span class="font-bold">{{ inStock }}</span>
+              <span class="text-xs uppercase opacity-50">{{ unitMeasurement(item.unit, inStock) }}</span>
+            </div>
           </div>
         </div>
       </template>
