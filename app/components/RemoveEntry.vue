@@ -36,7 +36,8 @@ async function onSubmit() {
         icon: 'hugeicons:checkmark-circle-02'
       });
       apiStore.removeEntryFromState(props.api, props.id)
-      eimt('on-removed')
+      emit('on-removed')
+      isOpen.value = false;
     }
   } catch (e) {
     toast.add({ 
@@ -68,7 +69,7 @@ async function onSubmit() {
       <div class="space-y-3">
         
         <div class="py-3 text-center">
-          Вы действительно хотите удалить {{ entryName }}
+          Вы действительно хотите удалить {{ entryName }}?
         </div>
 
         <div class="flex items-center justify-between w-full">

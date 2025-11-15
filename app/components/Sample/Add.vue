@@ -9,10 +9,11 @@ const toast = useToast()
 const router = useRouter()
 
 const schema = z.object({
-  name: z.string().min(3, 'Укажите наименование образца'),
+  name: z.string().min(1, 'Укажите наименование образца'),
   sku: z.string().min(1, 'Укажите артикул образца'),
   unit: z.enum(productUnits.map(unit => unit.value)),
   parLevel: z.number().min(0, 'Укажите количество'),
+  expireDate: z.date()
 });
 
 const data = reactive({
@@ -20,6 +21,7 @@ const data = reactive({
   sku: '',
   parLevel: 0,
   unit: productUnits[0].value,
+  expireDate: null,
   loading: false,
 })
 
@@ -75,8 +77,13 @@ const isDisabled = computed(() => {
       <UFormField label="Название" name="name" required>
         <UInput v-model="data.name" placeholder="Наименование образца" type="text" class="w-full" />
       </UFormField>
+
       <UFormField label="Артикул" name="sku" required>
         <UInput v-model="data.sku" placeholder="Артикул образца" type="text" class="w-full" />
+      </UFormField>
+
+      <UFormField label="Срок годности" name="expireDate">
+        <DateModify v-model:inputDate="data.expireDate" />
       </UFormField>
 
       <UFormField label="Количество" name="parLevel" required>
@@ -85,8 +92,8 @@ const isDisabled = computed(() => {
           :min="0" 
           :step="0.01"
           :ui="{ base: 'bg-white dark:bg-gray-950 text-black dark:text-white text-sm leading-3 font-bold' }"
-          :increment="{ icon: 'hugeicons:plus-sign-circle', size: 'md', class: 'p-0' }"
           :decrement="{ icon: 'hugeicons:minus-sign-circle', size: 'md', class: 'p-0' }" 
+          :increment="{ icon: 'hugeicons:plus-sign-circle', size: 'md', class: 'p-0' }" 
           variant="none" 
           class="w-40" />
       </UFormField>

@@ -350,15 +350,15 @@ export const useApiStore = defineStore('api', {
       switch (api) {
         case 'samples': this.samples.unshift(obj);
         break;
-        case 'products': this.products = this.products.unshift(obj);
+        case 'products': this.products.unshift(obj);
         break;
-        case 'invoices': this.invoices = this.invoices.unshift(obj);
+        case 'invoices': this.invoices.unshift(obj);
         break;
-        case 'orders': this.orders = this.orders.unshift(obj);
+        case 'orders': this.orders.unshift(obj);
         break;
-        case 'customers': this.customers = this.customers.unshift(obj);
+        case 'customers': this.customers.unshift(obj);
         break;
-        case 'comments': this.comments = this.comments.unshift(obj);
+        case 'comments': this.comments.unshift(obj);
         break;
         default: console.warn(`Неизвестный тип API: ${api}`);
       }

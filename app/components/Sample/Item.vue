@@ -86,7 +86,7 @@ async function onSubmit() {
             </UFormField>
           </div>
           <div class="flex items-center justify-between gap-2">
-            <RemoveEntry :id="item.documentId" api="samples" :entry-name="`образец ${item.name}?`" />
+            <RemoveEntry :id="item.documentId" api="samples" :entry-name="`образец ${item.name}`" />
             <UButton @click="onSubmit" :loading="data.loading" size="sm">
               Сохранить
             </UButton>
