@@ -28,13 +28,13 @@ const data = reactive({
 async function onSubmit(event) {
   data.loading = true;
   try {
-    const sampleResponse = await client('/samples', {
+    const res = await client('/samples', {
       method: 'POST',
       body: { data: { ...event.data } },
     });
 
-    if (sampleResponse?.data) { 
-      apiStore.addEntryToState('samples', sampleResponse.data)
+    if (res?.data) { 
+      apiStore.addEntryToState('samples', res.data)
       toast.add({ 
         title: 'Образец успешно добавлен', 
         color: 'success', 

@@ -73,7 +73,7 @@ async function onSubmit(event) {
       color: 'success', 
       icon: 'hugeicons:checkmark-circle-02'
     });
-    router.push(`/stock/${categoryId}/${newProductId}`)
+    router.push(`/stock/${newProductId}`)
 
   } catch (e) {
     toast.add({ 
@@ -148,7 +148,7 @@ const isDisabled = computed(() => {
       </UFormField>
       
       <div class="flex items-center justify-between mt-8">
-        <UButton to="/stock" color="primary" variant="ghost">
+        <UButton :to="route.path" color="primary" variant="ghost">
           Отмена
         </UButton>
         <UButton 

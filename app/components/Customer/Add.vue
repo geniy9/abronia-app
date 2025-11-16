@@ -98,7 +98,6 @@ const isDisabled = computed(() => { return !data.name })
         <UButton 
           type="submit" 
           :disabled="isDisabled" 
-          :class="isDisabled ? 'opacity-50' : 'opacity-100'"
           :loading="data.loading">
           Создать
         </UButton>

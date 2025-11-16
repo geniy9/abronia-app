@@ -64,7 +64,7 @@ const isDisabled = computed(() => { return !data.message })
       <div class="flex items-center justify-between">
         <RemoveEntry 
           :id="id" api="comments" 
-          :entry-name="`комментарий?`" 
+          :entry-name="`комментарий`" 
           @on-removed="onRemoved" />
         <UFieldGroup>
           <UButton :to="route.path" color="neutral" variant="soft" size="sm">

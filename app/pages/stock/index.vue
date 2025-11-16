@@ -9,6 +9,7 @@ definePageMeta({
 const apiStore = useApiStore()
 const data = reactive({
   loading: false,
+  isEdit: false
 })
 
 async function getCategories() {
@@ -21,6 +22,8 @@ async function getCategories() {
     data.loading = false
   }
 }
+function toggleEdit() { data.isEdit = data.isEdit ? false : true }
+
 onMounted(async () => { await getCategories() })
 
 const categories = computed(() => apiStore.categories)
@@ -40,12 +43,25 @@ const isAdd = computed(() => route.hash === '#add')
           </NuxtLink>
           <h2 class="main_title">Склад</h2>
         </div>
-        <NuxtLink :to="isAdd ? '/stock' : '/stock#add'" class="text-2xl leading-0 p-2">
-          <UIcon :name="isAdd ? 'hugeicons:cancel-square' : 'hugeicons:node-add'" class="text-2xl" />
-        </NuxtLink>
+        <div v-if="data.isEdit" @click="toggleEdit" class="text-2xl cursor-pointer leading-0 p-2">
+          <UIcon name="hugeicons:cancel-01" />
+        </div>
+        <UDropdownMenu v-else :items="[{
+            label: 'Добавить категорию',
+            icon: 'hugeicons:node-add',
+            to: '/stock#add'
+          },{
+            label: 'Удалить категорию',
+            icon: 'hugeicons:node-remove',
+            onSelect() { toggleEdit() }
+          }]" arrow>
+          <span class="text-2xl cursor-pointer leading-0 p-2">
+            <UIcon name="hugeicons:node-edit" />
+          </span>
+        </UDropdownMenu>
       </div>
 
-      <ProductAdd v-if="isAdd" />
+      <CategoryAdd v-if="isAdd" />
       <div v-else class="flex flex-col gap-4">
         <SearchBar placeholder="Поиск по товарам" api="products" />
 
@@ -60,7 +76,11 @@ const isAdd = computed(() => route.hash === '#add')
           </div>
         </NuxtLink>
 
-        <Categories :items="categories" :loading="apiStore.loadingCategories" />
+        <CategoryList 
+          :items="categories" 
+          :loading="apiStore.loadingCategories" 
+          :isEdit="data.isEdit" 
+          @on-removed-category="data.isEdit = false" />
       </div>
       
     </div>

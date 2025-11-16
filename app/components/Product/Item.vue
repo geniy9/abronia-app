@@ -8,7 +8,7 @@ const props = defineProps({
 })
 </script>
 <template>
-  <NuxtLink :to="`/stock/${item?.category?.documentId}/${item?.documentId}`" 
+  <NuxtLink :to="`/stock/${item?.documentId}`" 
     class="flex justify-between items-center cursor-pointer p-2 bg-gray-200 dark:bg-gray-900 rounded-lg">
     <h3 class="font-bold text-gray-900 dark:text-white">
       {{ truncate(item.name, 20) }}

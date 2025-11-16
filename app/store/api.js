@@ -67,7 +67,7 @@ export const useApiStore = defineStore('api', {
         this.loadingCategories = true
         const { find } = useStrapi()
         const res = await find('categories', { 
-          sort: ["sort_id:asc"]
+          sort: ["sortId:asc"]
         })
         if (res) this.categories = res.data
       } catch (error) {
@@ -352,6 +352,8 @@ export const useApiStore = defineStore('api', {
         break;
         case 'products': this.products.unshift(obj);
         break;
+        case 'categories': this.categories.unshift(obj);
+        break;
         case 'invoices': this.invoices.unshift(obj);
         break;
         case 'orders': this.orders.unshift(obj);
@@ -369,6 +371,8 @@ export const useApiStore = defineStore('api', {
         case 'samples': this.samples = this.samples.filter(i => i.documentId !== id);
         break;
         case 'products': this.products = this.products.filter(i => i.documentId !== id);
+        break;
+        case 'categories': this.categories = this.categories.filter(i => i.documentId !== id);
         break;
         case 'invoices': this.invoices = this.invoices.filter(i => i.documentId !== id);
         break;

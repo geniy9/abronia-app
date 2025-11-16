@@ -27,7 +27,7 @@ export default () => {
       [{
         label: 'Новый Товар',
         icon: 'hugeicons:package-add',
-        to: '/stock#add'
+        to: '/stock/category-null#add'
       }],
       [{
         label: 'Создать Заказ',
@@ -48,6 +48,11 @@ export default () => {
         label: 'Добавить Заметку',
         icon: 'hugeicons:message-add-01',
         to: '/comments#add'
+      }],
+      [{
+        label: 'Добавить категорию',
+        icon: 'hugeicons:node-add',
+        to: '/stock#add'
       }]
     ]
   }

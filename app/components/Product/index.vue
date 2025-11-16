@@ -31,7 +31,7 @@ const isEdit = computed(() => route.hash === '#edit')
   <div class="flex flex-col w-full gap-4">
 
     <div class="grid grid-cols-[auto_1fr_auto] items-center bg-primary text-white rounded-lg p-2">
-      <NuxtLink :to="`/stock/${item.category.documentId}`" class="text-2xl leading-0 p-2">
+      <NuxtLink :to="`/stock/category-${item.category.documentId}`" class="text-2xl leading-0 p-2">
         <UIcon name="hugeicons:link-backward" />
       </NuxtLink>
       <div class="text-center">

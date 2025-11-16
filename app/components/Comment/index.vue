@@ -49,7 +49,7 @@ const isEdit = computed(() => route.hash === '#edit')
         
         <UFieldGroup v-if="item.product" class="self-end">
           <UBadge color="neutral" variant="soft" icon="hugeicons:package-03" />
-          <UButton :to="`/stock/${item.product.category?.documentId}/${item.product.documentId}`" color="neutral" variant="soft" icon="hugeicons:link-square-02" size="sm" trailing>
+          <UButton :to="`/stock/${item.product.documentId}`" color="neutral" variant="soft" icon="hugeicons:link-square-02" size="sm" trailing>
             {{ item.product.name }}
           </UButton>
         </UFieldGroup>
