@@ -132,7 +132,7 @@ export const useApiStore = defineStore('api', {
                 productItems: { populate: ['product'] }
               },
             },
-            attachments: true,
+            attachments: { sort: "createdAt:desc" },
             comment: true,
             remind: true,
           }
@@ -150,6 +150,7 @@ export const useApiStore = defineStore('api', {
       }
     },
 
+    // пока не используется
     addAttachmentsToInvoice(newAttachments) {
       if (!this.invoice) {
         console.warn('Нет активного инвойса для добавления вложений.');
@@ -160,7 +161,11 @@ export const useApiStore = defineStore('api', {
       }
       const existingAttachmentIds = this.invoice.attachments.map(att => att.id);
       const uniqueNewAttachments = newAttachments.filter(newAtt => !existingAttachmentIds.includes(newAtt.id));
-      this.invoice.attachments = [...uniqueNewAttachments, ...this.invoice.attachments]
+
+      // this.invoice.attachments = [...uniqueNewAttachments, ...this.invoice.attachments]
+      if (uniqueNewAttachments.length) {
+        this.invoice.attachments.unshift(...uniqueNewAttachments);
+      }
     },
 
     async getOrders() {

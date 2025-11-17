@@ -1,5 +1,5 @@
 <script setup>
-const { imageUrl, smallImg, largeImg } = useConfig()
+const { strapiUrl, smallImg, largeImg } = useConfig()
 const props = defineProps({
   items: {
     type: Array,
@@ -27,6 +27,7 @@ function popupImage(data) {
       ref="carousel" 
       v-slot="{ item }"
       :items="items"
+      arrows
       :prev="{ onClick: onClickPrev }"
       :next="{ onClick: onClickNext }"
       prev-icon="hugeicons:arrow-left-02"
@@ -34,15 +35,15 @@ function popupImage(data) {
       class="max-h-50 mx-auto"
       @select="onSelect" 
       :ui="{ 
-        item: 'basis-1/2',
-        prev: 'start-0 sm:start-0 hidden sm:flex', 
-        next: 'end-0 sm:end-0 hidden sm:flex'
+        item: 'basis-1/3',
+        prev: 'start-0 sm:start-0 sm:flex', 
+        next: 'end-0 sm:end-0 sm:flex'
         }">
       <div class="flex justify-start items-center gap-2">
         <div v-if="(item.mime === 'image/jpeg' || item.mime === 'image/png')">
           <img @click="popupImage(item)" :src="smallImg(item)" class="rounded-lg w-36 h-36 object-cover cursor-pointer" />
         </div>
-        <a v-else-if="(item.mime === 'application/pdf')" :href="imageUrl + item.url" target="_blank" 
+        <a v-else-if="(item.mime === 'application/pdf')" :href="strapiUrl + item.url" target="_blank" 
           class="grid place-items-center rounded-lg w-36 h-36 bg-black/20">
           <UIcon name="hugeicons:pdf-02" class="w-8 h-8 text-gray-500" />
         </a>
@@ -63,8 +64,8 @@ function popupImage(data) {
           color="neutral" 
           variant="outline" 
           class="absolute top-2 right-2" />
-        <div class="flex items-center justify-center w-full h-screen">
-          <img :src="largeImg(activeImage)" class="h-full w-auto" />
+        <div class="flex items-center justify-center w-screen h-screen">
+          <img :src="largeImg(activeImage)" class="w-full" />
         </div>
       </template>
     </UModal>

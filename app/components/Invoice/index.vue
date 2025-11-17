@@ -139,7 +139,7 @@ const isEdit = computed(() => route.hash === '#edit')
         <template #quantity-cell="{ row }">
           <div class="flex items-center justify-end gap-1">
             <p>{{ row.original.quantity }}</p>
-            <p>{{ unitMeasurement(row.original.product.unit, row.original.quantity) }}</p>
+            <p>{{ unitMeasurement(row.original.product?.unit, row.original?.quantity) }}</p>
           </div>
         </template>
       </UTable>
@@ -177,7 +177,7 @@ const isEdit = computed(() => route.hash === '#edit')
           }]">
           <template #notify>
             <div class="flex items-end gap-2 p-4 border border-gray-400 dark:border-gray-600 rounded-md">
-              <NotifyDate 
+              <DateNotify 
                 :dateOfRemind="item.remind?.remindDate" 
                 @on-set-date="onSetRemindDate" 
                 class="flex-1" />
@@ -202,7 +202,7 @@ const isEdit = computed(() => route.hash === '#edit')
             slot: 'upload',
           }]">
           <template #upload>
-            <InvoiceUploadFiles :document-id="item.documentId" />
+            <InvoiceUploadFilesThird :document-id="item.documentId" />
           </template>
         </UAccordion>
 

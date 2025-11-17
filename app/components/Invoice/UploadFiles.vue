@@ -13,19 +13,25 @@ const props = defineProps({
   }
 })
 
-const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB
-const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf']
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+const ACCEPTED_MIMES = ['image/jpeg', 'image/png', 'application/pdf'];
+const ACCEPTED_EXT = /\.(jpe?g|png|pdf)$/i;
 
 const schema = z.object({
-  images: z.array(z.instanceof(File)
-    .refine((file) => file.size <= MAX_FILE_SIZE, {
-      message: `Файл слишком большой. Пожалуйста приложите менее 2Mb.`
-    })
-    .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file.type), {
-      message: 'Пожалуйста используйте валидный формат файла (JPG, PNG, or PDF).'
-    })
-  ).min(1, 'Выберите хотя бы один файл.')
-})
+  images: z.array(
+    z.instanceof(File)
+      .refine(file => file.size <= MAX_FILE_SIZE, {
+        message: 'Файл слишком большой. Пожалуйста приложите файл менее 5 Мегабайт!'
+      })
+      .refine(file => {
+        if (ACCEPTED_MIMES.includes(file.type)) return true;
+        if (!file.type && file.name) return ACCEPTED_EXT.test(file.name);
+        return false;
+      }, {
+        message: 'Пожалуйста используйте валидный формат файла (JPG, PNG или PDF).'
+      })
+  ).min(1, 'Выберите хотя бы один файл.').max(10, 'Можно загрузить не более 10 файлов.')
+});
 
 const state = reactive({
   images: [],
@@ -101,7 +107,7 @@ async function onSubmit() {
         v-model="state.images"
         icon="hugeicons:upload-04"
         label="Приложить фото"
-        description="JPG, PNG, или PDF (max. 2MB)"
+        description="JPG, PNG, или PDF (max. 5MB)"
         layout="grid"
         multiple
         class="w-full min-h-32">

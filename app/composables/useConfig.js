@@ -1,9 +1,9 @@
 export default () => {
   const config = useRuntimeConfig()
-  const imageUrl = config.public.STRAPI_URL
+  const strapiUrl = config.public.STRAPI_URL
   const toast = useToast()
   return {
-    imageUrl,
+    strapiUrl,
     productUnits: [
       { name: 'Литры', value: 'liter' },
       { name: 'Кг', value: 'kg' }
@@ -101,31 +101,31 @@ export default () => {
       return `${(str || '').substring(0, value)}${str?.length > value ? ends : ''}`
     },
     thumbImg: (img) => {
-      return `${imageUrl}${img?.formats.thumbnail ? img.formats.thumbnail.url : img.url}`
+      return `${strapiUrl}${img?.formats.thumbnail ? img.formats.thumbnail.url : img.url}`
     },
     smallImg: (img) => {
-      return `${imageUrl}${img?.formats.small ? img.formats.small.url : img.url}`
+      return `${strapiUrl}${img?.formats.small ? img.formats.small.url : img.url}`
     },
     mediumImg: (img) => {
       if (img?.formats.medium) {
-        return `${imageUrl}${img.formats.medium.url}`
+        return `${strapiUrl}${img.formats.medium.url}`
       } else if (img?.formats.small) {
-        return `${imageUrl}${img.formats.small.url}`
+        return `${strapiUrl}${img.formats.small.url}`
       } else {
-        return `${imageUrl}${img.url}`
+        return `${strapiUrl}${img.url}`
       }
     },
     largeImg: (img) => {
       if (img?.formats) {
         if (img.formats?.large) {
-          return `${imageUrl}${img.formats.large.url}`
+          return `${strapiUrl}${img.formats.large.url}`
         } else if (img.formats?.medium) {
-          return `${imageUrl}${img.formats.medium.url}`
+          return `${strapiUrl}${img.formats.medium.url}`
         } else if (img.formats?.small) {
-          return `${imageUrl}${img.formats.small.url}`
+          return `${strapiUrl}${img.formats.small.url}`
         }
       } else {
-        return `${imageUrl}${img.url}`
+        return `${strapiUrl}${img.url}`
       }
     }
   }
