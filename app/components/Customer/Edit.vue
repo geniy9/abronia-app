@@ -63,7 +63,7 @@ async function onSubmit(event) {
     data.loading = false;
   }
 }
-function onRemoved() { router.push(route.path) }
+function onRemoved() { router.push('/customers') }
 const isDisabled = computed(() => { return !data.name })
 </script>
 <template>

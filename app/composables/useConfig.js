@@ -11,8 +11,9 @@ export default () => {
     stockStatusList: [
       { name: 'приход', value: 'stock_in' },
       { name: 'возврат', value: 'return' },
-      { name: 'списание', value: 'write_off' },
-      { name: 'отмена заказа', value: 'cancellation' },
+      { name: 'списание на образец', value: 'write_off_sample' },
+      { name: 'списание брак', value: 'write_off_defect' },
+      { name: 'отмена заказа', value: 'cancelled' },
       { name: 'продажа', value: 'sale' },
     ],
     orderStatusList: [

@@ -174,7 +174,9 @@ export const useApiStore = defineStore('api', {
         const { find } = useStrapi()
         const res = await find('orders', {
           sort: ["createdAt:desc"],
-          populate: { customer: true }
+          populate: { 
+            customer: true
+          }
         })
         if (res?.data) { 
           this.orders = res.data
@@ -198,7 +200,10 @@ export const useApiStore = defineStore('api', {
         const { find } = useStrapi()
         const res = await find('customers', {
           sort: ["name:asc"],
-          populate: { comment: true }
+          populate: { 
+            comment: true,
+            contact: true
+          }
         })
         if (res?.data) { 
           this.customers = res.data

@@ -13,7 +13,7 @@ async function getCustomer() {
     data.loading = true
     const { findOne } = useStrapi()
     const res = await findOne('customers', data.id, {
-      populate: { comment: true }
+      populate: { comment: true, contact: true }
     })
     if (res?.data) {
       customer.value = res.data
