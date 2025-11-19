@@ -138,7 +138,8 @@ const isDisabled = computed(() => {
         <USelect
           v-model="state.invoiceStatus"
           :items="invoiceStatusList.map(status => ({ label: status.name, value: status.value }))"
-          placeholder="Выберите статус"
+          placeholder="Выберите статус" 
+          trailing-icon="hugeicons:arrow-down-01"
           class="w-60" />
       </UFormField>
 
@@ -146,7 +147,8 @@ const isDisabled = computed(() => {
         <USelect
           v-model="state.orderId"
           :items="data.orders"
-          placeholder="Выберите заказ"
+          placeholder="Выберите заказ" 
+          trailing-icon="hugeicons:arrow-down-01"
           :loading="data.loadingFields" class="w-60" />
       </UFormField>
 

@@ -29,7 +29,7 @@ const schema = z.object({
   // stockType: z.enum(stockStatusList.map(item => item.value)),
   categoryId: z.string().min(1, 'Выберите категорию'),
   quantity: z.number().min(0, 'Укажите количество товара'),
-  expireDate: z.date()
+  expireDate: z.date().optional().or(z.string())
 });
 
 const data = reactive({
@@ -39,7 +39,7 @@ const data = reactive({
   categoryId: props.productData?.category?.documentId || '',
   stockType: '',
   quantity: 0,
-  expireDate: props.productData?.expireDate || '',
+  expireDate: props.productData?.expireDate ? new Date(props.productData.expireDate) : new Date(),
   loading: false,
 })
 
@@ -62,9 +62,10 @@ onMounted(async () => {
 async function onSubmit(event) {
   data.loading = true;
   try {
-    const { categoryId, quantity, stockType, ...formData } = event.data
+    const { categoryId, quantity, stockType, expireDate, ...formData } = event.data
     const productPayload = {
       ...formData,
+      expireDate: data.expireDate.toISOString(),
       category: { connect: [categoryId] }
     };
     const updatedPoduct = await update('products', props.id, productPayload);
@@ -146,7 +147,8 @@ const isDisabled = computed(() => {
           v-model="data.categoryId"
           :items="apiStore.categories.map(item => ({ label: item.name, value: item.documentId }))" 
           :loading="data.loadingCategories"
-          placeholder="Выберите категорию"
+          placeholder="Выберите категорию" 
+          trailing-icon="hugeicons:arrow-down-01"
           class="w-xs" />
       </UFormField>
 
@@ -176,7 +178,9 @@ const isDisabled = computed(() => {
         <USelect
           v-model="data.stockType"
           :items="stockStatusList.map(status => ({ label: status.name, value: status.value }))"
-          placeholder="Тип движения"
+          placeholder="Тип движения" 
+          trailing-icon="hugeicons:arrow-down-01" 
+          selected-icon="hugeicons:checkmark-circle-02"
           class="w-xs" />
       </UFormField>
       

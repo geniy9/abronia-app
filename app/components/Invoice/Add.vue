@@ -121,7 +121,8 @@ const isDisabled = computed(() => {
         <USelect
           v-model="state.orderId"
           :items="data.orders"
-          placeholder="Выберите заказ"
+          placeholder="Выберите заказ" 
+          trailing-icon="hugeicons:arrow-down-01"
           :loading="data.loadingOrders" class="w-60" />
       </UFormField>
 

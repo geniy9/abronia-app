@@ -63,7 +63,7 @@ const isEdit = computed(() => route.hash === '#edit')
           Количество
         </span>
         <span class="text-gray-900 dark:text-white text-sm font-medium">
-          {{ item.quantityInStock + unitMeasurement(item.unit, item.quantityInStock) }}
+          {{ item.quantityInStock === null ? '' : item.quantityInStock + unitMeasurement(item.unit, item.quantityInStock) }}
         </span>
       </div>
       <div v-if="item.expireDate" class="flex items-center justify-between gap-2">
