@@ -27,7 +27,7 @@ function popupImage(data) {
       ref="carousel" 
       v-slot="{ item }"
       :items="items"
-      arrows
+      :arrows="(items.length >= 3)"
       :prev="{ onClick: onClickPrev }"
       :next="{ onClick: onClickNext }"
       prev-icon="hugeicons:arrow-left-02"
@@ -65,7 +65,7 @@ function popupImage(data) {
           variant="outline" 
           class="absolute top-2 right-2" />
         <div class="flex items-center justify-center w-screen h-screen">
-          <img :src="largeImg(activeImage)" class="w-full" />
+          <img :src="largeImg(activeImage)" class="max-w-full" />
         </div>
       </template>
     </UModal>

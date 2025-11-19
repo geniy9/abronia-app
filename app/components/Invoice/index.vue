@@ -202,7 +202,7 @@ const isEdit = computed(() => route.hash === '#edit')
             slot: 'upload',
           }]">
           <template #upload>
-            <InvoiceUploadFiles :document-id="item.documentId" />
+            <Uploading :document-id="item.documentId" />
           </template>
         </UAccordion>
 

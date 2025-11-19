@@ -1,17 +1,8 @@
 <script setup>
 import { z } from 'zod'
-import { useApiStore } from '~/store/api'
 
 const client = useStrapiClient()
-const apiStore = useApiStore()
 const toast = useToast()
-
-const props = defineProps({
-  documentId: {
-    type: String,
-    default: ''
-  }
-})
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ACCEPTED_MIMES = ['image/jpeg', 'image/png', 'application/pdf']
@@ -30,15 +21,14 @@ const schema = z.object({
       }, {
         message: 'Пожалуйста используйте валидный формат файла (JPG, PNG или PDF).'
       })
-  ).min(1, 'Выберите хотя бы один файл.').max(10, 'Можно загрузить не более 10 файлов.')
+  ).max(10, 'Можно загрузить не более 10 файлов.')
 })
 
 const state = reactive({
   images: [],
   loading: false,
-  progress: 0 // общий прогресс 0..100
+  progress: 0
 })
-
 let progressTimer = null
 
 function startSimulatedProgress() {
@@ -59,17 +49,13 @@ function finishSimulatedProgress(success = true) {
     setTimeout(() => { state.progress = 0 }, 700)
   }
 }
-
 function clearSimulatedProgress() {
   if (progressTimer) {
     clearInterval(progressTimer)
     progressTimer = null
   }
 }
-
-onBeforeUnmount(() => {
-  clearSimulatedProgress()
-})
+onBeforeUnmount(() => { clearSimulatedProgress() })
 
 function normalizeUploadedResponse(res) {
   if (!res) return []
@@ -82,28 +68,14 @@ function normalizeUploadedResponse(res) {
   return []
 }
 
-async function onSubmit() {
-  if (!state.images.length) {
-    toast.add({
-      title: 'Выберите хотя бы один файл.',
-      color: 'error',
-      icon: 'hugeicons:cancel-circle',
-    })
-    return
-  }
-  if (!props.documentId) {
-    toast.add({
-      title: 'Не указан документ (инвойс) для прикрепления файлов.',
-      color: 'error',
-      icon: 'hugeicons:cancel-circle',
-    })
-    return
-  }
+defineExpose({ startUpload })
+async function startUpload(documentId) {
+  if (!documentId || !state.images.length) return 
 
   try {
     schema.parse({ images: state.images })
   } catch (err) {
-    const msg = err?.errors?.[0]?.message || 'Неверные файлы.'
+    const msg = err?.errors?.[0]?.message || 'Некорректный формат файлов'
     toast.add({ title: msg, color: 'error', icon: 'hugeicons:cancel-circle' })
     return
   }
@@ -115,10 +87,7 @@ async function onSubmit() {
     const formData = new FormData()
     state.images.forEach(file => formData.append('files', file))
 
-    const res = await client('/upload', {
-      method: 'POST',
-      body: formData
-    })
+    const res = await client('/upload', { method: 'POST', body: formData })
 
     const uploadedFiles = normalizeUploadedResponse(res)
 
@@ -131,21 +100,15 @@ async function onSubmit() {
       })
       return
     }
-
-    const existIds = apiStore.getterInvoice?.attachments?.map(file => file.id) || []
     const newIds = uploadedFiles.map(f => f.id).filter(Boolean)
-    const allIds = [...existIds, ...newIds]
 
-    await client(`/invoices/${props.documentId}`, {
+    await client(`/invoices/${documentId}`, {
       method: 'PUT',
-      body: JSON.stringify({ data: { attachments: allIds } })
+      body: JSON.stringify({ data: { attachments: newIds } })
     })
 
-    await apiStore.getInvoice(props.documentId)
-
-    // apiStore.addAttachmentsToInvoice(uploadedFiles)
     toast.add({
-      title: 'Файлы успешно загружены и прикреплены!',
+      title: 'Файлы загружены и прикреплены!',
       color: 'success',
       icon: 'hugeicons:checkmark-circle-02',
     })
@@ -176,8 +139,7 @@ async function onSubmit() {
         description="JPG, PNG, или PDF (max. 5MB)"
         layout="grid"
         multiple
-        class="w-full min-h-32"
-      >
+        class="w-full min-h-32">
         <template #files-top="{ open, files }">
           <div v-if="files?.length" class="mb-2 flex items-center justify-between">
             <p class="font-bold">Файлы ({{ files?.length }})</p>
@@ -206,19 +168,6 @@ async function onSubmit() {
         <div class="truncate">{{ f.name }}</div>
         <div class="text-xs text-gray-300">{{ f.type || 'file' }}</div>
       </div>
-    </div>
-
-    <div class="flex">
-      <UButton
-        icon="hugeicons:file-upload"
-        type="submit"
-        label="Начать загрузку"
-        color="neutral"
-        variant="outline"
-        block
-        :loading="state.loading"
-        :disabled="state.loading || !state.images.length"
-      />
     </div>
   </UForm>
 </template>

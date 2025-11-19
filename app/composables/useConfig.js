@@ -105,7 +105,7 @@ export default () => {
       return `${strapiUrl}${img?.formats.thumbnail ? img.formats.thumbnail.url : img.url}`
     },
     smallImg: (img) => {
-      return `${strapiUrl}${img?.formats.small ? img.formats.small.url : img.url}`
+      return `${strapiUrl}${img?.formats?.small ? img.formats.small.url : img.url}`
     },
     mediumImg: (img) => {
       if (img?.formats.medium) {
@@ -124,9 +124,9 @@ export default () => {
           return `${strapiUrl}${img.formats.medium.url}`
         } else if (img.formats?.small) {
           return `${strapiUrl}${img.formats.small.url}`
+        } else {
+          return `${strapiUrl}${img.url}`
         }
-      } else {
-        return `${strapiUrl}${img.url}`
       }
     }
   }

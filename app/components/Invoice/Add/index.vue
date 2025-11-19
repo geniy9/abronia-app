@@ -9,6 +9,8 @@ const toast = useToast()
 const router = useRouter()
 const route = useRoute()
 
+const invoiceUploader = ref(null)
+
 const schema = z.object({
   invoiceNumber: z.string().min(1, 'Укажите артикул/номер инвойса'),
   invoiceStatus: z.enum(invoiceStatusList.map(unit => unit.value)),
@@ -66,7 +68,7 @@ async function onSubmit(event) {
     const res = await client('/invoices', {
       method: 'POST',
       body: { data: invoicePayload },
-    });
+    })
     if (res?.data) {
       const newInvoiceId = res.data.documentId;
       toast.add({
@@ -74,6 +76,8 @@ async function onSubmit(event) {
         color: 'success',
         icon: 'hugeicons:checkmark-circle-02',
       });
+      await invoiceUploader.value.startUpload(newInvoiceId)
+
       router.push(`/invoices/${newInvoiceId}`);
     }
 
@@ -142,6 +146,17 @@ const isDisabled = computed(() => {
       </UFormField>
 
       <DateModify v-model:inputDate="state.shipmentDate" title="Дата отгрузки" />
+
+      <UAccordion :items="[{
+          label: 'Приложить файлы',
+          icon: 'hugeicons:plus-sign-circle',
+          trailingIcon: 'hugeicons:arrow-down-01',
+          slot: 'upload',
+        }]">
+        <template #upload>
+          <InvoiceAddFiles ref="invoiceUploader" />
+        </template>
+      </UAccordion>
       
       <div class="flex items-center justify-between mt-8">
         <UButton to="/invoices" color="primary" variant="ghost">
