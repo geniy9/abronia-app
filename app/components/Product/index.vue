@@ -74,6 +74,17 @@ const isEdit = computed(() => route.hash === '#edit')
           {{ humanDate(item.expireDate) }}
         </UBadge>
       </div>
+      <div v-if="item.doc && item.doc?.document" class="flex items-center justify-between gap-2">
+        <span class="text-gray-900 dark:text-white">
+          Документы
+        </span>
+        <UFieldGroup>
+          <UButton color="neutral" variant="soft" icon="hugeicons:document-attachment" size="sm">
+          </UButton>
+          <UButton :to="`/docs/${item.doc?.documentId}`" color="neutral" variant="soft" icon="hugeicons:link-square-02" size="sm">
+          </UButton>
+        </UFieldGroup>
+      </div>
 
       <UAccordion :items="[{
           label: 'Комментарий',

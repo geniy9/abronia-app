@@ -16,6 +16,7 @@ async function getProduct() {
       populate: { 
         category: true,
         comment: true,
+        doc: { populate: { document: true }}
       }
     })
     if (res) {
