@@ -9,7 +9,7 @@ const toast = useToast()
 const router = useRouter()
 const route = useRoute()
 
-const invoiceUploader = ref(null)
+const uploaderFiles = ref(null)
 
 const schema = z.object({
   invoiceNumber: z.string().min(1, 'Укажите артикул/номер инвойса'),
@@ -26,6 +26,7 @@ const state = reactive({
   totalAmount: 0,
   shipmentDate: new Date()
 });
+
 const data = reactive({
   orders: [],
   loading: false,
@@ -57,18 +58,25 @@ async function onSubmit(event) {
   try {
     await schema.parseAsync(state);
 
+    let attachmentIds = [];
+    if (uploaderFiles.value) {
+      attachmentIds = await uploaderFiles.value.uploadFiles();
+    }
+
     const invoicePayload = {
       invoiceNumber: state.invoiceNumber,
       invoiceStatus: state.invoiceStatus,
       totalAmount: state.totalAmount,
       order: { connect: [state.orderId] },
-      shipmentDate: state.shipmentDate.toISOString()
+      shipmentDate: state.shipmentDate.toISOString(),
+      attachments: attachmentIds
     };
 
     const res = await client('/invoices', {
       method: 'POST',
       body: { data: invoicePayload },
     })
+
     if (res?.data) {
       const newInvoiceId = res.data.documentId;
       toast.add({
@@ -76,8 +84,6 @@ async function onSubmit(event) {
         color: 'success',
         icon: 'hugeicons:checkmark-circle-02',
       });
-      await invoiceUploader.value.startUpload(newInvoiceId)
-
       router.push(`/invoices/${newInvoiceId}`);
     }
 
@@ -94,22 +100,15 @@ async function onSubmit(event) {
       icon: 'hugeicons:cancel-circle',
     });
   } finally {
-    clearForm();
     data.loading = false;
   }
-}
-function clearForm() {
-  state.invoiceNumber = ''
-  state.invoiceStatus = 'new'
-  state.orderId = ''
-  state.shipmentDate = new Date()
-  state.totalAmount = 0
 }
 
 const isDisabled = computed(() => {
   return data.loading || !state.invoiceNumber || !state.orderId || state.totalAmount <= 0
 });
 </script>
+
 <template>
   <UCard>
     <template #header>
@@ -154,7 +153,7 @@ const isDisabled = computed(() => {
           slot: 'upload',
         }]">
         <template #upload>
-          <InvoiceAddFiles ref="invoiceUploader" />
+          <UploaderFiles ref="uploaderFiles" />
         </template>
       </UAccordion>
       

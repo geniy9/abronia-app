@@ -19,6 +19,10 @@ export default () => {
       to: '/customers',
       img: `${baseURL}/img/customer.png`
     },{
+      name: 'Документы',
+      to: '/docs',
+      img: `${baseURL}/img/document.png`
+    },{
       name: 'Заметки',
       to: '/comments',
       img: `${baseURL}/img/comment.png`

@@ -1,5 +1,5 @@
 <script setup>
-const { humanDate, statusInvoice }= useConfig()
+const { humanDate, statusInvoice } = useConfig()
 const props = defineProps({
   item: {
     type: [Object, Date],
@@ -17,7 +17,7 @@ const statusObject = computed(() => statusInvoice(props.item.invoiceStatus))
         <span>{{ item.invoiceNumber }}</span>
       </div>
       <div v-if="item.attachments" class="flex items-center gap-0.5">
-        <UIcon v-if="item.attachments" name="hugeicons:file-attachment" class="w-5 h-5" />
+        <UIcon name="hugeicons:file-attachment" class="w-5 h-5" />
         <span>{{ item.attachments.length }}</span>
       </div>
     </div>

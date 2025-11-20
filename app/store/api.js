@@ -13,15 +13,18 @@ export const useApiStore = defineStore('api', {
     invoices: [],
     orders: [],
     customers: [],
+    docs: [],
     comments: [],
 
     invoice: null,
+    doc: null,
 
     loadingSamples: false,
     loadingProducts: false,
     loadingInvoices: false,
     loadingOrders: false,
     loadingCustomers: false,
+    loadingDocs: false,
     loadingComments: false,
 
     totalSamples: 0,
@@ -29,6 +32,7 @@ export const useApiStore = defineStore('api', {
     totalInvoices: 0,
     totalOrders: 0,
     totalCustomers: 0,
+    totalDocs: 0,
     totalComments: 0,
 
     hasSamples: null,
@@ -36,6 +40,7 @@ export const useApiStore = defineStore('api', {
     hasInvoices: null,
     hasOrders: null,
     hasCustomers: null,
+    hasDocs: null,
     hasComments: null,
 
     pageSize: 24,
@@ -154,22 +159,22 @@ export const useApiStore = defineStore('api', {
     },
 
     // пока не используется
-    addAttachmentsToInvoice(newAttachments) {
-      if (!this.invoice) {
-        console.warn('Нет активного инвойса для добавления вложений.');
-        return;
-      }
-      if (!Array.isArray(this.invoice.attachments)) {
-        this.invoice.attachments = [];
-      }
-      const existingAttachmentIds = this.invoice.attachments.map(att => att.id);
-      const uniqueNewAttachments = newAttachments.filter(newAtt => !existingAttachmentIds.includes(newAtt.id));
+    // addAttachmentsToInvoice(newAttachments) {
+    //   if (!this.invoice) {
+    //     console.warn('Нет активного инвойса для добавления вложений.');
+    //     return;
+    //   }
+    //   if (!Array.isArray(this.invoice.attachments)) {
+    //     this.invoice.attachments = [];
+    //   }
+    //   const existingAttachmentIds = this.invoice.attachments.map(att => att.id);
+    //   const uniqueNewAttachments = newAttachments.filter(newAtt => !existingAttachmentIds.includes(newAtt.id));
 
-      // this.invoice.attachments = [...uniqueNewAttachments, ...this.invoice.attachments]
-      if (uniqueNewAttachments.length) {
-        this.invoice.attachments.unshift(...uniqueNewAttachments);
-      }
-    },
+    //   // this.invoice.attachments = [...uniqueNewAttachments, ...this.invoice.attachments]
+    //   if (uniqueNewAttachments.length) {
+    //     this.invoice.attachments.unshift(...uniqueNewAttachments);
+    //   }
+    // },
 
     async getOrders() {
       try {
@@ -347,6 +352,64 @@ export const useApiStore = defineStore('api', {
       this.products.length = 0
       this.searchValue = ''
       this.getProducts()
+    },
+
+    async getDocs() {
+      try {
+        this.loadingDocs = true
+        const { find } = useStrapi()
+        const res = await find('docs', { 
+          sort: ["createdAt:desc"],
+          populate: { 
+            product: true,
+            document: {
+              populate: {
+                attachments: true
+              }
+            }
+          },
+        })
+        if (res?.data) { 
+          this.docs = res.data
+          this.hasDocs = res.meta?.pagination?.total || 0
+          this.totalDocs = res.meta?.pagination?.total || 0
+        } else {
+          this.docs = []
+          this.hasDocs = null
+          this.totalDocs = 0
+        }
+      } catch (error) {
+        console.error("Error fetching documents:", error)
+      } finally {
+        this.loadingDocs = false
+      }
+    },
+
+    async getDoc(id) {
+      try {
+        this.loadingDocs = true
+        const { findOne } = useStrapi()
+        const res = await findOne('docs', id, {
+          populate: { 
+            product: true,
+            document: {
+              populate: {
+                attachments: true
+              }
+            }
+          }
+        })
+        if (res?.data) {
+          this.doc = res.data
+        } else {
+          this.doc = null
+        }
+      } catch (error) {
+        console.error("Error fetching doc:", error)
+        this.doc = null
+      } finally {
+        this.loadingDocs = false
+      }
     },
 
     // async paginate(value, id = null) {

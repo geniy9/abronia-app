@@ -7,7 +7,7 @@ const apiStore = useApiStore()
 const toast = useToast()
 
 const props = defineProps({
-  documentId: {
+  id: {
     type: String,
     default: ''
   }
@@ -91,7 +91,7 @@ async function onSubmit() {
     })
     return
   }
-  if (!props.documentId) {
+  if (!props.id) {
     toast.add({
       title: 'Не указан документ для прикрепления файлов.',
       color: 'error',
@@ -136,12 +136,12 @@ async function onSubmit() {
     const newIds = uploadedFiles.map(f => f.id).filter(Boolean)
     const allIds = [...existIds, ...newIds]
 
-    await client(`/invoices/${props.documentId}`, {
+    await client(`/invoices/${props.id}`, {
       method: 'PUT',
       body: JSON.stringify({ data: { attachments: allIds } })
     })
 
-    await apiStore.getInvoice(props.documentId)
+    await apiStore.getInvoice(props.id)
 
     toast.add({
       title: 'Файлы успешно загружены и прикреплены!',

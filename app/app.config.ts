@@ -2,7 +2,11 @@ export default defineAppConfig({
   ui: {
 
     icons: {
-      loading: 'svg-spinners:90-ring'
+      loading: 'svg-spinners:90-ring',
+      chevronRight: 'hugeicons:arrow-right-01',
+      chevronLeft: 'hugeicons:arrow-left-01',
+      chevronDoubleRight: 'hugeicons:arrow-right-double', 
+      chevronDoubleLeft: 'hugeicons:arrow-left-double',
     },
 
     button: {
@@ -127,7 +131,7 @@ export default defineAppConfig({
           'bottom-center': 'bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2'
         },
       },
-    }
+    },
 
   }
 })

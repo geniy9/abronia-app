@@ -12,16 +12,16 @@ const schema = z.object({
   images: z.array(
     z.instanceof(File)
       .refine(file => file.size <= MAX_FILE_SIZE, {
-        message: 'Файл слишком большой. Пожалуйста приложите файл менее 5 Мегабайт!'
+        message: 'Файл слишком большой (макс. 5MB)'
       })
       .refine(file => {
         if (ACCEPTED_MIMES.includes(file.type)) return true
         if (!file.type && file.name) return ACCEPTED_EXT.test(file.name)
         return false
       }, {
-        message: 'Пожалуйста используйте валидный формат файла (JPG, PNG или PDF).'
+        message: 'Неверный формат (только JPG, PNG, PDF)'
       })
-  ).max(10, 'Можно загрузить не более 10 файлов.')
+  ).max(10, 'Максимум 10 файлов')
 })
 
 const state = reactive({
@@ -29,8 +29,8 @@ const state = reactive({
   loading: false,
   progress: 0
 })
-let progressTimer = null
 
+let progressTimer = null
 function startSimulatedProgress() {
   clearSimulatedProgress()
   state.progress = 5
@@ -41,13 +41,10 @@ function startSimulatedProgress() {
     state.progress = Math.min(maxTarget, state.progress + increment)
   }, 300)
 }
-
 function finishSimulatedProgress(success = true) {
   state.progress = success ? 100 : 0
   clearSimulatedProgress()
-  if (success) {
-    setTimeout(() => { state.progress = 0 }, 700)
-  }
+  if (success) setTimeout(() => { state.progress = 0 }, 700)
 }
 function clearSimulatedProgress() {
   if (progressTimer) {
@@ -59,25 +56,22 @@ onBeforeUnmount(() => { clearSimulatedProgress() })
 
 function normalizeUploadedResponse(res) {
   if (!res) return []
-  if (res.data !== undefined) {
-    if (Array.isArray(res.data)) return res.data
-    if (res.data === null) return []
-    return [res.data]
-  }
   if (Array.isArray(res)) return res
-  return []
+  if (res.data && Array.isArray(res.data)) return res.data
+  if (res.data) return [res.data]
+  return [res]
 }
 
-defineExpose({ startUpload })
-async function startUpload(documentId) {
-  if (!documentId || !state.images.length) return 
+defineExpose({ uploadFiles })
+async function uploadFiles() {
+  if (!state.images.length) return []
 
   try {
     schema.parse({ images: state.images })
   } catch (err) {
-    const msg = err?.errors?.[0]?.message || 'Некорректный формат файлов'
+    const msg = err?.errors?.[0]?.message || 'Ошибка валидации файлов'
     toast.add({ title: msg, color: 'error', icon: 'hugeicons:cancel-circle' })
-    return
+    throw new Error(msg)
   }
 
   state.loading = true
@@ -88,66 +82,51 @@ async function startUpload(documentId) {
     state.images.forEach(file => formData.append('files', file))
 
     const res = await client('/upload', { method: 'POST', body: formData })
-
     const uploadedFiles = normalizeUploadedResponse(res)
-
+    
     if (!uploadedFiles || uploadedFiles.length === 0) {
-      finishSimulatedProgress(false)
-      toast.add({
-        title: 'Не удалось загрузить файлы.',
-        color: 'error',
-        icon: 'hugeicons:cancel-circle',
-      })
-      return
+      throw new Error('Сервер не вернул данные о файлах')
     }
-    const newIds = uploadedFiles.map(f => f.id).filter(Boolean)
-
-    await client(`/invoices/${documentId}`, {
-      method: 'PUT',
-      body: JSON.stringify({ data: { attachments: newIds } })
-    })
-
-    toast.add({
-      title: 'Файлы загружены и прикреплены!',
-      color: 'success',
-      icon: 'hugeicons:checkmark-circle-02',
-    })
-
+    const fileIds = uploadedFiles.map(f => f.id).filter(Boolean)
+    
     finishSimulatedProgress(true)
-    state.images = []
+    return fileIds
+
   } catch (error) {
-    console.error('Ошибка в onSubmit:', error)
+    console.error('Upload error:', error)
     finishSimulatedProgress(false)
     toast.add({
-      title: 'Произошла ошибка при загрузке файлов.',
-      description: error?.message || 'Проверьте консоль для деталей.',
+      title: 'Ошибка загрузки файлов',
+      description: error?.message,
       color: 'error',
       icon: 'hugeicons:cancel-circle',
     })
+    throw error // Пробрасываем ошибку родителю
   } finally {
     state.loading = false
   }
 }
 </script>
 <template>
-  <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+  <UForm :schema="schema" :state="state" class="space-y-2">
     <UFormField name="images">
       <UFileUpload
         v-model="state.images"
         icon="hugeicons:upload-04"
-        label="Приложить фото"
-        description="JPG, PNG, или PDF (max. 5MB)"
+        label="Файлы документа"
+        description="JPG, PNG, PDF (макс. 5MB)"
         layout="grid"
         multiple
         class="w-full min-h-32">
         <template #files-top="{ open, files }">
           <div v-if="files?.length" class="mb-2 flex items-center justify-between">
-            <p class="font-bold">Файлы ({{ files?.length }})</p>
+            <p class="font-bold text-sm">Выбрано: {{ files?.length }}</p>
             <UButton
               icon="hugeicons:plus-sign-circle"
               label="Добавить"
               color="neutral"
               variant="outline"
+              size="xs"
               class="-my-2"
               @click="open()" />
           </div>
@@ -155,19 +134,12 @@ async function startUpload(documentId) {
       </UFileUpload>
     </UFormField>
 
-    <div v-if="state.loading || state.progress > 0" class="space-y-2">
-      <div class="flex justify-between items-center text-sm text-gray-300">
-        <div>Загрузка</div>
+    <div v-if="state.loading || state.progress > 0" class="space-y-1">
+      <div class="flex justify-between items-center text-xs text-gray-400">
+        <div>Загрузка на сервер...</div>
         <div>{{ state.progress }}%</div>
       </div>
-      <UProgress v-model="state.progress" size="sm" class="w-full" />
-    </div>
-
-    <div v-if="state.images.length" class="mt-2 space-y-1">
-      <div v-for="(f, idx) in state.images" :key="f.name + '_' + f.size + '_' + idx" class="flex items-center justify-between">
-        <div class="truncate">{{ f.name }}</div>
-        <div class="text-xs text-gray-300">{{ f.type || 'file' }}</div>
-      </div>
+      <UProgress v-model="state.progress" size="xs" class="w-full" />
     </div>
   </UForm>
 </template>
