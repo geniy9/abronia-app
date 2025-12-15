@@ -35,8 +35,8 @@ module.exports = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: '#FF0000',
-          foreground: 'hsl(var(--primary-foreground))',
+          DEFAULT: '#008000', // #FF0000
+          foreground: '#00FF00', // #FF2C2C
         },
       },
       transitionDuration: {

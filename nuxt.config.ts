@@ -30,8 +30,8 @@ export default defineNuxtConfig({
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0',
       link: [
-        { rel: "icon", type: "image/ico", sizes: "32x32", href: "/favicon.ico" },
-        { rel: "icon", type: "image/png", sizes: "32x32", href: "/32.png" },
+        { rel: "icon", type: "image/ico", sizes: "32x32", href: "/favicon-tm.ico" },
+        { rel: "icon", type: "image/png", sizes: "32x32", href: "/32-tm.png" },
         { rel: "apple-touch-icon", type: "image/png", sizes: "180x180", href: "/180.png" },
       ]
     },
@@ -84,17 +84,17 @@ export default defineNuxtConfig({
       id: '/app/',
       icons: [
         {
-          src: 'icons/icon-192x192.png',
+          src: 'icons/icon-192.png',
           sizes: '192x192',
           type: 'image/png',
         },
         {
-          src: 'icons/icon-512x512.png',
+          src: 'icons/icon-512.png',
           sizes: '512x512',
           type: 'image/png',
         },
         {
-          src: 'icons/icon-512x512.png',
+          src: 'icons/icon-512.png',
           sizes: '512x512',
           type: 'image/png',
           purpose: 'any maskable',
