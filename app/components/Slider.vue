@@ -54,7 +54,7 @@ function popupImage(data) {
             <span class="text-[10px] text-gray-500 px-2 text-center line-clamp-2 leading-tight">{{ item.name }}</span>
           </a>
           <div class="absolute bottom-0 w-full flex justify-center pb-1">
-            <Sharing :file="item" icon-color="gray" ui-class="flex gap-1" />
+            <Sharing :file="item" icon-color="gray" class="flex gap-1" />
           </div>
         </div>
 
@@ -82,7 +82,7 @@ function popupImage(data) {
           <img :src="largeImg(activeImage)" class="max-w-full max-h-full object-contain" />
           <div class="absolute bottom-10 left-0 w-full flex justify-center z-50">
             <div class="bg-gray-900/60 backdrop-blur-md rounded-full px-6 py-2 border border-white/10">
-              <Sharing v-if="activeImage" :file="activeImage" icon-color="neutral" ui-class="flex gap-8" />
+              <Sharing v-if="activeImage" :file="activeImage" icon-color="neutral" class="flex gap-8" />
             </div>
           </div>
         </div>

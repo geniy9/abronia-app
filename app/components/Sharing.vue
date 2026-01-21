@@ -7,13 +7,9 @@ const props = defineProps({
     type: Object,
     required: true
   },
-  uiClass: {
-    type: String,
-    default: 'flex gap-4'
-  },
   iconColor: {
     type: String,
-    default: 'white' // или 'gray'
+    default: 'neutral'
   }
 })
 
@@ -22,10 +18,6 @@ const loading = reactive({
   download: false
 })
 
-/**
- * Получает Blob файла с сервера
- * Важно: На Strapi должен быть настроен CORS для вашего домена!
- */
 async function getFileBlob(url) {
   const fullUrl = url.startsWith('http') ? url : `${strapiUrl}${url}`
   
@@ -40,9 +32,6 @@ async function getFileBlob(url) {
   }
 }
 
-/**
- * Скачивание файла
- */
 async function downloadFile() {
   if (loading.download) return
   loading.download = true
@@ -53,25 +42,18 @@ async function downloadFile() {
     const url = window.URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
-    // Генерируем имя файла
     link.download = props.file.name || `document.${props.file.ext.replace('.', '')}`
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
     window.URL.revokeObjectURL(url)
   }
-
   loading.download = false
 }
 
-/**
- * Шеринг файла через Web Share API
- */
 async function shareFile() {
   if (loading.share) return
   loading.share = true
-
-  // Проверяем поддержку
   if (!navigator.share) {
     toast.add({ title: 'Ваше устройство не поддерживает функцию поделиться', color: 'warning' })
     loading.share = false
@@ -81,9 +63,7 @@ async function shareFile() {
   const blob = await getFileBlob(props.file.url)
 
   if (blob) {
-    // Создаем File объект из Blob (нужен для navigator.share)
     const fileObj = new File([blob], props.file.name, { type: props.file.mime })
-
     const shareData = {
       files: [fileObj],
       title: props.file.name,
@@ -95,43 +75,36 @@ async function shareFile() {
       if (navigator.canShare && navigator.canShare(shareData)) {
         await navigator.share(shareData)
       } else {
-        // Фоллбек: если файл нельзя, шарим ссылку
         await navigator.share({
           title: props.file.name,
           url: props.file.url.startsWith('http') ? props.file.url : `${strapiUrl}${props.file.url}`
         })
       }
     } catch (err) {
-      // Игнорируем AbortError (если пользователь открыл меню и закрыл его)
       if (err.name !== 'AbortError') {
         console.error('Error sharing:', err)
-        toast.add({ title: 'Ошибка при отправке', color: 'red' })
+        toast.add({ title: 'Ошибка при отправке', color: 'error' })
       }
     }
   }
-
   loading.share = false
 }
 </script>
-
 <template>
-  <div :class="uiClass">
-    <!-- Кнопка Скачать -->
+  <div>
     <UButton
       variant="ghost"
       :loading="loading.download"
       @click.stop="downloadFile"
-      :class="[iconColor === 'white' ? 'text-white hover:bg-white/20' : 'text-gray-700 dark:text-gray-200']"
+      :class="[iconColor === 'neutral' ? 'text-white hover:bg-white/20' : 'text-gray-700 dark:text-gray-200']"
     >
       <UIcon name="hugeicons:file-download" class="w-6 h-6" />
     </UButton>
-
-    <!-- Кнопка Поделиться -->
     <UButton
       variant="ghost"
       :loading="loading.share"
       @click.stop="shareFile"
-      :class="[iconColor === 'white' ? 'text-white hover:bg-white/20' : 'text-gray-700 dark:text-gray-200']"
+      :class="[iconColor === 'neutral' ? 'text-white hover:bg-white/20' : 'text-gray-700 dark:text-gray-200']"
     >
       <UIcon name="hugeicons:share-08" class="w-6 h-6" />
     </UButton>

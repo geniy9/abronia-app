@@ -9,7 +9,7 @@ const route = useRoute()
 const apiStore = useApiStore()
 
 const schema = z.object({
-  productId: z.string().min(1, 'Выберите продукт'),
+  productId: z.string().optional(),
   document: z.array(z.object({
     name: z.string().min(1, 'Укажите название документа'),
     expireDate: z.union([z.date(), z.string(), z.null()]).optional()
@@ -51,16 +51,11 @@ onMounted(async () => {
 });
 
 // Управление динамическими полями
-function addDocument() {
-  data.document.push({ name: '', expireDate: null });
-}
-function removeDocument(index) { 
-  data.document.splice(index, 1) 
-}
+function addDocument() { data.document.push({ name: '', expireDate: null }) }
+function removeDocument(index) { data.document.splice(index, 1) }
 
 async function onSubmit() {
   data.loading = true;
-
   try {
     await schema.parseAsync(data);
 
@@ -80,12 +75,15 @@ async function onSubmit() {
       };
     }));
 
-    const finalPayload = {
-      product: { connect: [data.productId] },
-      document: documentPayload // Массив компонентов
-    };
+    // const finalPayload = {
+    //   product: { connect: [data.productId] },
+    //   document: documentPayload
+    // };
+    const finalPayload = { document: documentPayload };
+    if (data.productId) {
+      finalPayload.product = { connect: [data.productId] };
+    }
 
-    // 4. Отправка создания записи Doc
     const res = await client('/docs', {
       method: 'POST',
       body: { data: finalPayload }
@@ -103,7 +101,6 @@ async function onSubmit() {
 
   } catch (e) {
     console.error(e)
-    // Обработка ошибок Zod или API
     const msg = e instanceof z.ZodError 
       ? e.errors.map(err => err.message).join(', ')
       : e.message || 'Ошибка при сохранении';
@@ -119,14 +116,13 @@ async function onSubmit() {
   }
 }
 
-function clearData() {
-  data.document = [{ name: '', expireDate: null }]
-  data.productId = ''
-}
-
-const isDisabled = computed(() => !data.productId || data.loading)
+const isDisabled = computed(() => {
+  if (data.loading) return true
+  if (data.document.length === 0) return true
+  const hasEmptyName = data.document.some(doc => !doc.name || !doc.name.trim())
+  return hasEmptyName
+})
 </script>
-
 <template>
   <UCard>
     <template #header>
@@ -135,15 +131,14 @@ const isDisabled = computed(() => !data.productId || data.loading)
 
     <UForm :schema="schema" :state="data" class="space-y-4" @submit.prevent="onSubmit">
       
-      <UFormField label="Продукт" name="productId" required>
+      <UFormField label="Продукт" name="productId">
         <USelect
           v-model="data.productId"
           :items="data.products"
-          placeholder="Выберите товар"
+          placeholder="Выберите товар (необязательно)"
           :loading="data.loadingProducts"
-          class="w-full md:w-1/2" 
-          trailing-icon="hugeicons:arrow-down-01"
-        />
+          class="w-full" 
+          trailing-icon="hugeicons:arrow-down-01" />
       </UFormField>
       
       <USeparator label="Список документов" class="my-6" />
