@@ -36,7 +36,7 @@ const isEdit = computed(() => route.hash === '#edit')
       </NuxtLink>
       <div class="text-center">
         <p class="text-xs">{{ item.category.name }}</p>
-        <h2 class="text-lg font-bold">{{ item.name }}</h2>
+        <h2 class="text-lg leading-5 font-bold">{{ item.name }}</h2>
       </div>
       <NuxtLink :to="isEdit ? route.path : `${route.path}#edit`" class="text-2xl leading-0 p-2">
         <UIcon :name="isEdit ? 'hugeicons:cancel-square' : 'hugeicons:settings-01'" class="text-2xl" />

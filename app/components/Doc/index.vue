@@ -18,7 +18,7 @@ const isEdit = computed(() => route.hash === '#edit')
         <UIcon name="hugeicons:link-backward" />
       </NuxtLink>
       <div class="text-center">
-        <p class="text-xs">Документы на</p>
+        <p class="text-xs">Документы по продукту</p>
         <h2 class="text-lg font-bold">
           {{ item.product?.name }}
         </h2>
