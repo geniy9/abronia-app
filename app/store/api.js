@@ -422,6 +422,31 @@ export const useApiStore = defineStore('api', {
     //   }
     // },
 
+    // Универсальная функция получения списка
+    async getItems(apiId, { 
+      page = 1, 
+      pageSize = 25, 
+      filters = {}, 
+      populate = '*', 
+      sort = ["createdAt:desc"] } = {}) {
+      const { find } = useStrapi()
+      try {
+        const res = await find(apiId, {
+          sort,
+          pagination: { page, pageSize },
+          filters,
+          populate
+        })
+        return {
+          data: res.data || [],
+          meta: res.meta?.pagination || { total: 0, pageCount: 0 }
+        }
+      } catch (error) {
+        console.error(`Error fetching ${apiId}:`, error)
+        return { data: [], meta: { total: 0 } }
+      }
+    },
+
     addEntryToState(api, obj) {
       switch (api) {
         case 'samples': this.samples.unshift(obj);

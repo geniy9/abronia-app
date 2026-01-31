@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 const apiStore = useApiStore()
 const client = useStrapiClient()
-const { orderStatusList, unitMeasurement } = useConfig()
+const { orderStatusList, unitMeasurement, truncate } = useConfig()
 const toast = useToast()
 const router = useRouter()
 const cartComponent = ref(null);
@@ -14,7 +14,7 @@ const schema = z.object({
   orderStatus: z.enum(orderStatusList.map(unit => unit.value)),
   customerId: z.string().min(1, 'Выберите клиента'),
   productItems: z.array(z.object({
-    id: z.string(),
+    documentId: z.string(),
     name: z.string(),
     quantity: z.number().min(0, 'Укажите количество'),
   })).min(1, 'Выберите хотя бы один товар для заказа'),
@@ -24,11 +24,10 @@ const state = reactive({
   orderNumber: '',
   orderStatus: 'pending',
   customerId: '',
-  productItems: [], // Выбранные товары
+  productItems: [], 
 });
 const data = reactive({
   customers: [],
-  products: [],
   loading: false,
   loadingFields: false
 });
@@ -36,15 +35,9 @@ const data = reactive({
 onMounted(async () => {
   data.loadingFields = true;
   try {
-    await Promise.all([apiStore.getCustomers(), apiStore.getProducts()])
-
+    await apiStore.getCustomers()
     data.customers = apiStore.customers.map(item => ({ label: item.name, value: item.documentId }));
-    data.products = apiStore.products.map(item => ({
-      documentId: item.documentId,
-      category: item.category?.name,
-      name: item.name,
-      unit: item.unit,
-    }));
+
   } catch (error) {
     toast.add({
       title: 'Ошибка загрузки данных',
@@ -74,7 +67,7 @@ async function onSubmit(event) {
       orderStatus: state.orderStatus,
       customer: { connect: [state.customerId] },
       productItems: state.productItems.map(item => ({
-        product: { connect: [item.id] },
+        product: { connect: [item.documentId] },
         quantity: item.quantity,
       })),
     };
@@ -89,7 +82,7 @@ async function onSubmit(event) {
       const stockPayload = {
         type: 'sale',
         quantity: item.quantity,
-        product: { connect: [item.id] },
+        product: { connect: [item.documentId] },
         order: { connect: [newOrderId] },
       };
       await client('/stocks', {
@@ -151,17 +144,19 @@ const isDisabled = computed(() => {
           :loading="data.loadingFields"
           @click="openProductSelection" />
         <div v-if="state.productItems.length > 0" class="mt-2 space-y-2">
-          <div v-for="item in state.productItems" :key="item.id" class="flex justify-between gap-2 items-center bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white px-2 py-1 rounded-md">
-            <span class="flex-1"><UBadge :label="item.name" color="neutral" /></span>
+          <div v-for="item in state.productItems" :key="item.id" class="flex justify-between gap-2 items-center bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white p-1 rounded-md">
             <span class="flex-1">
+              <UBadge :label="truncate(item.name, 30)" color="neutral" />
+            </span>
+            <span>
               {{ item.quantity }} {{ unitMeasurement(item.unit, item.quantity) }}
             </span>
             <UButton
               icon="hugeicons:cancel-01"
-              color="red"
+              color="error"
               variant="soft"
               size="sm"
-              @click="state.productItems = state.productItems.filter(p => p.id !== item.id)"
+              @click="state.productItems = state.productItems.filter(p => p.documentId !== item.documentId)"
             />
           </div>
         </div>
@@ -191,9 +186,8 @@ const isDisabled = computed(() => {
 
     <OrderCart
       ref="cartComponent"
-      :products="data.products"
       :initial-selected="state.productItems.map(item => ({ 
-        product: { documentId: item.id, name: item.name }, 
+        product: { documentId: item.documentId, name: item.name }, 
         quantity: item.quantity 
       }))"
       @add-to-order="handleProductsAdded" />
