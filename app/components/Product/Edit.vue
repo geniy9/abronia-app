@@ -149,10 +149,10 @@ const isDisabled = computed(() => {
           :loading="data.loadingCategories"
           placeholder="Выберите категорию" 
           trailing-icon="hugeicons:arrow-down-01"
-          class="w-xs" />
+          class="w-full xs:w-xs" />
       </UFormField>
 
-      <div class="flex items-start gap-6">
+      <div class="flex items-start flex-wrap gap-3">
         <UFormField label="Количество" name="quantity">
           <UInputNumber 
             v-model.number="data.quantity"
@@ -162,7 +162,7 @@ const isDisabled = computed(() => {
             :increment="{ icon: 'hugeicons:plus-sign-circle', size: 'md', class: 'p-0' }"
             :decrement="{ icon: 'hugeicons:minus-sign-circle', size: 'md', class: 'p-0' }" 
             variant="none" 
-            class="w-40" />
+            class="w-40" size="lg" />
         </UFormField>
         <UFormField label="Единица измерения" name="unit">
           <URadioGroup 
@@ -181,7 +181,7 @@ const isDisabled = computed(() => {
           placeholder="Тип движения" 
           trailing-icon="hugeicons:arrow-down-01" 
           selected-icon="hugeicons:checkmark-circle-02"
-          class="w-xs" />
+          class="w-full xs:w-xs" />
       </UFormField>
       
       <div class="flex items-center justify-between mt-8">
@@ -198,7 +198,7 @@ const isDisabled = computed(() => {
             type="submit" size="sm"
             :disabled="isDisabled" 
             :loading="data.loading">
-            Обновить товар
+            Обновить
           </UButton>
         </UFieldGroup>
       </div>

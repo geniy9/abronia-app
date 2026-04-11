@@ -60,7 +60,7 @@ async function onSubmit() {
     <UButton 
       icon="hugeicons:delete-02"
       variant="outline" 
-      color="primary" 
+      color="error" 
       size="sm">
       Удалить
     </UButton>

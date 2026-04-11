@@ -73,6 +73,9 @@ export default defineAppConfig({
 
     accordion: {
       slots: {
+        header: 'flex items-start',
+        item: 'border-b border-gray-400 dark:border-gray-700',
+        trigger: 'group flex-1 flex items-start py-2.5',
         leadingIcon: 'text-gray-900 dark:text-white',
         trailingIcon: 'text-gray-900 dark:text-white',
         label: 'text-gray-900 dark:text-white'

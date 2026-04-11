@@ -120,31 +120,32 @@ const isDisabled = computed(() => {
         <DateModify v-model:inputDate="data.expireDate" />
       </UFormField>
 
-      <UFormField label="Количество" name="quantity" required>
-        <UInputNumber 
-          v-model.number="data.quantity"
-          :min="0" 
-          :step="0.01"
-          :ui="{ base: 'bg-white dark:bg-gray-950 text-black dark:text-white text-sm leading-3 font-bold' }"
-          :increment="{ icon: 'hugeicons:plus-sign-circle', size: 'md', class: 'p-0' }"
-          :decrement="{ icon: 'hugeicons:minus-sign-circle', size: 'md', class: 'p-0' }" 
-          variant="none" 
-          class="w-40" />
-      </UFormField>
-
-      <UFormField label="Единица измерения" name="unit" required>
-        <URadioGroup 
-          v-model="data.unit" 
-          :items="productUnits.map(item => ({ label: item.name, value: item.value }))" 
-          orientation="horizontal" variant="card" size="sm" />
-      </UFormField>
+      <div class="flex items-start flex-wrap gap-3">
+        <UFormField label="Количество" name="quantity" required>
+          <UInputNumber 
+            v-model.number="data.quantity"
+            :min="0" 
+            :step="0.01"
+            :ui="{ base: 'bg-white dark:bg-gray-950 text-black dark:text-white text-sm leading-3 font-bold' }"
+            :increment="{ icon: 'hugeicons:plus-sign-circle', size: 'md', class: 'p-0' }"
+            :decrement="{ icon: 'hugeicons:minus-sign-circle', size: 'md', class: 'p-0' }" 
+            variant="none" 
+            class="w-40" size="lg" />
+        </UFormField>
+        <UFormField label="Единица измерения" name="unit" required>
+          <URadioGroup 
+            v-model="data.unit" 
+            :items="productUnits.map(item => ({ label: item.name, value: item.value }))" 
+            orientation="horizontal" variant="card" size="xs" />
+        </UFormField>
+      </div>
 
       <UFormField label="Категория" name="categoryId" required>
         <USelect
           v-model="data.categoryId"
           :items="data.categories"
           placeholder="Выберите категорию"
-          class="w-xs" />
+          class="w-full xs:w-xs" />
       </UFormField>
       
       <div class="flex items-center justify-between mt-8">

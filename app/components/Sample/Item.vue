@@ -44,15 +44,16 @@ async function onSubmit() {
 }
 </script>
 <template>
-  <div class="flex items-center justify-between bg-gray-200 dark:bg-gray-900 rounded-lg px-3">
+  <div class="flex items-center justify-between rounded-lg px-3" 
+    :class="data.active ? 'bg-gray-300 dark:bg-gray-900' : 'bg-gray-300/80 dark:bg-gray-900/80'">
     <UAccordion v-model="data.active" :items="[{ trailingIcon: 'hugeicons:arrow-down-01', slot: 'sample' }]">
       <template #leading>
-        <div class="flex justify-between items-center w-full gap-2 text-gray-900 dark:text-white">
-          <div class="flex flex-col items-start gap-1">
+        <div class="flex justify-between items-start w-full gap-2 text-gray-900 dark:text-white">
+          <div class="flex flex-col justify-start items-start text-left gap-1">
             <h3 class="font-bold">
-              {{ truncate(item.name, 20) }}
+              {{ data.active ? item.name : truncate(item.name, 20) }}
             </h3>
-            <span class="text-xs opacity-50">
+            <span class="text-xs opacity-70">
               {{ item.sku }}
             </span>
           </div>
@@ -62,7 +63,9 @@ async function onSubmit() {
             </UBadge>
             <div>
               <span class="font-bold">{{ inStock }}</span>
-              <span class="text-xs uppercase opacity-50">{{ unitMeasurement(item.unit, inStock) }}</span>
+              <span class="text-[10px] uppercase opacity-70">
+                {{ unitMeasurement(item.unit, inStock) }}
+              </span>
             </div>
           </div>
         </div>
