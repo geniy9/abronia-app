@@ -10,6 +10,8 @@ const data = reactive({
   currentPage: 1
 })
 const category = ref(null)
+const currentPage = ref(1)
+const searchQuery = ref('')
 
 async function getProductsByCategory() {
   try {
@@ -24,9 +26,25 @@ async function getProductsByCategory() {
 }
 onMounted(async () => { await getProductsByCategory() })
 
-watch(() => data.currentPage, (value) => {
-  if (value) { apiStore.paginate(value, data.id) }
-})
+async function loadProducts() {
+  const filters = {};
+  if (searchQuery.value) {
+    filters.$or = [
+      // { category: { documentId: { $eq: data.id } } },
+      { name: { $containsi: searchQuery.value } },
+      { sku: { $containsi: searchQuery.value } },
+    ];
+  }
+  await apiStore.getItems('products', {
+    page: currentPage.value,
+    filters: filters,
+    populate: { category: true },
+    sort: ["name:asc"]
+  });
+}
+
+watch(() => searchQuery.value, () => { loadProducts() });
+watch(() => currentPage.value, () => { loadProducts() });
 
 const isAdd = computed(() => route.hash === '#add')
 </script>
@@ -51,7 +69,14 @@ const isAdd = computed(() => route.hash === '#add')
 
       <ProductAdd v-if="isAdd" />
       <div v-else class="flex flex-col gap-4">
+
+        <SearchBar 
+          v-model="searchQuery" 
+          placeholder="Поиск товара" 
+          :loading="apiStore.loadingProducts" />
+
         <ProductList :items="apiStore.products" :loading="apiStore.loadingProducts" />
+
         <div v-if="(apiStore.hasProducts === 0)" class="flex flex-col gap-4 items-center p-4">
           <span class="text-center text-gray-400">
             В данной категории товаров пока нет
@@ -61,17 +86,16 @@ const isAdd = computed(() => route.hash === '#add')
           </UButton>
         </div>
 
-        <div v-if="(apiStore.totalProducts > apiStore.pageSize)" class="flex justify-center w-full mt-10">
+        <div v-if="(apiStore.totalProducts > apiStore.pageSize)" class="flex justify-center">
           <UPagination 
             v-model:page="currentPage" 
             :items-per-page="apiStore.pageSize" 
             :total="apiStore.totalProducts" 
+            color="neutral" 
+            variant="ghost"
             active-color="primary" 
-            :sibling-count="1"
-            firstIcon="material-symbols:keyboard-double-arrow-left-rounded" 
-            prevIcon="material-symbols:chevron-left-rounded" 
-            nextIcon="material-symbols:chevron-right-rounded" 
-            lastIcon="material-symbols:keyboard-double-arrow-right-rounded" />
+            activeVariant="solid"
+            size="sm" />
         </div>
       </div>
 

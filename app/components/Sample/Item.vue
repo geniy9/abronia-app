@@ -71,7 +71,7 @@ async function onSubmit() {
         <div class="grid gap-4 pb-3">
           <USeparator />
 
-          <div class="flex justify-between items-center">
+          <div class="flex justify-between items-center gap-2">
             <DateModify v-model:inputDate="expireDate" title="Срок годности" />
             <UFormField label="Количество" class="flex flex-col items-end">
               <UInputNumber 

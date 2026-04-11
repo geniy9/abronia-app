@@ -3,10 +3,8 @@ import { useApiStore } from '~/store/api'
 
 const apiStore = useApiStore()
 const route = useRoute()
-
-// const data = reactive({
-//   currentPage: 1
-// })
+const currentPage = ref(1)
+const searchQuery = ref('')
 
 async function getSamples() {
   try {
@@ -19,9 +17,23 @@ onMounted(async () => { await getSamples() })
 
 const isAdd = computed(() => route.hash === '#add')
 
-// watch(() => data.currentPage, (value) => {
-//   if (value) { apiStore.paginate(value, data.id) }
-// })
+async function loadSamples() {
+  const filters = {};
+  if (searchQuery.value) {
+    filters.$or = [
+      { name: { $containsi: searchQuery.value } },
+      { sku: { $containsi: searchQuery.value } },
+    ];
+  }
+  await apiStore.getItems('samples', {
+    page: currentPage.value,
+    filters: filters,
+    sort: ["name:asc"]
+  });
+}
+
+watch(() => searchQuery.value, async () => { await loadSamples() });
+watch(() => currentPage.value, async () => { await loadSamples() });
 </script>
 <template>
   <div class="body_layout">
@@ -42,23 +54,29 @@ const isAdd = computed(() => route.hash === '#add')
 
       <SampleAdd v-if="isAdd" />
       <div v-else class="flex flex-col gap-4">
+
+        <SearchBar 
+          v-model="searchQuery" 
+          placeholder="Поиск образца" 
+          :loading="apiStore.loadingSamples" />
+
         <SampleList :items="apiStore.samples" :loading="apiStore.loadingSamples" />
+
         <div v-if="(apiStore.hasSamples === 0)" class="text-center text-gray-500 py-4">
           Образцы пока отсутствуют
         </div>
 
-        <!-- <div v-if="(apiStore.totalSamples > apiStore.pageSize)" class="flex justify-center w-full mt-10">
+        <div v-if="(apiStore.totalSamples > apiStore.pageSize)" class="flex justify-center">
           <UPagination 
             v-model:page="currentPage" 
             :items-per-page="apiStore.pageSize" 
             :total="apiStore.totalSamples" 
+            color="neutral" 
+            variant="ghost"
             active-color="primary" 
-            :sibling-count="1"
-            firstIcon="material-symbols:keyboard-double-arrow-left-rounded" 
-            prevIcon="material-symbols:chevron-left-rounded" 
-            nextIcon="material-symbols:chevron-right-rounded" 
-            lastIcon="material-symbols:keyboard-double-arrow-right-rounded" />
-        </div> -->
+            activeVariant="solid"
+            size="sm" />
+        </div>
       </div>
 
     </div>

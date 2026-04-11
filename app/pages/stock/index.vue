@@ -63,7 +63,6 @@ const isAdd = computed(() => route.hash === '#add')
 
       <CategoryAdd v-if="isAdd" />
       <div v-else class="flex flex-col gap-4">
-        <SearchBar placeholder="Поиск по товарам" api="products" />
 
         <NuxtLink to="/stock/samples" class="bg-primary dark:bg-primary/50 rounded-lg p-2">
           <div class="flex items-center justify-between w-full">

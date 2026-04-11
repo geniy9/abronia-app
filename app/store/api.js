@@ -412,38 +412,65 @@ export const useApiStore = defineStore('api', {
       }
     },
 
-    // async paginate(value, id = null) {
-    //   this.products.length = 0
-    //   this.currentPage = value
-    //   if (id) {
-    //     await this.getProductsByCategory(id)
-    //   } else {
-    //     await this.getProducts()
-    //   }
-    // },
-
-    // Универсальная функция получения списка
     async getItems(apiId, { 
-      page = 1, 
-      pageSize = 25, 
+      page = this.currentPage, 
+      pageSize = this.pageSize, 
       filters = {}, 
       populate = '*', 
       sort = ["createdAt:desc"] } = {}) {
+      this.loading = true
+      switch (apiId) {
+        case 'products': this.loadingProducts = true; break;
+        case 'samples': this.loadingSamples = true; break;
+        case 'samples': this.loadingInvoices = true; break;
+        case 'orders': this.loadingOrders = true; break;
+        case 'customers': this.loadingCustomers = true; break;
+        case 'docs': this.loadingDocs = true; break;
+        case 'comments': this.loadingComments = true; break;
+      }
       const { find } = useStrapi()
       try {
-        const res = await find(apiId, {
-          sort,
-          pagination: { page, pageSize },
-          filters,
-          populate
-        })
-        return {
-          data: res.data || [],
-          meta: res.meta?.pagination || { total: 0, pageCount: 0 }
+        const res = await find(apiId, { sort, pagination: { page, pageSize }, filters, populate })
+        switch (apiId) {
+          case 'products': 
+            this.products = res.data || []
+            this.totalProducts = res.meta?.pagination?.total || 0
+          break;
+          case 'samples':
+            this.samples = res.data || []
+            this.totalSamples = res.meta?.pagination?.total || 0
+          break;
+          case 'samples':
+            this.invoices = res.data || []
+            this.totalInvoices = res.meta?.pagination?.total || 0
+          break;
+          case 'orders':
+            this.orders = res.data || []
+            this.totalOrders = res.meta?.pagination?.total || 0
+          break;
+          case 'customers':
+            this.customers = res.data || []
+            this.totalCustomers = res.meta?.pagination?.total || 0
+          break;
+          case 'docs':
+            this.docs = res.data || []
+            this.totalDocs = res.meta?.pagination?.total || 0
+          break;
+          case 'comments':
+            this.comments = res.data || []
+            this.totalComments = res.meta?.pagination?.total || 0
+          break;
         }
       } catch (error) {
         console.error(`Error fetching ${apiId}:`, error)
-        return { data: [], meta: { total: 0 } }
+      } finally {
+        this.loadingProducts = false
+        this.loadingSamples = false
+        this.loadingInvoices = false
+        this.loadingOrders = false
+        this.loadingCustomers = false
+        this.loadingDocs = false
+        this.loadingComments = false
       }
     },
 

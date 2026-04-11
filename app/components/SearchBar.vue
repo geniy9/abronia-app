@@ -1,51 +1,37 @@
 <script setup>
-import { useApiStore } from '~/store/api'
-
 const props = defineProps({
+  modelValue: {
+    type: String,
+    default: ''
+  },
+  loading: {
+    type: Boolean,
+    default: false
+  },
   placeholder: {
     type: String,
     default: 'Поиск'
   },
-  api: {
-    type: String,
-    default: ''
-  }
 })
+const emit = defineEmits(['update:modelValue'])
+const searchQuery = ref('')
+let searchTimeout = null
 
-const apiStore = useApiStore()
-const router = useRouter()
-const route = useRoute()
-const loading = ref(false)
-
-const searchValue = computed({
-  get: () => apiStore.searchValue,
-  set: (value) => { apiStore.searchValue = value }
-})
-
-const onSearch = async () => {
-  try {
-    loading.value = true
-    apiStore.currentPage = 1;
-    await apiStore.fetchProducts()
-    if (route.path !== '/products') {
-      await router.push('/products')
+function handleSearch(val) {
+  if (searchTimeout) clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    if (val.length === 0 || val.length >= 2) {
+      emit('update:modelValue', val);
     }
-  } catch(e) {
-    console.log(e)
-  } finally {
-    loading.value = false
-  }
+  }, 300);
 }
-
 </script>
 <template>
-  <UInput
-    v-model="searchValue"
-    :placeholder="placeholder"
-    variant="custom" 
-    size="md"
-    icon="hugeicons:search-01"
-    @keydown.enter="onSearch" 
-    :loading="loading"
+  <UInput 
+    v-model.trim="searchQuery" 
+    :placeholder="placeholder" 
+    icon="hugeicons:search-01" 
+    @update:model-value="handleSearch" 
+    :loading="loading" 
     class="w-full" />
 </template>

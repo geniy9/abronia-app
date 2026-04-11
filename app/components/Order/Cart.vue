@@ -24,13 +24,8 @@ const productItemSchema = z.object({
 const isOpen = ref(false);
 const localSelectedProducts = ref([]);
 
-const remoteProducts = ref([]);
-const loading = ref(false);
-const page = ref(1);
-const total = ref(0);
-const pageSize = 24;
+const currentPage = ref(1);
 const searchQuery = ref('');
-let searchTimeout = null;
 
 watchEffect(() => {
   if (props.initialSelected) {
@@ -46,7 +41,7 @@ watchEffect(() => {
 const displayedProducts = computed(() => {
   const selectedIds = new Set(localSelectedProducts.value.map(p => p.documentId));
   
-  const normalizedRemote = remoteProducts.value.map(p => ({
+  const normalizedRemote = apiStore.products.map(p => ({
     documentId: p.documentId,
     name: p.name,
     category: p.category?.name,
@@ -55,49 +50,28 @@ const displayedProducts = computed(() => {
   }));
   
   const selectedNotInRemote = localSelectedProducts.value.filter(s => 
-    !remoteProducts.value.find(r => r.documentId === s.documentId)
+    !apiStore.products.find(r => r.documentId === s.documentId)
   ).map(s => ({...s, category: 'Выбрано ранее'})); 
 
   return [...selectedNotInRemote, ...normalizedRemote];
 });
 
 async function loadProducts() {
-  loading.value = true;
-  
   const filters = {};
-  if (searchQuery.value.length >= 2) {
+  if (searchQuery) {
     filters.name = { $containsi: searchQuery.value };
   }
-
-  const res = await apiStore.getItems('products', {
-    page: page.value,
-    pageSize: pageSize,
+  await apiStore.getItems('products', {
+    page: currentPage.value,
     filters: filters,
     populate: { category: true },
     sort: ["name:asc"]
   });
-
-  remoteProducts.value = res.data;
-  total.value = res.meta.total;
-  loading.value = false;
 }
 
-watch(() => isOpen.value, (val) => {
-  if (val && remoteProducts.value.length === 0) { loadProducts() }
-});
-watch(() => page.value, () => { loadProducts() });
-
-function handleSearch(val) {
-  searchQuery.value = val;
-  if (searchTimeout) clearTimeout(searchTimeout);
-  
-  searchTimeout = setTimeout(() => {
-    if (val.length === 0 || val.length >= 2) {
-      page.value = 1; 
-      loadProducts();
-    }
-  }, 300);
-}
+watch(() => isOpen.value, (val) => { if (val && apiStore.products.length === 0) loadProducts() });
+watch(() => currentPage.value, () => { loadProducts() });
+watch(() => searchQuery.value, () => { loadProducts() });
 
 function toggleProductSelection(product) {
   const index = localSelectedProducts.value.findIndex(item => item.documentId === product.documentId);
@@ -160,19 +134,15 @@ defineExpose({ openCart });
     </template>
 
     <template #body>
-      <div class="grid gap-2">
-        <div class="mb-4">
-          <UInput 
-            :model-value="searchQuery"
-            @update:model-value="handleSearch"
-            icon="hugeicons:search-02"
-            placeholder="Поиск товара..."
-            :loading="loading"
-            autofocus />
-        </div>
+      <div class="grid gap-4">
+
+        <SearchBar 
+          v-model="searchQuery" 
+          placeholder="Поиск товара" 
+          :loading="apiStore.loadingProducts" />
       
         <div class="flex-1 overflow-y-auto">
-          <div v-if="loading && displayedProducts.length === 0" class="flex justify-center min-h-40 max-h-60">
+          <div v-if="(apiStore.loadingProducts && displayedProducts.length === 0)" class="flex justify-center min-h-40 max-h-60">
             <UIcon name="svg-spinners:90-ring" class="w-8 h-8" />
           </div>
           <div v-else-if="displayedProducts.length === 0" class="flex flex-col items-center justify-center h-full text-center">
@@ -213,11 +183,11 @@ defineExpose({ openCart });
           </div>
         </div>
 
-        <div class="flex justify-center mt-4 border-t pt-2 border-gray-100 dark:border-gray-800" v-if="total > pageSize">
+        <div v-if="(apiStore.totalProducts > apiStore.pageSize)" class="flex justify-center">
           <UPagination 
-            v-model:page="page" 
-            :items-per-page="pageSize" 
-            :total="total" 
+            v-model:page="currentPage" 
+            :items-per-page="apiStore.pageSize" 
+            :total="apiStore.totalProducts" 
             color="neutral" 
             variant="ghost"
             active-color="primary" 
