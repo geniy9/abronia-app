@@ -9,12 +9,12 @@ export default () => {
       { name: 'Кг', value: 'kg' }
     ],
     stockStatusList: [
-      { name: 'приход', value: 'stock_in' },
-      { name: 'возврат', value: 'return' },
-      { name: 'списание на образец', value: 'write_off_sample' },
-      { name: 'списание брак', value: 'write_off_defect' },
-      { name: 'отмена заказа', value: 'cancelled' },
-      { name: 'продажа', value: 'sale' },
+      { name: 'приход', value: 'stock_in', operation: '+' },
+      { name: 'возврат', value: 'return', operation: '+' },
+      { name: 'отмена заказа', value: 'cancelled', operation: '+' },
+      { name: 'списание на образец', value: 'write_off_sample', operation: '-' },
+      { name: 'списание брак', value: 'write_off_defect', operation: '-' },
+      { name: 'продажа', value: 'sale', operation: '-' },
     ],
     orderStatusList: [
       { name: 'в ожидании', value: 'pending' },

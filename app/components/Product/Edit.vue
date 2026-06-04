@@ -26,10 +26,19 @@ const schema = z.object({
   name: z.string().min(1, 'Укажите наименование товара'),
   sku: z.string().min(1, 'Укажите артикул товара'),
   unit: z.enum(productUnits.map(unit => unit.value)),
-  // stockType: z.enum(stockStatusList.map(item => item.value)),
+  stockType: z.string().optional(),
   categoryId: z.string().min(1, 'Выберите категорию'),
   quantity: z.number().min(0, 'Укажите количество товара'),
   expireDate: z.date().optional().or(z.string())
+}).refine((val) => {
+  if (val.quantity > 0) {
+    const validValues = stockStatusList.map(item => item.value)
+    return !!val.stockType && validValues.includes(val.stockType)
+  }
+  return true
+}, {
+  message: 'Выберите тип операции',
+  path: ['stockType']
 });
 
 const data = reactive({
@@ -70,7 +79,7 @@ async function onSubmit(event) {
     };
     const updatedPoduct = await update('products', props.id, productPayload);
 
-    if (data.stockType) {
+    if (quantity > 0 && data.stockType) {
       const stockPayload = {
         type: data.stockType,
         quantity: quantity,
@@ -117,10 +126,13 @@ function clearData() {
   data.stockType = '';
   data.quantity = 0;
 }
-function onRemoved() { router.push('/invoices') }
+function onRemoved() { router.push('/stock') }
 
 const isDisabled = computed(() => {
-  return !data.name || !data.sku || !data.unit || !data.categoryId
+  const isBasicFormInvalid = !data.name || !data.sku || !data.unit || !data.categoryId;
+  const isStockTypeMissing = data.quantity > 0 && !data.stockType;
+  
+  return isBasicFormInvalid || isStockTypeMissing;
 })
 </script>
 <template>
@@ -173,15 +185,23 @@ const isDisabled = computed(() => {
       </div>
 
       <UFormField label="Движение по складу" 
-        description="Тип движения по складу влияет на его остаток (необязательно)" 
-        name="stockType">
+        description="Тип движения по складу влияет на остаток" 
+        name="stockType" :required="data.quantity > 0">
         <USelect
           v-model="data.stockType"
-          :items="stockStatusList.map(status => ({ label: status.name, value: status.value }))"
+          :items="stockStatusList.map(status => ({ label: status.name, value: status.value, kbd: status.operation }))"
           placeholder="Тип движения" 
           trailing-icon="hugeicons:arrow-down-01" 
           selected-icon="hugeicons:checkmark-circle-02"
-          class="w-full xs:w-xs" />
+          class="w-full xs:w-xs">
+          <template #item-label="{ item }">
+            <span class="flex items-center gap-2">
+              <UKbd :value="item.kbd" class="font-bold rounded-full" variant="soft" 
+                :color="item.kbd === '+' ? 'success' : 'error'" />
+              <span>{{ item.label }}</span>
+            </span>
+          </template>
+        </USelect>
       </UFormField>
       
       <div class="flex items-center justify-between mt-8">
