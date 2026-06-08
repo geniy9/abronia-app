@@ -10,11 +10,7 @@ definePageMeta({
       <div class="flex items-center justify-center">
         <img src="/abronia.svg" alt="logo" class="w-60" />
       </div>
-      <div class="flex gap-2 items-center justify-center text-xs text-white tracking-widest">
-        <UIcon name="hugeicons:more-horizontal-square-01" class="text-lg" />
-        <span>Global App</span>
-        <UIcon name="hugeicons:more-horizontal-square-01" class="text-lg" />
-      </div>
+      <USeparator label="Global App" />
       <NuxtLink to="/home" class="flex gap-2 items-center justify-center text-xs text-white tracking-widest">
         <span>Войти</span>
       </NuxtLink>

@@ -44,7 +44,10 @@ export default defineNuxtConfig({
     prefix: '/api',
     version: 'v5',
     cookie: {},
-    cookieName: 'strapi_jwt'
+    cookieName: 'strapi_jwt',
+    auth: {
+      populate: ['role']
+    }
   },
 
   pinia: {

@@ -1,7 +1,4 @@
 <script setup>
-definePageMeta({
-  middleware: 'auth'
-})
 const route = useRoute()
 const user = useStrapiUser()
 const isEdit = computed(() => route.hash === '#edit')
@@ -28,6 +25,8 @@ const isEdit = computed(() => route.hash === '#edit')
       <AuthSendEmailConfirmationBanner v-if="!user.confirmed" />
       
       <AuthProfile />
+
+      <AuthUserList v-if="user.role?.type === 'admin'" />
 
     </div>
   </div>

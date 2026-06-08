@@ -3,10 +3,6 @@ import { useApiStore } from '~/store/api'
 const apiStore = useApiStore()
 const route = useRoute()
 
-definePageMeta({
-  middleware: 'auth'
-})
-
 onMounted(async () => { await apiStore.getInvoices() })
 
 const yearsForSelect = computed(() => {

@@ -3,9 +3,6 @@ import { useApiStore } from '~/store/api'
 const apiStore = useApiStore()
 const route = useRoute()
 
-definePageMeta({
-  middleware: 'auth'
-})
 onMounted(async () => { await apiStore.getCustomers() })
 
 const isAdd = computed(() => route.hash === '#add')

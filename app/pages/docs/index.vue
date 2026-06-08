@@ -3,9 +3,6 @@ import { useApiStore } from '~/store/api'
 const apiStore = useApiStore()
 const route = useRoute()
 
-definePageMeta({
-  middleware: 'auth'
-})
 const data = reactive({
   currentPage: 1
 })

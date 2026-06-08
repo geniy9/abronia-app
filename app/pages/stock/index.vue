@@ -1,11 +1,6 @@
 <script setup>
 import { useApiStore } from '~/store/api'
 const route = useRoute()
-
-definePageMeta({
-  middleware: 'auth'
-})
-
 const apiStore = useApiStore()
 const data = reactive({
   loading: false,

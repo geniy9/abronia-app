@@ -1,7 +1,4 @@
 <script setup>
-definePageMeta({
-  middleware: 'auth'
-})
 const user = useStrapiUser()
 const { menuMain } = useMenu()
 </script>
