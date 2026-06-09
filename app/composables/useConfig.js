@@ -28,6 +28,17 @@ export default () => {
       { name: 'оплачен частично', value: 'partially_paid' },
       { name: 'оплачен', value: 'paid' },
     ],
+    getRoleLabel: (type) => {
+      if (type === 'admin') return 'Администратор'
+      if (type === 'manager') return 'Менеджер'
+      if (type === 'authenticated' || type === 'public') return 'Гость'
+      return 'Гость'
+    },
+    getRoleColor: (color) => {
+      if (color === 'admin') return 'success'
+      if (color === 'manager') return 'info'
+      return 'warning'
+    },
     unitMeasurement: (data, n) => {
       switch (data) {
         case 'liter':

@@ -1,11 +1,3 @@
-// middleware/auth.ts
-// export default defineNuxtRouteMiddleware((to, from) => {
-//   const user = useStrapiUser()
-//   if (!user.value) {
-//     return navigateTo('/auth/login')
-//   }
-// })
-
 export default defineNuxtRouteMiddleware((to) => {
   const user = useStrapiUser()
 
@@ -27,12 +19,11 @@ export default defineNuxtRouteMiddleware((to) => {
     const isAllowedForGuest = allowedForGuests.includes(targetPath) || targetPath.startsWith('/auth')
 
     if (!isAllowedForGuest) {
-      // const userRole = user.value.role?.type // 'authenticated', 'manager', 'admin'
       const userRole = (user.value as any)?.role?.type // 'authenticated', 'manager', 'admin'
       const hasFullAccess = ['manager', 'admin'].includes(userRole)
 
       if (!hasFullAccess) {
-        // Если у пользователя дефолтная роль (Гость), отправляем его на /home
+        // Если роль authenticated, отправляем на /home
         return navigateTo('/home')
       }
     }

@@ -3,7 +3,6 @@ import { useApiStore } from '~/store/api'
 import { z } from 'zod'
 
 const apiStore = useApiStore()
-
 const client = useStrapiClient()
 const toast = useToast()
 const router = useRouter()

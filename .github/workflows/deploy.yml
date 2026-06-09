@@ -1,4 +1,4 @@
-name: Deploy Nuxt Static Site to Server
+name: Deploy Abronia Global
 
 on:
   push:

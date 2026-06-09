@@ -94,7 +94,7 @@ export default defineAppConfig({
 
     table: {
       slots: {
-        tbody: 'divide-y divide-gray-300',
+        tbody: 'divide-y divide-gray-300 dark:divide-gray-700',
         th: 'px-2 py-2', 
         td: 'px-2 py-2 text-sm'
       }

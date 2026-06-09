@@ -1,4 +1,5 @@
 <script setup>
+const { getRoleLabel, getRoleColor } = useConfig()
 const client = useStrapiClient()
 const currentUser = useStrapiUser()
 
@@ -10,19 +11,10 @@ const updatingUserId = ref(null)
 
 const columns = [
   { accessorKey: 'username', header: 'Пользователь' },
-  { accessorKey: 'email', header: 'Email', meta: { class: { th: 'text-center', td: 'text-center' }} },
-  // { accessorKey: 'role', header: 'Роль', meta: { class: { th: 'text-center', td: 'text-center' }} },
-  { accessorKey: 'actions', header: 'Доступ', meta: { class: { th: 'text-right', td: 'text-right' }} }
+  { accessorKey: 'actions', header: 'Доступ', meta: { 
+    class: { th: 'text-right', td: 'text-right justify-end' }} 
+  }
 ]
-
-const getRoleLabel = (type) => {
-  if (type === 'admin') return 'Администратор'
-  if (type === 'manager') return 'Менеджер'
-  if (type === 'authenticated') return 'Гость'
-  if (type === 'public') return 'Гость'
-  return 'Гость'
-}
-
 const isManager = (user) => {
   return user.role?.type === 'manager'
 }
@@ -36,7 +28,7 @@ const loadData = async () => {
     roles.value = rolesRes.roles || []
   } catch (e) {
     console.error(e)
-    error.value = 'Не удалось загрузить данные. Убедитесь, что у роли Admin в Strapi настроены разрешения.'
+    error.value = 'Не удалось загрузить данные. Убедитесь, что Администратора настроены разрешения.'
   } finally {
     loading.value = false
   }
@@ -45,19 +37,14 @@ const loadData = async () => {
 const toggleAccess = async (user) => {
   updatingUserId.value = user.id
   try {
-    // Опеределяем целевую роль: если был менеджером — делаем гостем ('authenticated'), и наоборот
     const targetRoleType = isManager(user) ? 'authenticated' : 'manager'
     const targetRole = roles.value.find(r => r.type === targetRoleType)
-
     if (!targetRole) {
       throw new Error(`Роль ${targetRoleType} не найдена в системе Strapi`)
     }
-
     await client(`/users/${user.id}`, {
       method: 'PUT',
-      body: {
-        role: targetRole.id
-      }
+      body: { role: targetRole.id }
     })
 
     user.role = {
@@ -72,16 +59,12 @@ const toggleAccess = async (user) => {
     updatingUserId.value = null
   }
 }
-
-onMounted(() => {
-  loadData()
-})
+onMounted(() => { loadData() })
 </script>
 <template>
-  <UCard>
-    <div class="space-y-4">
-      <USeparator label="Управление доступом" />
-
+  <div>
+    <USeparator label="Управление доступом" class="mb-2" />
+    <UCard>
       <div v-if="loading" class="flex justify-center py-4">
         <UIcon name="svg-spinners:180-ring" class="text-2xl text-primary" />
       </div>
@@ -90,31 +73,34 @@ onMounted(() => {
       </div>
       <div v-else class="overflow-x-auto">
         <UTable :data="users" :columns="columns">
-          <template #email-cell="{ row }">
-            <div class="flex flex-col text-gray-500 dark:text-gray-400">
-              <span class="text-sm">
+          <template #username-cell="{ row }">
+            <div class="flex flex-col items-start gap-1">
+              <span class="text-sm font-bold text-gray-700 dark:text-gray-300">
+                {{ row.original.username }}
+              </span>
+              <span class="text-sm text-gray-600 dark:text-gray-400">
                 {{ row.original.email }}
               </span>
-              <span class="text-xs italic">
+              <UBadge variant="soft" size="sm" :color="getRoleColor(row.original.role?.type)">
                 {{ getRoleLabel(row.original.role?.type) }}
-              </span>
+              </UBadge>
             </div>
           </template>
-
           <template #actions-cell="{ row }">
-            <div v-if="row.original.id !== currentUser?.id && row.original.role?.type !== 'admin'">
+            <div v-if="row.original.id !== currentUser?.id && row.original.role?.type !== 'admin'" class="flex justify-end">
               <USwitch
                 :model-value="isManager(row.original)"
                 @update:model-value="toggleAccess(row.original)"
                 :loading="updatingUserId === row.original.id" 
-                :label="isManager(row.original) ? 'Разрешен' : 'Закрыт'" />
+                :label="isManager(row.original) ? 'Разрешен' : 'Закрыт'" 
+                :ui="{ root: 'items-end flex-col gap-1' }"/>
             </div>
-            <span v-else class="text-xs text-gray-400 dark:text-gray-500 italic">
+            <span v-else class="text-xs text-gray-500 dark:text-gray-500 italic">
               {{ row.original.role?.type === 'admin' ? 'Администратор' : '' }}
             </span>
           </template>
         </UTable>
       </div>
-    </div>
-  </UCard>
+    </UCard>
+  </div>
 </template>
